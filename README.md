@@ -27,7 +27,7 @@ AI skills run when you invoke them. Rules run **all the time** — during every 
 
 ## Install
 
-### Quick start: one file, full protection
+### Quick start: one file, ready to go
 
 `rules.md` is fully self-contained — all core rules work without any other file. Copy it to your AI tool's rules directory:
 
