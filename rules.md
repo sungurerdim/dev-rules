@@ -8,11 +8,25 @@ Only touch lines the task requires. Unrelated issues: mention, don't fix. Never 
 
 ### Test Integrity [PROHIBITION]
 
-Never weaken, skip, mock away, or relax assertions to make a test pass. Fix the code, or fix the test to correctly validate real behavior. Test environment must use real OS paths, production-equivalent layouts, and native host verification — not bypassed in harness. Every bug fix includes a regression test.
+Fix the code or fix the test to correctly validate real behavior — weakening, skipping, mocking away, or relaxing assertions to make a test pass creates false confidence. Test environment must use real OS paths, production-equivalent layouts, and native host verification. Every bug fix includes a regression test.
+
+Test boundary conditions: empty inputs, null/undefined values, maximum-size inputs, concurrent access, and locale/timezone edge cases. If a function handles data transformation, verify preservation with extreme/edge inputs — not just happy-path samples.
 
 ### Cross-file Consistency [PROHIBITION]
 
 After modifying file A, verify no file B depends on the changed interface, export, type, or constant in a now-broken way. Grep all consumers before declaring done. A change that breaks a dependent file is not done.
+
+### Over-engineering Prevention [PROHIBITION]
+
+Only make changes directly requested or clearly necessary. Don't add features, refactor code, or make "improvements" beyond what was asked. Don't add error handling, fallbacks, or validation for scenarios that can't happen. Don't create helpers or abstractions for one-time operations. Don't design for hypothetical future requirements. Three similar lines of code is better than a premature abstraction.
+
+### File Creation Discipline [PROHIBITION]
+
+Don't create files unless absolutely necessary. Prefer editing existing files over creating new ones. Don't add docstrings, comments, or type annotations to code you didn't change. Only add comments where the logic isn't self-evident.
+
+### Backwards-Compatibility Hacks [PROHIBITION]
+
+Don't rename unused `_vars`, re-export types, add `// removed` comments for deleted code, or add compatibility shims. If something is unused, delete it completely.
 
 ### Change Verification [GATE]
 
@@ -24,7 +38,7 @@ After rename/move/interface change → grep/glob entire codebase: all imports, i
 
 ### Trust Verification [GATE]
 
-Before using any import, API, or dependency → verify it exists in codebase, registry, or docs. Check: package exists in registry? Version correct? API available in that version? Not transitive-only? Never assume from memory.
+Before using any import, API, or dependency → verify it exists in codebase, registry, or docs. Check: package exists in registry? Version correct? API available in that version? Not transitive-only? Never assume from memory — AI models hallucinate packages, versions, and API signatures.
 
 ### Format Preservation [GATE]
 
@@ -60,9 +74,93 @@ Flag when code approaches these limits. Refactor only when current task scope al
 
 Preserve existing file indentation style and surrounding code patterns. On Windows, use the path format the project already uses.
 
+### Code Readability
+
+Prefer boring-but-clear over clever-but-opaque. The next developer (or AI) must understand the code without external context.
+
+- Choose descriptive names over short names — `remainingRetries` over `r`
+- Prefer linear flow (early returns) over nested conditions
+- When an assumption exists (input always > 0, list always non-empty), document it with an assertion or comment
+
+### Error Messages
+
+Every error message includes: what was expected, what was received, and how to fix it.
+
+| Weak | Strong |
+|------|--------|
+| `"Invalid input"` | `"Expected positive integer for 'retries', got -1. Use a value >= 1."` |
+| `"Auth failed"` | `"API key expired (last valid: 2026-03-01). Regenerate at /settings/api."` |
+| `"Not found"` | `"User 'abc123' not found in tenant 'acme'. Verify the user ID and tenant."` |
+
+### Function Contracts
+
+Document at system boundaries: null-safety (which params accept null), exception semantics (throws vs returns error), side effects (I/O, state mutation, external calls), and preconditions (valid input ranges).
+
+Internal helper functions: keep undocumented unless the contract is non-obvious.
+
+### Security Awareness
+
+Validate at system boundaries (user input, external APIs), trust internal code. Audit for OWASP top 10: command injection, XSS, SQL injection, path traversal.
+
+**Human-verification gate:** Authentication, payment processing, encryption, and secrets management code requires human review before merge. AI generates scaffold and tests; human verifies logic correctness.
+
+Shell command safety: quote all file paths, use `--` to separate flags from arguments, reject shell metacharacters in dynamic values.
+
+Store secrets in environment variables or secrets managers — verify no hardcoded secrets in source, configs, or logs.
+
+When working on auth, payments, crypto, multi-tenant systems, or CORS: load `references/safety.md` for detailed rules.
+
 ### Error Handling
 
-Catch specific exceptions, never broader. Propagate when unsure. Error handling must never hide a bug.
+Catch specific exceptions, not broader. Propagate when unsure. Error handling must not hide a bug.
+
+### i18n & Accessibility
+
+Flag missing i18n/a11y as HIGH on user-facing apps. Don't auto-fix — propose the framework's official/canonical i18n solution and message format. Verify the recommended package exists in the project's ecosystem before suggesting.
+
+## Token & Context Efficiency
+
+### Incremental Reading
+
+Before re-reading a file already read this session → was it modified since? If unchanged, reference prior read. When verifying changes, read only modified sections. Use LSP diagnostics for type/import checks instead of reading files.
+
+### Concise Output
+
+Avoid repeating file contents back to the user after reading. Summarize findings, don't echo. When explaining changes, describe the delta — not the full before/after.
+
+## Operational Awareness
+
+### Observability
+
+Log at decision points and error paths in critical flows (auth, payments, data mutations, external API calls). Use structured logging (JSON) with correlation IDs for request tracing.
+
+| Log Level | Use For |
+|-----------|---------|
+| ERROR | Failures requiring attention — failed transactions, auth failures, data corruption |
+| WARN | Degraded state — cache miss fallback, retry success, deprecated API usage |
+| INFO | Business events — user actions, state transitions, deployment events |
+| DEBUG | Development diagnostics — only in non-production |
+
+### Production Defaults
+
+Configuration values must be production-grade. Local/dev defaults in production configs cause outages.
+
+| Setting | Dev Default (wrong) | Production Default (right) |
+|---------|--------------------|-----------------------------|
+| Connection pool | 5 | 20-50 (based on expected load) |
+| Request timeout | 30s | 5-10s (fail fast) |
+| Rate limit | unlimited | Defined per endpoint |
+| Log level | DEBUG | INFO |
+
+Validate all required environment variables at startup — fail fast on missing config rather than failing at runtime.
+
+### Database Changes
+
+Schema migrations must be backward-compatible with the previous application version (expand-contract pattern). Include both `up` and `down` operations. Test rollback before applying to production.
+
+Data-destructive migrations (column drops, type narrowing): flag for human review with data preservation verification.
+
+When working on deployment, caching, infrastructure, or monitoring: load `references/operations.md` for detailed rules.
 
 ## Conventional Commit Classification
 
