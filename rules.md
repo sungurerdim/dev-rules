@@ -46,11 +46,11 @@ During format/schema/data conversion → all fields preserved, including unknown
 
 ### Artifact-First Recovery [GATE]
 
-After context gap → re-read files before modifying (conversation memory is not source of truth). Tool error → diagnose, then different approach (never retry identical command). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
+After context gap → re-read files before modifying (conversation memory is not source of truth — structured files survive context compression, conversation state does not). Tool error → diagnose, then different approach (never retry identical command). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
 
 ## Process Framework
 
-- **Before starting:** State the end goal. Complex tasks: track progress explicitly.
+- **Before starting:** State the end goal. Complex tasks: track progress in a structured file (not just conversation memory — files survive context compression).
 - **While working:** Execute numbered steps in order. Verify each step's output before proceeding. Never skip a step.
 - **Before finishing:** Re-read modified files. All steps completed? Original requirement fully met?
 - **On uncertainty:** State it explicitly. Ask, don't guess. Never assume requirements.
@@ -209,7 +209,7 @@ Unpushed commits are local WIP — not permanent record. Before push: if >1 comm
 | Tool Role | Missing Behavior |
 |-----------|-----------------|
 | Critical (git, gh) | Stop with install instructions |
-| Quality gate (linter, formatter) | Skip silently — project-specific, absence expected |
+| Quality gate (linter, formatter) | Offer to install if installable (show command, ask user). If declined or system-level tool → skip silently |
 | Non-critical operational | Warn once, continue |
 
 ### Skip Patterns
