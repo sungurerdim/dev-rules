@@ -13,15 +13,15 @@ AI skills run when you invoke them. Rules run **all the time** — during every 
 
 ## What's inside
 
-**11 failure prevention rules** — scope control, test integrity, cross-file consistency, over-engineering prevention, trust verification, migration sweep, format preservation, artifact-first recovery
+**15 failure prevention rules** — scope control, test integrity, cross-file consistency, over-engineering prevention, concurrency safety, trust verification, meaningful test data, self-verification, non-functional accountability, migration sweep, format preservation, artifact-first recovery
 
 **Code quality standards** — complexity limits (CC ≤ 15, nesting ≤ 3), readability-over-cleverness, error message quality, function contracts
 
-**Security awareness** — OWASP top 10, human-verification gate for auth/payments/crypto, shell command safety
+**Security awareness** — OWASP top 10, CI security scanning (24-30% of AI code has CWE flaws), human-verification gate for auth/payments/crypto, shell command safety
 
 **Operational awareness** — observability baseline, production-grade defaults, database migration safety
 
-**Process discipline** — structured workflow, scope expansion control, token efficiency
+**Process discipline** — structured workflow, vibe coding guardrails, external state persistence, scope expansion control, token efficiency
 
 **Reference files** — detailed security and operations rules, loaded on demand when working on auth, payments, deployment, caching, etc.
 
@@ -67,7 +67,7 @@ rm -rf /tmp/dev-rules
 ## How it works
 
 ```
-rules.md                    always loaded (~250 lines)
+rules.md                    always loaded (~270 lines)
 references/
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability
@@ -79,7 +79,7 @@ references/
 ## Design philosophy
 
 - **Prevent harm, don't just detect it.** Rules catch mistakes as they happen, not after.
-- **Positive framing.** "Verify imports exist before using" instead of "Don't use unverified imports." AI models follow positive instructions 40-60% more reliably than prohibitions ([research](references/rule-design.md)).
+- **Positive framing.** "Verify imports exist before using" instead of "Don't use unverified imports." Hard negatives fail ~5%, soft negatives ~10-15% — positive framing is 2-5× more reliable ([research](references/rule-design.md)).
 - **Tool-agnostic.** Works with any AI tool that accepts markdown instructions — no lock-in, no platform dependencies.
 - **Token-efficient.** ~2,500 tokens for the main file. References add ~1,000 each, only when needed.
 
@@ -93,7 +93,7 @@ dev-rules works great on its own. If you also use [dev-skills](https://github.co
 | **What** | How to work (behavioral guardrails) | What to do (execution workflows) |
 | **Example** | "Verify imports exist before using" | Full code review with 97 checks across 9 scopes |
 
-Together: always-on guardrails + 19 structured workflows covering scaffold → code → test → review → commit → PR → deploy → launch → analytics.
+Together: always-on guardrails + 21 structured workflows covering scaffold → code → design → test → review → commit → PR → deploy → launch → analytics.
 
 ## For contributors
 

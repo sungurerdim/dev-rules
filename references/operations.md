@@ -27,6 +27,8 @@ Every production service needs structured logging, metrics, and health checks.
 
 **Health check endpoints:** `/health` returns 200 when service is operational. `/ready` returns 200 when service can accept traffic (DB connected, cache warm, dependencies reachable).
 
+Source: [OpenTelemetry Specification (2025)](https://opentelemetry.io/docs/specs/otel/)
+
 ---
 
 ## Cache Coherence
@@ -101,5 +103,7 @@ Every cache interaction must define: TTL, invalidation strategy, and stale-data 
 **Staged rollout:** For high-risk changes, deploy incrementally: 1% → 10% → 50% → 100%. Monitor error rates and latency at each stage. Automated rollback if error rate exceeds threshold.
 
 **Zero-downtime deployment:** Use blue-green or rolling deployment. Verify: database migrations are backward-compatible, no breaking API changes for in-flight requests, session state survives instance rotation.
+
+**Container security:** Scan images for CVEs before deploying (Trivy, Snyk Container). Use distroless or chainguard base images for minimal attack surface. Source: [Docker Security Best Practices (2025)](https://docs.docker.com/build/building/best-practices/)
 
 **Post-deployment:** Monitor for 15 minutes after full rollout. Compare error rates, latency, and business metrics against pre-deployment baseline.

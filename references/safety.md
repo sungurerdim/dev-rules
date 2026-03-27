@@ -6,6 +6,8 @@ Detailed rules for security-critical code. Load when working on: authentication,
 
 ## Async & Concurrency Safety
 
+AI-generated code misuses concurrency primitives 2x more than human-written code (CodeRabbit 2025). Extra vigilance required.
+
 Concurrent code (locks, mutexes, event loops, queues, shared state) requires explicit synchronization verification.
 
 **Detect shared-state risks:**
@@ -76,6 +78,8 @@ Prefer managed auth services (Auth0, Supabase Auth, Firebase Auth, Clerk) over D
 
 OAuth/OIDC: use PKCE for all public clients (SPA, mobile). Implicit flow is deprecated.
 
+RFC 9700 (OAuth 2.1, 2025) consolidates OAuth 2.0 best practices. Passkeys (WebAuthn/FIDO2) are the recommended passwordless alternative — support as secondary auth method.
+
 ---
 
 ## Payment & Financial Code
@@ -103,3 +107,19 @@ Use platform/language standard libraries exclusively. Custom cryptographic imple
 | Key storage | Environment variables or secrets manager — never in source code, config files, or logs |
 | Key rotation | Define rotation schedule. Support concurrent old+new keys during transition |
 | Random values | Use cryptographically secure RNG (`crypto.randomBytes`, `secrets.token_bytes`) — never `Math.random()` or `random.random()` for security-sensitive values |
+
+---
+
+## OWASP API Security Top 10 (2025)
+
+When building APIs, verify against these top risks:
+
+| # | Risk | Prevention |
+|---|------|-----------|
+| API1 | Broken Object-Level Authorization | Verify user owns the requested object on every endpoint |
+| API2 | Broken Authentication | Rate limit auth endpoints, use OAuth 2.1, enforce MFA |
+| API3 | Broken Object Property-Level Authorization | Return only fields the requester is authorized to see |
+| API4 | Unrestricted Resource Consumption | Rate limiting, pagination limits, request size caps |
+| API5 | Broken Function-Level Authorization | RBAC on every endpoint, not just UI-visible ones |
+
+Source: [OWASP API Security Top 10 (2023)](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)

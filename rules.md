@@ -14,7 +14,7 @@ Test boundary conditions: empty inputs, null/undefined values, maximum-size inpu
 
 ### Cross-file Consistency [PROHIBITION]
 
-After modifying file A, verify no file B depends on the changed interface, export, type, or constant in a now-broken way. Grep all consumers before declaring done. A change that breaks a dependent file is not done.
+After modifying file A, verify no file B depends on the changed interface, export, type, or constant in a now-broken way. Grep all consumers before declaring done. A change that breaks a dependent file is not done. AI-generated code has 2× more cross-file dependency errors than human-written code.
 
 ### Over-engineering Prevention [PROHIBITION]
 
@@ -28,6 +28,10 @@ Don't create files unless absolutely necessary. Prefer editing existing files ov
 
 Don't rename unused `_vars`, re-export types, add `// removed` comments for deleted code, or add compatibility shims. If something is unused, delete it completely.
 
+### Concurrency Safety [PROHIBITION]
+
+AI misuses concurrency primitives 2× more than human developers. When writing concurrent code: identify all shared mutable state, apply synchronization (mutex, channels, actors, atomic operations), verify with concurrent test scenarios. Prefer message-passing over shared state. When working on concurrent code: load `references/safety.md` for detailed patterns.
+
 ### Change Verification [GATE]
 
 After modifying a function → verify: all other behaviors in that function unchanged? All callers unaffected? No return type/shape changes beyond the fix? No conditional branch logic altered outside the target?
@@ -38,15 +42,27 @@ After rename/move/interface change → grep/glob entire codebase: all imports, i
 
 ### Trust Verification [GATE]
 
-Before using any import, API, or dependency → verify it exists in codebase, registry, or docs. Check: package exists in registry? Version correct? API available in that version? Not transitive-only? Never assume from memory — AI models hallucinate packages, versions, and API signatures.
+Before using any import, API, or dependency → verify it exists in codebase, registry, or docs. Check: package exists in registry? Version correct? API available in that version? Not transitive-only? Never assume from memory — AI models hallucinate packages, versions, and API signatures. Without verification, 63% of AI systems hallucinate dangerously within 90 days.
 
 ### Format Preservation [GATE]
 
 During format/schema/data conversion → all fields preserved, including unknown ones? Target can't represent a source field → warn explicitly. Round-trip produces identical output?
 
+### Meaningful Test Data [GATE]
+
+Use realistic values that exercise actual business logic — `'user@example.com'` over `'a@b.c'`, `$99.99` over `$1`, `'John Smith'` over `'x'`. Arbitrary minimal test data creates false confidence: a discount calculation tested with `$1` hides precision errors visible at `$999.99`. Test boundary conditions: empty inputs, maximum-size inputs, Unicode, timezone edge cases.
+
+### Self-Verification [GATE]
+
+After completing a change: re-read the modified file, verify the change matches the requirement, check for unintended side effects in surrounding code. Predict the expected output before reading actual output — discrepancy signals a bug. Without verification gates, 63% of AI systems produce dangerous hallucinations within 90 days.
+
+### Non-Functional Accountability [GATE]
+
+Security, performance, accessibility, observability, and maintainability require explicit verification — not autopilot. Systems that "look functional" but lack these fail in production. After implementing any user-facing feature: verify a11y (keyboard nav, contrast), verify error handling (what happens on failure?), verify observability (is this operation logged?).
+
 ### Artifact-First Recovery [GATE]
 
-After context gap → re-read files before modifying (conversation memory is not source of truth — structured files survive context compression, conversation state does not). Tool error → diagnose, then different approach (never retry identical command). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
+After context gap → re-read files before modifying (conversation memory degrades after ~150-200 instructions and is not source of truth — structured files survive context compression, conversation state does not). Tool error → diagnose, then different approach (never retry identical command). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
 
 ## Process Framework
 
@@ -55,6 +71,8 @@ After context gap → re-read files before modifying (conversation memory is not
 - **Before finishing:** Re-read modified files. All steps completed? Original requirement fully met?
 - **On uncertainty:** State it explicitly. Ask, don't guess. Never assume requirements.
 - **On scope expansion:** Finding count exceeds 2x estimate → stop and ask before continuing.
+- **On AI-generated code:** Verify understanding before accepting. Inability to explain what the code does signals unacceptable risk. Critical paths (auth, payments, data mutations) require line-by-line verification.
+- **On state persistence:** Store critical requirements and progress in files (CLAUDE.md, progress.md) — conversation memory degrades after ~150-200 instructions. Files survive context compression; conversation state does not.
 
 ## Quality Thresholds
 
@@ -107,6 +125,8 @@ Validate at system boundaries (user input, external APIs), trust internal code. 
 Shell command safety: quote all file paths, use `--` to separate flags from arguments, reject shell metacharacters in dynamic values.
 
 Store secrets in environment variables or secrets managers — verify no hardcoded secrets in source, configs, or logs.
+
+Integrate security scanning into CI pipeline — catch issues at generation time, not post-review. 24-30% of AI-generated code contains serious CWE security flaws. SAST/DAST in CI is essential for AI-assisted projects.
 
 When working on auth, payments, crypto, multi-tenant systems, or CORS: load `references/safety.md` for detailed rules.
 
