@@ -64,6 +64,22 @@ Security, performance, accessibility, observability, and maintainability require
 
 After context gap → re-read files before modifying (conversation memory degrades after ~150-200 instructions and is not source of truth — structured files survive context compression, conversation state does not). Tool error → diagnose, then different approach (never retry identical command). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
 
+### Task Pre-flight [GATE]
+
+Before executing any task that touches 3+ files or changes behavior (not cosmetic/docs edits): produce a compact pre-flight block and wait for user confirmation before modifying any files.
+
+```
+Goal:     [one-line: what changes and why]
+Include:  [files / modules to modify]
+Exclude:  [files / modules off-limits]
+Output:   [code / tests / both]
+Criteria: [lint clean / tests pass / type-check / etc.]
+```
+
+If scope is genuinely ambiguous, ask one clarifying question before showing the block — not after. Skip the question if the answer is inferable from the codebase, project rules, or prior conversation.
+
+Single-file cosmetic changes (formatting, typos, comment edits, docs-only) are exempt.
+
 ## Process Framework
 
 - **Before starting:** State the end goal. Complex tasks: track progress in a structured file (not just conversation memory — files survive context compression).
@@ -72,7 +88,7 @@ After context gap → re-read files before modifying (conversation memory degrad
 - **On uncertainty:** State it explicitly. Ask, don't guess. Never assume requirements.
 - **On scope expansion:** Finding count exceeds 2x estimate → stop and ask before continuing.
 - **On AI-generated code:** Verify understanding before accepting. Inability to explain what the code does signals unacceptable risk. Critical paths (auth, payments, data mutations) require line-by-line verification.
-- **On state persistence:** Store critical requirements and progress in files (CLAUDE.md, progress.md) — conversation memory degrades after ~150-200 instructions. Files survive context compression; conversation state does not.
+- **On state persistence:** Store critical requirements and progress in project rule files or a progress tracking file — conversation memory degrades after ~150-200 instructions. Files survive context compression; conversation state does not.
 
 ## Quality Thresholds
 
