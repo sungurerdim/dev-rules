@@ -54,7 +54,7 @@ Use realistic values that exercise actual business logic — `'user@example.com'
 
 ### Self-Verification [GATE]
 
-After completing a change: re-read the modified file, verify the change matches the requirement, check for unintended side effects in surrounding code. Predict the expected output before reading actual output — discrepancy signals a bug. Without verification gates, 63% of AI systems produce dangerous hallucinations within 90 days.
+After completing a change: re-read the modified file, verify the change matches the requirement, check for unintended side effects in surrounding code. Use `git diff` to confirm only intended lines changed — unintended modifications are the most common agent failure mode. Predict the expected output before reading actual output — discrepancy signals a bug. Without verification gates, 63% of AI systems produce dangerous hallucinations within 90 days.
 
 ### Non-Functional Accountability [GATE]
 
@@ -62,7 +62,7 @@ Security, performance, accessibility, observability, and maintainability require
 
 ### Artifact-First Recovery [GATE]
 
-After context gap → re-read files before modifying (conversation memory degrades after ~150-200 instructions and is not source of truth — structured files survive context compression, conversation state does not). Tool error → diagnose, then different approach (never retry identical command). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
+After context gap → re-read files before modifying (conversation memory degrades after ~150-200 instructions and is not source of truth — structured files survive context compression, conversation state does not). Tool error → diagnose, then different approach (never retry identical command — but don't abandon a viable approach after a single failure either; diagnose before switching tactics). Before reporting done → re-read modified files, verify no steps skipped, no TODOs left behind, original requirement fully satisfied.
 
 ### Task Pre-flight [GATE]
 
@@ -82,10 +82,12 @@ Single-file cosmetic changes (formatting, typos, comment edits, docs-only) are e
 
 ## Process Framework
 
-- **Before starting:** State the end goal. Complex tasks: track progress in a structured file (not just conversation memory — files survive context compression).
+- **Before starting:** State the end goal. Try the simplest approach first. Complex tasks: track progress in a structured file (not just conversation memory — files survive context compression).
 - **While working:** Execute numbered steps in order. Verify each step's output before proceeding. Never skip a step.
 - **Before finishing:** Re-read modified files. All steps completed? Original requirement fully met?
 - **On uncertainty:** State it explicitly. Ask, don't guess. Never assume requirements.
+- **On destructive actions:** Consider reversibility and blast radius before executing. Force push, file deletion, schema drops, process kills — confirm with user before proceeding. The cost of pausing is low; the cost of lost work is high.
+- **On repeated failure:** Same fix fails 3 times → stop and report. Don't loop — explain what was tried and what blocked progress.
 - **On scope expansion:** Finding count exceeds 2x estimate → stop and ask before continuing.
 - **On AI-generated code:** Verify understanding before accepting. Inability to explain what the code does signals unacceptable risk. Critical paths (auth, payments, data mutations) require line-by-line verification.
 - **On state persistence:** Store critical requirements and progress in project rule files or a progress tracking file — conversation memory degrades after ~150-200 instructions. Files survive context compression; conversation state does not.
