@@ -76,6 +76,7 @@ references/
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability
   rule-design.md            contributor reference — never loaded at runtime
+CLAUDE.md                   AI contributor guide — never loaded at runtime
 ```
 
 **Progressive disclosure:** The main file is always in context. Reference files load only when the current task matches their domain — minimal token overhead, maximum coverage when it matters.
@@ -101,7 +102,7 @@ Together: always-on guardrails + 21 structured workflows covering scaffold → c
 
 ## For contributors
 
-See [references/rule-design.md](references/rule-design.md) for the research, design patterns, and evaluation rubric behind these rules.
+See [CLAUDE.md](CLAUDE.md) for the project structure, invariants, and rule authoring guide. See [references/rule-design.md](references/rule-design.md) for the research, design patterns, and evaluation rubric.
 
 ## License
 
