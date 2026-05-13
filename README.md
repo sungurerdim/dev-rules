@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Tool](https://img.shields.io/badge/works_with-Claude_Code_·_Cursor_·_Copilot_·_Windsurf_·_Codex_·_Aider-green)]()
 
-AI coding assistants hallucinate APIs, break dependent files, weaken tests to make them pass, and silently drop data during conversions. These rules prevent that.
+AI coding assistants hallucinate APIs, break dependent files, weaken tests to make them pass, claim errors are "pre-existing" to skip fixing them, and silently drop data during conversions. These rules prevent that.
 
 > One file. Any AI coding tool. Always active.
 
@@ -13,15 +13,19 @@ AI skills run when you invoke them. Rules run **all the time** — during every 
 
 ## What's inside
 
-**15 failure prevention rules** — scope control, test integrity, cross-file consistency, over-engineering prevention, concurrency safety, trust verification, meaningful test data, self-verification, non-functional accountability, migration sweep, format preservation, artifact-first recovery
+**Pre-task protocol** — tiered pre-flight gate (Tier 1: inline, no-wait for clear tasks; Tier 2: block + confirmation for complex/risky), spec artifact (`tasks.md`) for multi-phase work, scope expansion stop at 2× estimate
 
-**Code quality standards** — complexity limits (CC ≤ 15, nesting ≤ 3), readability-over-cleverness, error message quality, function contracts
+**Failure prevention** — scope boundary, test integrity, error ownership (pre-existing error = not an excuse), cross-file consistency, over-engineering prevention, concurrency safety, trust verification, external content injection guard, read-before-modify, tool-call result verification
 
-**Security awareness** — OWASP top 10, CI security scanning (24-30% of AI code has CWE flaws), human-verification gate for auth/payments/crypto, shell command safety
+**Completion gate** — explicit done criteria, `git diff` verification, no silent "done" without stating what changed and how to verify
+
+**Code quality** — complexity limits (CC ≤ 15, nesting ≤ 3), readability-over-cleverness, error message quality, error handling discipline
+
+**Security** — OWASP top 10, human-verification gate for auth/payments/crypto, shell command safety, no hardcoded secrets
 
 **Operational awareness** — observability baseline, production-grade defaults, database migration safety
 
-**Process discipline** — structured workflow, vibe coding guardrails, external state persistence, scope expansion control, token efficiency
+**Process discipline** — structured workflow, artifact-first recovery after context gaps, LSP-first navigation, subagent model routing
 
 **Reference files** — detailed security and operations rules, loaded on demand when working on auth, payments, deployment, caching, etc.
 
@@ -67,7 +71,7 @@ rm -rf /tmp/dev-rules
 ## How it works
 
 ```
-rules.md                    always loaded (~270 lines)
+rules.md                    always loaded (~240 lines)
 references/
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability

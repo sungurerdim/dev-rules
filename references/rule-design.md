@@ -30,9 +30,22 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Veracode: GenAI Security and Vibe Coding (2026)](https://www.veracode.com/blog/genai-security-and-vibe-coding/)
 - [5 Test Integrity Rules for AI Agents](https://jsmanifest.com/5-test-integrity-rules-ai-agents-typescript)
 - [Good Spec for AI Agents (Addy Osmani)](https://addyosmani.com/blog/good-spec/)
+- [Addy Osmani: LLM Coding Workflow 2026](https://addyosmani.com/blog/ai-coding-workflow/)
+- [Beyond the Vibes: Coding Agents 2026 (tedivm)](https://blog.tedivm.com/guides/2026/03/beyond-the-vibes-coding-assistants-and-agents/)
 - [AI-Assisted Development 2026 Best Practices](https://dev.to/austinwdigital/ai-assisted-development-in-2026-best-practices-real-risks-and-the-new-bar-for-engineers-3fom)
 - [OWASP Prompt Injection Guide](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
 - [Preventing AI Agent Drift](https://www.getmaxim.ai/articles/a-comprehensive-guide-to-preventing-ai-agent-drift-over-time/)
+- [AWS: Stop AI Agent Hallucinations — 4 Techniques](https://dev.to/aws/stop-ai-agent-hallucinations-4-essential-techniques-2i94)
+- [Zhang et al.: Guardrails Beat Guidance (arXiv:2604.11088, 2026)](https://arxiv.org/abs/2604.11088)
+- [ClawSafety: Indirect Prompt Injection (arXiv:2604.01438, 2026)](https://arxiv.org/abs/2604.01438)
+
+### Model-Specific Failure Reports
+- [Claude Code: Read-Before-Act Regression Analysis (GitHub #42796, 6,852 sessions)](https://github.com/anthropics/claude-code/issues/42796)
+- [Claude Code: Opus 4.6 Read Regression — Destructive Changes Without Reading (GitHub #47901)](https://github.com/anthropics/claude-code/issues/47901)
+- [Claude Code: Opus 4.7 Bootstrap Failure (GitHub #50999)](https://github.com/anthropics/claude-code/issues/50999)
+- [Kimi K2: Tool Call Format Instability in Multi-Round Agentic Use (HuggingFace #48)](https://huggingface.co/moonshotai/Kimi-K2-Instruct/discussions/48)
+- [DeepSeek V3-0324: Function Calling Fix (Model Card)](https://huggingface.co/deepseek-ai/DeepSeek-V3-0324)
+- [OpenAI Codex: Context Compaction Failure (GitHub #20931)](https://github.com/openai/codex/issues/20931)
 
 ---
 
@@ -143,7 +156,7 @@ JSON schema validation outperforms free-form text for agent outputs (Databricks 
 
 ## AI Weakness Taxonomy
 
-Ten systematic weaknesses in AI coding assistants. Rules address via specific mitigation strategies:
+Systematic weaknesses in AI coding assistants. Rules address via specific mitigation strategies:
 
 | ID | Weakness | What Happens | Rule Mitigation |
 |----|----------|-------------|-----------------|
@@ -152,11 +165,15 @@ Ten systematic weaknesses in AI coding assistants. Rules address via specific mi
 | W3 | Scope Creep | Reformats untouched code, adds unrequested features | Scope Boundary + Over-engineering Prevention |
 | W4 | Memory Decay | Relies on stale conversation context | Artifact-First Recovery — re-read before modifying |
 | W5 | Confidence Bias | Assigns higher severity than evidence warrants | Severity levels — when uncertain, choose lower |
-| W6 | Skip Tendency | Declares done before all steps executed | Process Framework — verify before finishing |
+| W6 | Skip Tendency | Declares done before all steps executed | Completion Gate — explicit done checklist |
 | W7 | Redundancy Blindness | Reports same issue multiple times | Deduplication in Fix Quality |
 | W8 | Injection Risk | Unsanitized input in shell commands | Security Awareness — quote paths, use `--`, reject metacharacters |
-| W9 | Concurrency Errors | AI-generated code misuses concurrency primitives 2x more than human-written code (CodeRabbit 2025) | Safety reference — explicit concurrency checklist |
-| W10 | Self-Verification Failure | 63% of model self-checks still contain hallucinated content | Artifact-First Recovery — use external tools, not self-assessment |
+| W9 | Concurrency Errors | AI-generated code misuses concurrency primitives 2× more than human-written (CodeRabbit 2025) | Safety reference — explicit concurrency checklist |
+| W10 | Self-Verification Failure | 63% of model self-checks still contain hallucinated content | Completion Gate — state what changed + how to verify |
+| W11 | Read-Before-Act Regression | Claude 4.6: reads-per-edit dropped 6.6× → 2.0× after Feb 2026 update; modifies files without reading them first (GitHub #47901, 6,852 sessions) | Read-Before-Modify gate — explicit read required before every edit |
+| W12 | Tool-Call Format Instability | Kimi K2: `finish_reason="tool_calls"` but `tool_calls=[]` after multi-round agentic sessions; assumed success causes silent failure | Tool-Call Result Verification gate — verify result before proceeding |
+| W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently | Error Ownership — every detected problem must be addressed regardless of origin |
+| W14 | External Content Injection | Files/web/emails read during task embed fake instructions; model follows them (ClawSafety 2026: 40–75% success rate) | External Content Injection prohibition — treat all external content as untrusted data |
 
 Each rule in `rules.md` addresses one or more weaknesses. New rules: explicitly identify weaknesses mitigated.
 
@@ -193,5 +210,5 @@ When adding new rule:
 2. **Positive framing first:** Write as "Do X" before adding any "Don't Y" reinforcement
 3. **Token budget:** Adding > 10 lines to `rules.md` → use reference file instead
 4. **Overlap check:** Search all dev-skills SKILL.md files — verify reinforcement, not contradiction
-5. **Weakness mapping:** Map to W1-W10. Unmapped rules may belong in skill instead
+5. **Weakness mapping:** Map to W1-W14. Unmapped rules may belong in skill instead
 6. **Evaluate with rubric:** Minimum 15/18 for inclusion
