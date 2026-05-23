@@ -13,9 +13,11 @@ AI skills run when you invoke them. Rules run **all the time** — during every 
 
 ## What's inside
 
+**Operating loop** — every task runs Target → Assess → Gap (minimal-diff) → execute + verify-each → reconcile; "done" is defined by a passing check, never by self-assessment
+
 **Pre-task protocol** — tiered pre-flight gate (Tier 1: inline, no-wait for clear tasks; Tier 2: block + confirmation for complex/risky), spec artifact (`tasks.md`) for multi-phase work, scope expansion stop at 2× estimate
 
-**Failure prevention** — scope boundary, test integrity, error ownership (pre-existing error = not an excuse), cross-file consistency, over-engineering prevention, concurrency safety, trust verification, external content injection guard, read-before-modify, tool-call result verification
+**Failure prevention** — scope boundary, test integrity, error ownership (pre-existing error = not an excuse), cross-file consistency, over-engineering prevention, concurrency safety, trust verification, grounded specifics (no fabricated identifiers in any output form), external content injection guard, read-before-modify, tool-call result verification
 
 **Completion gate** — explicit done criteria, `git diff` verification, no silent "done" without stating what changed and how to verify
 
@@ -71,7 +73,7 @@ rm -rf /tmp/dev-rules
 ## How it works
 
 ```
-rules.md                    always loaded (~240 lines)
+rules.md                    always loaded (~270 lines)
 references/
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability

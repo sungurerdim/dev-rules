@@ -46,6 +46,9 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Kimi K2: Tool Call Format Instability in Multi-Round Agentic Use (HuggingFace #48)](https://huggingface.co/moonshotai/Kimi-K2-Instruct/discussions/48)
 - [DeepSeek V3-0324: Function Calling Fix (Model Card)](https://huggingface.co/deepseek-ai/DeepSeek-V3-0324)
 - [OpenAI Codex: Context Compaction Failure (GitHub #20931)](https://github.com/openai/codex/issues/20931)
+- [Claude Opus 4.7: Confident-Prose Hallucination & "Bucket-Bypass Drift" — mechanical enforcement ≫ behavioral (GitHub #50235)](https://github.com/anthropics/claude-code/issues/50235)
+- [DeepSeek V4 Pro: CAISI/NIST Evaluation — ~8 months behind frontier, weak precision reasoning (2026)](https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro)
+- [DeepSeek V4 Pro: reasoning_content Multi-Turn Tool-Call Inconsistency (opencode #25000)](https://github.com/anomalyco/opencode/issues/25000)
 
 ---
 
@@ -132,6 +135,25 @@ Forced CoT adds only 2.9-3.1% accuracy improvement for reasoning models while co
 
 ---
 
+## The Operating Loop & Mechanical Verification
+
+`rules.md` opens with an explicit **Target → Assess → Gap → Verify-each → Reconcile** loop. Rationale:
+
+The gap between a frontier model and a cheaper one concentrates in three places — long-horizon plan coherence, reliable self-verification, and instruction-following under load. All three are externalizable, and the loop mechanizes them:
+
+- **Target / Gap** convert open-ended "vibe coding" into a spec-bounded diff — kills scope creep (W3) for any model, and forces the problem-specific check a weak reasoner skips (DeepSeek V4 Pro applies familiar templates without verifying the problem's preconditions).
+- **Assess** grounds claims in read reality, not memory — the direct mitigation for confident-prose fabrication (Opus 4.7 #50235: emits real-looking but fabricated commit hashes / file paths) and for hallucination (W1) generally.
+- **Verify-each + "done = external signal"** is the highest-leverage move: it replaces the model's self-judgment (hallucinated ~63% of the time, W10) with a machine-checkable signal a passing test does not fake.
+
+**Why mechanical, not behavioral — and the limit of a prompt file.** Opus 4.7 field data (#50235) found rules enforced via tool-call hooks reach near-100% compliance, while the *same* rules enforced purely as in-context behavioral guidance reach moderate-to-low compliance — and fabrications "bucket-bypass" into whatever output form (tags, labels, fields) a prose-level rule failed to name. Two design consequences:
+
+1. A prompt file cannot *be* a mechanical gate; its leverage is to make the model *defer* to mechanical signals it can run (tests, builds, linters, exit codes, diffs). True enforcement (hooks, SAST, sandbox, `tool_choice`) lives in the harness/CI — see CLAUDE.md "Out of Scope".
+2. Anti-bypass framing: a rule that constrains one output form must name *all* forms (see Grounded Specifics — "prose, labels, tags, fields"), or the failure migrates to the unnamed one.
+
+The model difference narrows to the degree behavior is mechanized; it closes only where a real gate runs.
+
+---
+
 ## Literal Interpretation
 
 Claude 4.x takes instructions literally — omitted details omitted from output (Anthropic Official Docs 2026). Implications for rule design:
@@ -160,13 +182,13 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 
 | ID | Weakness | What Happens | Rule Mitigation |
 |----|----------|-------------|-----------------|
-| W1 | Hallucination | Fabricates APIs, packages, file paths | Trust Verification gate — verify before using |
+| W1 | Hallucination | Fabricates APIs, packages, file paths, commit hashes, prices | Trust Verification + Grounded Specifics — every emitted specific must trace to an observation, in any output form |
 | W2 | Tunnel Vision | Edits file A, breaks file B | Cross-file Consistency + Migration Sweep |
 | W3 | Scope Creep | Reformats untouched code, adds unrequested features | Scope Boundary + Over-engineering Prevention |
 | W4 | Memory Decay | Relies on stale conversation context | Artifact-First Recovery — re-read before modifying |
 | W5 | Confidence Bias | Assigns higher severity than evidence warrants | Severity levels — when uncertain, choose lower |
 | W6 | Skip Tendency | Declares done before all steps executed | Completion Gate — explicit done checklist |
-| W7 | Redundancy Blindness | Reports same issue multiple times | Deduplication in Fix Quality |
+| W7 | Redundancy Blindness | Reports same issue multiple times; re-raises resolved concerns (Opus 4.7 loops) | Deduplication in Fix Quality + settled-concern rule (don't re-litigate without new evidence) |
 | W8 | Injection Risk | Unsanitized input in shell commands | Security Awareness — quote paths, use `--`, reject metacharacters |
 | W9 | Concurrency Errors | AI-generated code misuses concurrency primitives 2× more than human-written (CodeRabbit 2025) | Safety reference — explicit concurrency checklist |
 | W10 | Self-Verification Failure | 63% of model self-checks still contain hallucinated content | Completion Gate — state what changed + how to verify |
