@@ -20,6 +20,17 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Ten Simple Rules AI-Assisted Coding (arXiv 2025)](https://arxiv.org/html/2510.22254v2)
 - [Instruction Hierarchy (arXiv 2024)](https://arxiv.org/html/2404.13208v1)
 - [SHIELDA: Structured Exception Handling in LLM Workflows](https://arxiv.org/html/2508.07935v1)
+- [SpecBench: Specification Gaming in Code Agents — +28pp gap with 10× more code (arXiv:2605.21384, 2026)](https://arxiv.org/abs/2605.21384)
+- [Reward-Hacking Behaviors in LLM Coding Agents (arXiv:2605.02964, 2026)](https://arxiv.org/abs/2605.02964)
+- [SWE-ABS: Semantic Correctness of "Solved" SWE Tasks — 19.78% semantically wrong (arXiv:2603.00520, 2026)](https://arxiv.org/abs/2603.00520)
+- [BrokenMath: LLM Sycophancy Under Pushback — GPT-5 29% (arXiv:2510.04721, 2025)](https://arxiv.org/abs/2510.04721)
+- [Authorship Bias in AI-Assisted Code Review — redaction recovers 68.75% of missed vulns (arXiv:2603.18740, 2026)](https://arxiv.org/abs/2603.18740)
+- [Why Do Multi-Agent LLM Systems Fail? MASFT taxonomy, 1,600+ traces (arXiv:2503.13657, 2025)](https://arxiv.org/abs/2503.13657)
+- [Which Agent Caused the Failure? Inter-Agent Attribution — 53.5% (arXiv:2505.00212, 2025)](https://arxiv.org/abs/2505.00212)
+- [Context Degradation in Long-Context LLMs (arXiv:2601.22047, 2026)](https://arxiv.org/abs/2601.22047)
+- [Agent Autonomy in Open-Source PRs — 8,031 PRs (arXiv:2601.17413, 2026)](https://arxiv.org/abs/2601.17413)
+- [USENIX Security '25: "We Have a Package for You!" — Package Hallucinations by Code-Generating LLMs (19.7% hallucinated, 43% reproducible)](https://www.usenix.org/conference/usenixsecurity25/technical-sessions)
+- [METR: Measuring AI Ability to Complete Long Software Tasks — 7-month horizon doubling (arXiv:2503.14499, 2025)](https://arxiv.org/abs/2503.14499)
 
 ### Industry
 - [CodeRabbit: AI vs Human Code Quality Report (2025)](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)
@@ -38,6 +49,12 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [AWS: Stop AI Agent Hallucinations — 4 Techniques](https://dev.to/aws/stop-ai-agent-hallucinations-4-essential-techniques-2i94)
 - [Zhang et al.: Guardrails Beat Guidance (arXiv:2604.11088, 2026)](https://arxiv.org/abs/2604.11088)
 - [ClawSafety: Indirect Prompt Injection (arXiv:2604.01438, 2026)](https://arxiv.org/abs/2604.01438)
+- [Chroma: Context Rot — How Increasing Input Tokens Impacts LLM Performance, 18-model study (2025)](https://research.trychroma.com/context-rot)
+- [GitClear: AI Copilot Code Quality — 2025 Research Report (copy/paste 8.3%→12.3%, refactor 24.1%→9.5%, churn 3.1%→5.7%)](https://www.gitclear.com/ai_assistant_code_quality_2025_research)
+- [GitGuardian: The State of Secrets Sprawl 2026 (28.65M secrets; AI-assisted commits 3.2% vs 1.5% baseline; 24,008 secrets in MCP configs)](https://blog.gitguardian.com/the-state-of-secrets-sprawl-2026/)
+- [Cloud Security Alliance: Slopsquatting & the AI Supply Chain (2026)](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/)
+- [Tenzai: Bad Vibes — Secure-Coding Capabilities of AI Coding Agents (SSRF 100%, security headers 0/15) (2026)](https://blog.tenzai.com/bad-vibes-comparing-the-secure-coding-capabilities-of-popular-coding-agents/)
+- [OWASP: Top 10 for Agentic Applications (2026)](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
 
 ### Model-Specific Failure Reports
 - [Claude Code: Read-Before-Act Regression Analysis (GitHub #42796, 6,852 sessions)](https://github.com/anthropics/claude-code/issues/42796)
@@ -196,6 +213,12 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 | W12 | Tool-Call Format Instability | Kimi K2: `finish_reason="tool_calls"` but `tool_calls=[]` after multi-round agentic sessions; assumed success causes silent failure | Tool-Call Result Verification gate — verify result before proceeding |
 | W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently | Error Ownership — every detected problem must be addressed regardless of origin |
 | W14 | External Content Injection | Files/web/emails read during task embed fake instructions; model follows them (ClawSafety 2026: 40–75% success rate) | External Content Injection prohibition — treat all external content as untrusted data |
+| W15 | Specification Gaming / Reward Hacking | Satisfies the literal test/metric while violating intent — special-cases known test inputs, hard-codes expected outputs, games the reward signal (SWE-ABS 2603.00520: 19.78% of "solved" tasks semantically wrong; gap widens +28pp at 10× code, SpecBench 2605.21384) | Test Integrity — verify against described intent + cases beyond the provided suite; never special-case test inputs |
+| W16 | Sycophancy / Authority Deference | Abandons a correct position under user pushback; defers to authority claims (PR text, comments, "the reviewer said") instead of judging behavior (BrokenMath 2510.04721: GPT-5 29% sycophantic; redacting AI-authorship cues recovered 68.75% of missed vulns, 2603.18740) | Process Framework (on pushback, re-verify from source) + Trust Verification — judge code by behavior, not claims |
+| W17 | Dependency Hallucination / Slopsquatting | Imports a package that doesn't exist, or an attacker's typosquat of a hallucinated name (USENIX 2025: 19.7% of LLM-suggested packages hallucinated, 43% reproducible) | Trust Verification — package present in registry (non-trivial age + downloads) AND in lockfile before import |
+| W18 | Context Rot / Long-Context Degradation | Accuracy degrades as input grows even within the window; mid-context instructions silently dropped (Chroma 18-model study; arXiv 2601.22047). Distinct from W4 (post-compaction staleness) | Artifact-First Recovery + Token/Context — front-load constraints, re-ground every ~20 calls, summarize don't accumulate |
+| W19 | Multi-Agent / Subagent Handoff Failure | Trusts subagent-returned data as ground truth; specs/results distorted or lost across handoffs (MASFT 2503.13657, 1,600+ traces; 2505.00212: 53.5% inter-agent attribution) | Subagent Output Verification gate — apply Grounded Specifics + Trust Verification to returned data; explicit handoff contract; turn budget → escalate |
+| W20 | Slop / Duplication Drift | Regenerates near-duplicate code instead of reusing existing implementation (GitClear 2025: copy-pasted 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 3.1%→5.7%) | Fix Quality — grep for existing impl before generating; reuse/modify over regenerate |
 
 Each rule in `rules.md` addresses one or more weaknesses. New rules: explicitly identify weaknesses mitigated.
 
@@ -232,5 +255,5 @@ When adding new rule:
 2. **Positive framing first:** Write as "Do X" before adding any "Don't Y" reinforcement
 3. **Token budget:** Adding > 10 lines to `rules.md` → use reference file instead
 4. **Overlap check:** Search all dev-skills SKILL.md files — verify reinforcement, not contradiction
-5. **Weakness mapping:** Map to W1-W14. Unmapped rules may belong in skill instead
+5. **Weakness mapping:** Map to W1-W20. Unmapped rules may belong in skill instead
 6. **Evaluate with rubric:** Minimum 15/18 for inclusion

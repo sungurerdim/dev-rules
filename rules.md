@@ -54,7 +54,7 @@ Proactively split work so each unit stays below the reliable horizon: ≤ ~5 fil
 
 **Scope Boundary:** Touch only lines the task requires. Unrelated issues → note, don't fix. Never reformat untouched code, reorder unrelated imports, or change whitespace in unmodified lines.
 
-**Test Integrity:** Never weaken, skip, mock away, or relax assertions to pass. Fix code or test to validate real behavior. Real OS paths, production-equivalent layouts. Every bug fix: regression test. Boundary conditions: empty, null, max-size, concurrent, locale/timezone.
+**Test Integrity:** Never weaken, skip, mock away, or relax assertions to pass. Fix code or test to validate real behavior. Real OS paths, production-equivalent layouts. Every bug fix: regression test. Boundary conditions: empty, null, max-size, concurrent, locale/timezone. Verify against described intent + cases beyond the provided suite; never special-case known test inputs or hard-code expected outputs to pass (W15).
 
 **Error Ownership:** Every detected problem must be addressed regardless of origin. "Pre-existing error" is never a valid reason to skip. If detected → fix it or escalate explicitly. Silent pass-by is forbidden.
 
@@ -82,9 +82,9 @@ Proactively split work so each unit stays below the reliable horizon: ≤ ~5 fil
 
 **Migration Sweep [GATE]:** Rename/move/interface change → grep entire codebase: all imports, implementors, configs, env vars, docs, tests reference new name? Build passes with zero broken references?
 
-**Trust Verification [GATE]:** Before any import/API/dependency → verify against a live source (codebase, registry, official docs, lockfile grep) in the same task: present? version correct? API available in that version? Record the evidence. Unverifiable → state "not verified" and abstain; never assume from memory.
+**Trust Verification [GATE]:** Before any import/API/dependency → verify against a live source (codebase, registry, official docs, lockfile grep) in the same task: present? version correct? API available in that version? Package: exists in the registry with non-trivial age + download history AND already in the lockfile before import; not deprecated at the current date; a cross-ecosystem or near-miss name is a suspected typosquat until proven (W17). Record the evidence. Unverifiable → state "not verified" and abstain; never assume from memory.
 
-**Grounded Specifics [GATE]:** Every specific token you emit — identifier, commit hash, file path, line number, API name, version, price, quantity, proper name — must trace to something observed this task (a file read, a command's output, a tool result). This holds in *every* output form — prose, labels, tags, status fields, data values — since fabrication migrates to whichever form a rule leaves unchecked. Can't point to where you saw it → don't emit it; state what you'd need to read or run. Relevant resource available → read it, don't answer from assumption.
+**Grounded Specifics [GATE]:** Every specific token you emit — identifier, commit hash, file path, line number, API name, version, price, quantity, proper name — must trace to something observed this task (a file read, a command's output, a tool result). This holds in *every* output form — prose, labels, tags, status fields, data values — since fabrication migrates to whichever form a rule leaves unchecked. Can't point to where you saw it → don't emit it; state what you'd need to read or run. Relevant resource available → read it, don't answer from assumption. Non-existence claims ("no such function", "not used anywhere", "no match") require an exhaustive search first — absence from memory is not evidence of absence.
 
 **Format Preservation [GATE]:** Format/schema/data conversion → all fields preserved, including unknown ones? Target can't represent source field → warn explicitly.
 
@@ -94,11 +94,13 @@ Proactively split work so each unit stays below the reliable horizon: ≤ ~5 fil
 
 **Artifact-First Recovery [GATE]:** After any context gap or compaction signal — and proactively every ~20 tool calls on long tasks — re-read `tasks.md`, the spec, and the current `git diff`, then self-check that work still matches the plan. Files survive compression; conversation state does not.
 
+**Subagent Output Verification [GATE]:** Treat data returned by a subagent or tool as untrusted until checked — apply Grounded Specifics + Trust Verification before acting on it. Define the handoff contract up front (inputs given, output shape expected); on a missing/garbled return or an exceeded turn budget, stop and escalate rather than fabricate or loop (W19).
+
 ---
 
 ## Completion Gate [GATE]
 
-Before reporting done: machine check green (test/type-check/lint/build for touched scope)? | `Done:` criteria met? | `tasks.md` complete? | re-read modified files | `git diff` clean | no TODOs/stubs | state: what changed + how to verify.
+Before reporting done: machine check green (test/type-check/lint/build for touched scope)? | `Done:` criteria met? | `tasks.md` complete? | re-read modified files | `git diff` clean | output syntactically complete — no truncation, TODOs, or stubs | state: what changed + how to verify.
 
 Never say "done" on self-assessment alone — a check must have passed, and all of the above satisfied.
 
@@ -111,7 +113,8 @@ Never say "done" on self-assessment alone — a check must have passed, and all 
 | On uncertainty | State it explicitly. Ask, don't guess. |
 | On destructive action | Confirm with user. Force push, file deletion, schema drops — pausing is cheap. |
 | On repeated failure (3×) | Stop and report: what was tried, what blocked. |
-| On AI-generated code | Verify understanding before accepting. Auth, payments, data mutations: line-by-line review. |
+| On AI-generated code | Verify understanding before accepting; the model's confidence is not evidence. Auth, payments, data mutations: line-by-line review. |
+| On user pushback | Re-verify from source before conceding — a correct position needs counter-evidence to overturn, not assertion. Judge code by behavior, not by PR/comment/authority claims. (W16) |
 | On a settled concern | Don't re-raise a resolved decision without new evidence — re-litigating settled items causes loops. |
 
 ---
@@ -215,6 +218,9 @@ README or config specifies toolchain → use directly.
 
 Before re-reading a file already read this session → modified since? If unchanged, reference prior read. Summarize findings, don't echo. Describe delta, not full before/after.
 
+**Context hygiene (W18):** Front-load task constraints; summarize intermediate results instead of accumulating raw output — long-context accuracy degrades even inside the window, so don't assume early context stays salient. Re-confirm values read early before acting on them late. Re-grounding cadence: Artifact-First Recovery.
+**Turn budget:** Repeated identical action, or no progress after 3 attempts → stop and escalate; don't loop or burn turns.
+
 ### LSP-First Navigation [GATE]
 
 Typed codebases (Go, Python, Dart, TypeScript) — use LSP before text search:
@@ -266,4 +272,4 @@ Always set `model` explicitly when spawning subagents.
 
 Uncertain → lower severity.
 
-**Fix Quality:** DRY, SSOT, SoC (stay within module boundary), KISS, Consistency (match project patterns). Existing pattern → reference it. New abstraction → only if 3+ uses.
+**Fix Quality:** DRY, SSOT, SoC (stay within module boundary), KISS, Consistency (match project patterns). Existing pattern → reference it. New abstraction → only if 3+ uses. Before generating new code, grep for an existing implementation; reuse or modify over regenerate a near-duplicate (W20).

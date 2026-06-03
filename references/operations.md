@@ -100,6 +100,8 @@ Every cache interaction must define: TTL, invalidation strategy, + stale-data to
 | Smoke tests | Critical user journeys pass in staging before production deploy |
 | Monitoring | Dashboards + alerts configured for new feature/change |
 
+**Agent-authored changes:** A PR opened by an autonomous agent gets human review before merge when it touches CI/CD (`.github/workflows/`, pipelines), infrastructure-as-code, auth, or secrets — and never auto-merges to a protected branch. Agent dependency-bumps included. Source: [Agent Autonomy in Open-Source PRs — 8,031 PRs (arXiv:2601.17413, 2026)](https://arxiv.org/abs/2601.17413).
+
 **Staged rollout:** High-risk changes → deploy incrementally: 1% → 10% → 50% → 100%. Monitor error rates + latency at each stage. Automated rollback if error rate exceeds threshold.
 
 **Zero-downtime deployment:** Use blue-green or rolling deployment. Verify: DB migrations backward-compatible, no breaking API changes for in-flight requests, session state survives instance rotation.

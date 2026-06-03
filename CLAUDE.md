@@ -41,7 +41,7 @@ Each has a prompt-expressible shadow that *does* live in `rules.md` (e.g. "verif
 
 ### Pre-checks (all must pass)
 
-1. Map to weakness taxonomy W1–W14 (see `references/rule-design.md`) — unmapped rules may belong in a skill instead
+1. Map to weakness taxonomy W1–W20 (see `references/rule-design.md`) — unmapped rules may belong in a skill instead
 2. Evidence: ≥2 documented real-world failure cases (not hypothetical)
 3. Token budget: rule body >10 lines → move detail to reference file, keep summary in `rules.md`
 4. Overlap check: search existing rules — reinforce, don't contradict
@@ -66,7 +66,7 @@ Types:
 | Tier 2 | 8+ files, ambiguous, destructive, or multi-phase | Block format, wait for confirmation |
 | Exempt | 1–2 file cosmetic, trivial lookup | No pre-flight |
 
-## Weakness Taxonomy (W1–W14)
+## Weakness Taxonomy (W1–W20)
 
 | ID | Weakness | Mitigated By |
 |----|----------|-------------|
@@ -84,6 +84,12 @@ Types:
 | W12 | Tool-Call Format Instability | Tool-Call Result Verification gate |
 | W13 | Error Abandonment | Error Ownership prohibition |
 | W14 | External Content Injection | External Content Injection prohibition |
+| W15 | Specification Gaming / Reward Hacking | Test Integrity — intent over tests |
+| W16 | Sycophancy / Authority Deference | Process Framework (re-verify on pushback), Trust Verification |
+| W17 | Dependency Hallucination / Slopsquatting | Trust Verification — registry age/downloads + lockfile |
+| W18 | Context Rot / Long-Context Degradation | Artifact-First Recovery, Context hygiene |
+| W19 | Multi-Agent / Subagent Handoff Failure | Subagent Output Verification gate |
+| W20 | Slop / Duplication Drift | Fix Quality — grep before generate |
 
 ## Sync Requirement
 
