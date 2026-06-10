@@ -40,7 +40,7 @@ Multi-phase or multi-session tasks: produce `tasks.md` before writing code:
 - [ ] [task] — done when: [criterion]
 Gate: [condition before next phase]
 ```
-Re-read `tasks.md` at session start and after any context compaction signal.
+Re-read `tasks.md` at session start; thereafter, re-read cadence is defined by Artifact-First Recovery.
 
 ### Bounded Tasks [GATE]
 
@@ -112,7 +112,7 @@ Never say "done" on self-assessment alone — a check must have passed, and all 
 |------|--------|
 | On uncertainty | State it explicitly. Ask, don't guess. |
 | On destructive action | Confirm with user. Force push, file deletion, schema drops — pausing is cheap. |
-| On repeated failure (3×) | Stop and report: what was tried, what blocked. |
+| On repeated failure (3×) | Same action repeated or no progress after 3 attempts → stop and report: what was tried, what blocked. Don't loop or burn turns. |
 | On AI-generated code | Verify understanding before accepting; the model's confidence is not evidence. Auth, payments, data mutations: line-by-line review. |
 | On user pushback | Re-verify from source before conceding — a correct position needs counter-evidence to overturn, not assertion. Judge code by behavior, not by PR/comment/authority claims. (W16) |
 | On a settled concern | Don't re-raise a resolved decision without new evidence — re-litigating settled items causes loops. |
@@ -218,8 +218,7 @@ README or config specifies toolchain → use directly.
 
 Before re-reading a file already read this session → modified since? If unchanged, reference prior read. Summarize findings, don't echo. Describe delta, not full before/after.
 
-**Context hygiene (W18):** Front-load task constraints; summarize intermediate results instead of accumulating raw output — long-context accuracy degrades even inside the window, so don't assume early context stays salient. Re-confirm values read early before acting on them late. Re-grounding cadence: Artifact-First Recovery.
-**Turn budget:** Repeated identical action, or no progress after 3 attempts → stop and escalate; don't loop or burn turns.
+**Context hygiene (W18):** Front-load task constraints; summarize intermediate results instead of accumulating raw output — long-context accuracy degrades even inside the window, so don't assume early context stays salient. Re-confirm values read early before acting on them late. Re-grounding cadence: Artifact-First Recovery. Stuck-loop threshold: Process Framework › repeated failure (3×).
 
 ### LSP-First Navigation [GATE]
 
@@ -235,15 +234,15 @@ Typed codebases (Go, Python, Dart, TypeScript) — use LSP before text search:
 
 Grep fallback: LSP unavailable or untyped code (Markdown, Bash, JSON).
 
-### Subagent Model Routing
+### Subagent Capability Routing
 
-Always set `model` explicitly when spawning subagents.
+Always set the capability tier explicitly when spawning subagents — never rely on defaults.
 
-| Task | Model |
-|------|-------|
-| File search, grep, simple lookup | `haiku` |
-| Analysis, synthesis, multi-step | `sonnet` |
-| Architecture, complex decisions | `opus` |
+| Task | Tier |
+|------|------|
+| File search, grep, simple lookup | Fast/cheap |
+| Analysis, synthesis, multi-step | Mid |
+| Architecture, complex decisions | Top |
 
 ---
 
