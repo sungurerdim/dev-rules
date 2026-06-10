@@ -78,7 +78,7 @@ Prefer managed auth services (Auth0, Supabase Auth, Firebase Auth, Clerk) over D
 
 OAuth/OIDC: use PKCE for all public clients (SPA, mobile). Implicit flow is deprecated.
 
-RFC 9700 (OAuth 2.1, 2025) consolidates OAuth 2.0 best practices. Passkeys (WebAuthn/FIDO2) recommended passwordless alternative — support as secondary auth method.
+RFC 9700 (OAuth 2.0 Security Best Current Practice, 2025) consolidates OAuth 2.0 security guidance — PKCE for all clients, implicit + ROPC grants deprecated, exact redirect-URI matching; OAuth 2.1 (still an IETF draft) incorporates it. Passkeys (WebAuthn/FIDO2) recommended passwordless alternative — support as secondary auth method.
 
 ---
 
@@ -110,7 +110,7 @@ Use platform/language standard libraries exclusively. Custom crypto implementati
 
 ---
 
-## OWASP API Security Top 10 (2025)
+## OWASP API Security Top 10 (2023)
 
 When building APIs, verify against top risks:
 
@@ -164,7 +164,7 @@ Broken object-level authorization is the most common AI-introduced access flaw: 
 3. Assert `403`/`404` — not `200`. A suite without this case does not test authorization.
 
 Apply equally to indirect references (filenames, storage keys, sequential IDs).
-Source: [OWASP API1: BOLA](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/); [CVE-2025-48757](https://nvd.nist.gov/vuln/detail/CVE-2025-48757).
+Source: [OWASP API1: BOLA](https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/); [CVE-2025-48757](https://nvd.nist.gov/vuln/detail/CVE-2025-48757) (missing row-level authorization, CWE-863 — the same absent "is this yours?" check at table level).
 
 ---
 
@@ -215,7 +215,7 @@ Source: [OWASP Agentic Top 10 2026](https://genai.owasp.org/resource/owasp-top-1
 
 ## License & IP Contamination
 
-AI assistants can emit near-verbatim third-party or copyleft code without attribution. In *Doe v. GitHub* most claims were dismissed, but an open-source-license-violation claim survives and the DMCA "identicality" question is on appeal — provenance still matters. The EU AI Act (Reg. 2024/1689) GPAI training-data/copyright transparency duties applied Aug 2025; full applicability + Article 50 transparency begin 2 Aug 2026.
+AI assistants can emit near-verbatim third-party or copyleft code without attribution. In *Doe v. GitHub* most claims were dismissed, but an open-source-license-violation claim survives and the DMCA "identicality" question is on appeal — provenance still matters. The EU AI Act (Reg. 2024/1689): GPAI obligations (Art. 53 — training-data summaries, copyright compliance) applied 2 Aug 2025; full applicability, including Article 50 transparency for AI-generated content, begins 2 Aug 2026.
 
 1. Run a license/SCA scan (FOSSA, ScanCode) on AI-assisted PRs; flag GPL/AGPL/copyleft entering permissively-licensed code.
 2. Large verbatim AI-emitted blocks → verify provenance before merge; prefer generating from your own interfaces.

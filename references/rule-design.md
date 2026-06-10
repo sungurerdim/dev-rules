@@ -13,30 +13,30 @@ How + why rules are written as they are. For rule authors and contributors — n
 
 ### Academic
 - [Wharton: Chain-of-Thought Technical Report (2025)](https://gail.wharton.upenn.edu/research-and-insights/tech-report-chain-of-thought/)
-- [RDS+: Representation Redundancy in Instruction Tuning (arXiv 2025)](https://arxiv.org/html/2602.13773)
-- [Process Reward Models (ACL Findings 2025)](https://arxiv.org/abs/2501.07301)
-- [AI Agent Systems Survey (arXiv 2025)](https://arxiv.org/html/2601.01743v1)
-- [Focused Chain-of-Thought (ICLR 2025)](https://arxiv.org/pdf/2511.22176)
+- [RDS+: Representation Redundancy in Instruction Tuning (arXiv 2026)](https://arxiv.org/html/2602.13773)
+- [Process Reward Models (arXiv 2025)](https://arxiv.org/abs/2501.07301)
+- [AI Agent Systems Survey (arXiv 2026)](https://arxiv.org/html/2601.01743v1)
+- [Focused Chain-of-Thought (arXiv 2025)](https://arxiv.org/pdf/2511.22176)
 - [Ten Simple Rules AI-Assisted Coding (arXiv 2025)](https://arxiv.org/html/2510.22254v2)
 - [Instruction Hierarchy (arXiv 2024)](https://arxiv.org/html/2404.13208v1)
 - [SHIELDA: Structured Exception Handling in LLM Workflows](https://arxiv.org/html/2508.07935v1)
 - [SpecBench: Specification Gaming in Code Agents — +28pp gap with 10× more code (arXiv:2605.21384, 2026)](https://arxiv.org/abs/2605.21384)
 - [Reward-Hacking Behaviors in LLM Coding Agents (arXiv:2605.02964, 2026)](https://arxiv.org/abs/2605.02964)
-- [SWE-ABS: Semantic Correctness of "Solved" SWE Tasks — 19.78% semantically wrong (arXiv:2603.00520, 2026)](https://arxiv.org/abs/2603.00520)
+- [SWE-ABS: Semantic Correctness of "Solved" SWE Tasks — 19.71% semantically wrong (arXiv:2603.00520, 2026)](https://arxiv.org/abs/2603.00520)
 - [BrokenMath: LLM Sycophancy Under Pushback — GPT-5 29% (arXiv:2510.04721, 2025)](https://arxiv.org/abs/2510.04721)
-- [Authorship Bias in AI-Assisted Code Review — redaction recovers 68.75% of missed vulns (arXiv:2603.18740, 2026)](https://arxiv.org/abs/2603.18740)
-- [Why Do Multi-Agent LLM Systems Fail? MASFT taxonomy, 1,600+ traces (arXiv:2503.13657, 2025)](https://arxiv.org/abs/2503.13657)
+- [Authorship Bias in AI-Assisted Code Review — redaction recovers 70.6% (12/17) of missed vulns (arXiv:2603.18740, 2026)](https://arxiv.org/abs/2603.18740)
+- [Why Do Multi-Agent LLM Systems Fail? MAST taxonomy, 1,600+ traces (arXiv:2503.13657, 2025)](https://arxiv.org/abs/2503.13657)
 - [Which Agent Caused the Failure? Inter-Agent Attribution — 53.5% (arXiv:2505.00212, 2025)](https://arxiv.org/abs/2505.00212)
-- [Context Degradation in Long-Context LLMs (arXiv:2601.22047, 2026)](https://arxiv.org/abs/2601.22047)
-- [Agent Autonomy in Open-Source PRs — 8,031 PRs (arXiv:2601.17413, 2026)](https://arxiv.org/abs/2601.17413)
-- [USENIX Security '25: "We Have a Package for You!" — Package Hallucinations by Code-Generating LLMs (19.7% hallucinated, 43% reproducible)](https://www.usenix.org/conference/usenixsecurity25/technical-sessions)
+- [Intelligence Degradation in Long-Context LLMs (arXiv:2601.15300, 2026)](https://arxiv.org/abs/2601.15300)
+- [When AI Agents Touch CI/CD Configurations — 8,031 agentic PRs (arXiv:2601.17413, 2026)](https://arxiv.org/abs/2601.17413)
+- [USENIX Security '25: "We Have a Package for You!" — Package Hallucinations by Code-Generating LLMs (19.7% hallucinated, 43% reproducible)](https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen)
 - [METR: Measuring AI Ability to Complete Long Software Tasks — 7-month horizon doubling (arXiv:2503.14499, 2025)](https://arxiv.org/abs/2503.14499)
 
 ### Industry
 - [CodeRabbit: AI vs Human Code Quality Report (2025)](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)
 - [Authority Partners: AI Agent Guardrails Production Guide (2026)](https://authoritypartners.com/insights/ai-agent-guardrails-production-guide-for-2026/)
 - [CodeSignal: Prompt Engineering Best Practices (2025)](https://codesignal.com/blog/prompt-engineering-best-practices-2025/)
-- [Databricks: Structured Outputs for Agent Workflows (2025)](https://www.databricks.com/blog/introducing-structured-outputs-for-batch-and-agent-workflows)
+- [Databricks: Structured Outputs for Agent Workflows (2024)](https://www.databricks.com/blog/introducing-structured-outputs-batch-and-agent-workflows)
 - [Lakera: Prompt Engineering Guide (2026)](https://www.lakera.ai/blog/prompt-engineering-guide)
 - [Veracode: GenAI Security and Vibe Coding (2026)](https://www.veracode.com/blog/genai-security-and-vibe-coding/)
 - [5 Test Integrity Rules for AI Agents](https://jsmanifest.com/5-test-integrity-rules-ai-agents-typescript)
@@ -49,7 +49,7 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [AWS: Stop AI Agent Hallucinations — 4 Techniques](https://dev.to/aws/stop-ai-agent-hallucinations-4-essential-techniques-2i94)
 - [Zhang et al.: Guardrails Beat Guidance (arXiv:2604.11088, 2026)](https://arxiv.org/abs/2604.11088)
 - [ClawSafety: Indirect Prompt Injection (arXiv:2604.01438, 2026)](https://arxiv.org/abs/2604.01438)
-- [Chroma: Context Rot — How Increasing Input Tokens Impacts LLM Performance, 18-model study (2025)](https://research.trychroma.com/context-rot)
+- [Chroma: Context Rot — How Increasing Input Tokens Impacts LLM Performance, 18-model study (2025)](https://www.trychroma.com/research/context-rot)
 - [GitClear: AI Copilot Code Quality — 2025 Research Report (copy/paste 8.3%→12.3%, refactor 24.1%→9.5%, churn 3.1%→5.7%)](https://www.gitclear.com/ai_assistant_code_quality_2025_research)
 - [GitGuardian: The State of Secrets Sprawl 2026 (28.65M secrets; AI-assisted commits 3.2% vs 1.5% baseline; 24,008 secrets in MCP configs)](https://blog.gitguardian.com/the-state-of-secrets-sprawl-2026/)
 - [Cloud Security Alliance: Slopsquatting & the AI Supply Chain (2026)](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/)
@@ -58,13 +58,13 @@ How + why rules are written as they are. For rule authors and contributors — n
 
 ### Model-Specific Failure Reports
 - [Claude Code: Read-Before-Act Regression Analysis (GitHub #42796, 6,852 sessions)](https://github.com/anthropics/claude-code/issues/42796)
-- [Claude Code: Opus 4.6 Read Regression — Destructive Changes Without Reading (GitHub #47901)](https://github.com/anthropics/claude-code/issues/47901)
+- [Claude Code: Opus 4.6/4.5 Read Regression — Systematic Failure to Read Before Acting (GitHub #47901)](https://github.com/anthropics/claude-code/issues/47901)
 - [Claude Code: Opus 4.7 Bootstrap Failure (GitHub #50999)](https://github.com/anthropics/claude-code/issues/50999)
 - [Kimi K2: Tool Call Format Instability in Multi-Round Agentic Use (HuggingFace #48)](https://huggingface.co/moonshotai/Kimi-K2-Instruct/discussions/48)
 - [DeepSeek V3-0324: Function Calling Fix (Model Card)](https://huggingface.co/deepseek-ai/DeepSeek-V3-0324)
 - [OpenAI Codex: Context Compaction Failure (GitHub #20931)](https://github.com/openai/codex/issues/20931)
 - [Claude Opus 4.7: Confident-Prose Hallucination & "Bucket-Bypass Drift" — mechanical enforcement ≫ behavioral (GitHub #50235)](https://github.com/anthropics/claude-code/issues/50235)
-- [DeepSeek V4 Pro: CAISI/NIST Evaluation — ~8 months behind frontier, weak precision reasoning (2026)](https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro)
+- [DeepSeek V4: CAISI/NIST Evaluation — ~8 months behind frontier, weak precision reasoning (2026)](https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro)
 - [DeepSeek V4 Pro: reasoning_content Multi-Turn Tool-Call Inconsistency (opencode #25000)](https://github.com/anomalyco/opencode/issues/25000)
 
 ---
@@ -100,7 +100,7 @@ Optimal example count per rule:
 | 3-5 | Optimal — happy path + edge case + error recovery |
 | > 5 | Diminishing returns — increases token cost without proportional benefit |
 
-**Quality over quantity:** 3.5% well-selected training data outperforms 100% random data by 0.71% on benchmarks (RDS+ arXiv 2025). Same principle applies to rule examples — few precise, representative examples > many generic ones.
+**Quality over quantity:** 3.5% well-selected training data outperforms 100% random data by 0.71% on benchmarks (RDS+ arXiv 2026). Same principle applies to rule examples — few precise, representative examples > many generic ones.
 
 **Ordering matters:** Place most relevant or complex example LAST. AI models exhibit recency bias — final example has strongest influence on behavior.
 
@@ -148,7 +148,7 @@ Forced CoT adds only 2.9-3.1% accuracy improvement for reasoning models while co
 - Do not force step-by-step reasoning for tasks model can handle directly
 - Reserve explicit reasoning prompts for genuinely ambiguous or multi-step decisions
 - Use gates, not chains: "Verify X before Y" cheaper + more effective than "Think through X step by step, then do Y"
-- Focused CoT (ICLR 2025): when reasoning needed, constrain to specific decision point, not entire task
+- Focused CoT (arXiv 2025): when reasoning needed, constrain to specific decision point, not entire task
 
 ---
 
@@ -158,7 +158,7 @@ Forced CoT adds only 2.9-3.1% accuracy improvement for reasoning models while co
 
 The gap between a frontier model and a cheaper one concentrates in three places — long-horizon plan coherence, reliable self-verification, and instruction-following under load. All three are externalizable, and the loop mechanizes them:
 
-- **Target / Gap** convert open-ended "vibe coding" into a spec-bounded diff — kills scope creep (W3) for any model, and forces the problem-specific check a weak reasoner skips (DeepSeek V4 Pro applies familiar templates without verifying the problem's preconditions).
+- **Target / Gap** convert open-ended "vibe coding" into a spec-bounded diff — kills scope creep (W3) for any model, and forces the problem-specific check a weak reasoner skips (DeepSeek V4 applies familiar templates without verifying the problem's preconditions).
 - **Assess** grounds claims in read reality, not memory — the direct mitigation for confident-prose fabrication (Opus 4.7 #50235: emits real-looking but fabricated commit hashes / file paths) and for hallucination (W1) generally.
 - **Verify-each + "done = external signal"** is the highest-leverage move: it replaces the model's self-judgment (hallucinated ~63% of the time, W10) with a machine-checkable signal a passing test does not fake.
 
@@ -210,14 +210,14 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 | W9 | Concurrency Errors | AI-generated code misuses concurrency primitives 2× more than human-written (CodeRabbit 2025) | Safety reference — explicit concurrency checklist |
 | W10 | Self-Verification Failure | 63% of model self-checks still contain hallucinated content | Completion Gate — state what changed + how to verify |
 | W11 | Read-Before-Act Regression | Claude 4.6: reads-per-edit dropped 6.6× → 2.0× after Feb 2026 update; modifies files without reading them first (GitHub #47901, 6,852 sessions) | Read-Before-Modify gate — explicit read required before every edit |
-| W12 | Tool-Call Format Instability | Kimi K2: `finish_reason="tool_calls"` but `tool_calls=[]` after multi-round agentic sessions; assumed success causes silent failure | Tool-Call Result Verification gate — verify result before proceeding |
+| W12 | Tool-Call Format Instability | Kimi K2: malformed `tool_call_id` format breaks tool-call parsing in multi-round agentic sessions; assumed success causes silent failure | Tool-Call Result Verification gate — verify result before proceeding |
 | W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently | Error Ownership — every detected problem must be addressed regardless of origin |
 | W14 | External Content Injection | Files/web/emails read during task embed fake instructions; model follows them (ClawSafety 2026: 40–75% success rate) | External Content Injection prohibition — treat all external content as untrusted data |
-| W15 | Specification Gaming / Reward Hacking | Satisfies the literal test/metric while violating intent — special-cases known test inputs, hard-codes expected outputs, games the reward signal (SWE-ABS 2603.00520: 19.78% of "solved" tasks semantically wrong; gap widens +28pp at 10× code, SpecBench 2605.21384) | Test Integrity — verify against described intent + cases beyond the provided suite; never special-case test inputs |
-| W16 | Sycophancy / Authority Deference | Abandons a correct position under user pushback; defers to authority claims (PR text, comments, "the reviewer said") instead of judging behavior (BrokenMath 2510.04721: GPT-5 29% sycophantic; redacting AI-authorship cues recovered 68.75% of missed vulns, 2603.18740) | Process Framework (on pushback, re-verify from source) + Trust Verification — judge code by behavior, not claims |
+| W15 | Specification Gaming / Reward Hacking | Satisfies the literal test/metric while violating intent — special-cases known test inputs, hard-codes expected outputs, games the reward signal (SWE-ABS 2603.00520: 19.71% of "solved" tasks semantically wrong; gap widens +28pp at 10× code, SpecBench 2605.21384) | Test Integrity — verify against described intent + cases beyond the provided suite; never special-case test inputs |
+| W16 | Sycophancy / Authority Deference | Abandons a correct position under user pushback; defers to authority claims (PR text, comments, "the reviewer said") instead of judging behavior (BrokenMath 2510.04721: GPT-5 29% sycophantic; redacting AI-authorship cues recovered 70.6% of missed vulns, 2603.18740) | Process Framework (on pushback, re-verify from source) + Trust Verification — judge code by behavior, not claims |
 | W17 | Dependency Hallucination / Slopsquatting | Imports a package that doesn't exist, or an attacker's typosquat of a hallucinated name (USENIX 2025: 19.7% of LLM-suggested packages hallucinated, 43% reproducible) | Trust Verification — package present in registry (non-trivial age + downloads) AND in lockfile before import |
-| W18 | Context Rot / Long-Context Degradation | Accuracy degrades as input grows even within the window; mid-context instructions silently dropped (Chroma 18-model study; arXiv 2601.22047). Distinct from W4 (post-compaction staleness) | Artifact-First Recovery + Token/Context — front-load constraints, re-ground every ~20 calls, summarize don't accumulate |
-| W19 | Multi-Agent / Subagent Handoff Failure | Trusts subagent-returned data as ground truth; specs/results distorted or lost across handoffs (MASFT 2503.13657, 1,600+ traces; 2505.00212: 53.5% inter-agent attribution) | Subagent Output Verification gate — apply Grounded Specifics + Trust Verification to returned data; explicit handoff contract; turn budget → escalate |
+| W18 | Context Rot / Long-Context Degradation | Accuracy degrades as input grows even within the window; mid-context instructions silently dropped (Chroma 18-model study; arXiv 2601.15300). Distinct from W4 (post-compaction staleness) | Artifact-First Recovery + Token/Context — front-load constraints, re-ground every ~20 calls, summarize don't accumulate |
+| W19 | Multi-Agent / Subagent Handoff Failure | Trusts subagent-returned data as ground truth; specs/results distorted or lost across handoffs (MAST 2503.13657, 1,600+ traces; 2505.00212: 53.5% inter-agent attribution) | Subagent Output Verification gate — apply Grounded Specifics + Trust Verification to returned data; explicit handoff contract; turn budget → escalate |
 | W20 | Slop / Duplication Drift | Regenerates near-duplicate code instead of reusing existing implementation (GitClear 2025: copy-pasted 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 3.1%→5.7%) | Fix Quality — grep for existing impl before generating; reuse/modify over regenerate |
 
 Each rule in `rules.md` addresses one or more weaknesses. New rules: explicitly identify weaknesses mitigated.
