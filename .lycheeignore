@@ -1,0 +1,5 @@
+# Domains that hard-block automated clients (links manually verified 2026-06-10)
+https://www.gitclear.com/.*
+https://blog.tenzai.com/.*
+https://www.usenix.org/.*
+https://nvd.nist.gov/.*

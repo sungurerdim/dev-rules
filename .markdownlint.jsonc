@@ -1,0 +1,13 @@
+// Minimal config matching the repo's existing compact style — rules are prose artifacts for AI consumption.
+{
+  "default": true,
+  // Long lines are intentional: one rule = one line (token-efficient)
+  "MD013": false,
+  // Compact tables/lists/fences/headings without surrounding blank lines are the established style
+  "MD060": false,
+  "MD032": false,
+  "MD031": false,
+  "MD022": false,
+  // Format-template fences (pre-flight blocks, tasks.md skeletons) carry no language
+  "MD040": false
+}

@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Line budget — rules.md hard limit 300
+        run: |
+          lines=$(wc -l < rules.md)
+          echo "rules.md: ${lines} lines (target ~240, hard limit 300)"
+          [ "${lines}" -le 300 ]
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v23
+        with:
+          globs: "**/*.md"
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: lychee link check
+        uses: lycheeverse/lychee-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --no-progress --max-concurrency 4 --max-retries 3 --retry-wait-time 5 --accept '200..=299,429' "**/*.md"
+          fail: true
