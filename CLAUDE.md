@@ -58,39 +58,29 @@ Types:
 - `[PROHIBITION]` — must never happen; failure = critical defect
 - `[GATE]` — verify condition before proceeding to next step
 
-### Pre-flight tier thresholds (do not change without updating both files)
+### Pre-flight tier thresholds
 
-| Tier | Trigger | Behavior |
-|------|---------|----------|
-| Tier 1 | 3–7 files, clear scope, no destructive ops | State plan inline, proceed without waiting |
-| Tier 2 | 8+ files, ambiguous, destructive, or multi-phase | Block format, wait for confirmation |
-| Exempt | 1–2 file cosmetic, trivial lookup | No pre-flight |
+Defined once in `rules.md` › Task Pre-flight — that is the single source of truth; this guide intentionally holds no copy.
 
 ## Weakness Taxonomy (W1–W20)
 
-| ID | Weakness | Mitigated By |
-|----|----------|-------------|
-| W1 | Hallucination | Trust Verification, Grounded Specifics |
-| W2 | Tunnel Vision | Cross-file Consistency, Migration Sweep |
-| W3 | Scope Creep | Scope Boundary, Over-engineering |
-| W4 | Memory Decay | Artifact-First Recovery |
-| W5 | Confidence Bias | Severity levels |
-| W6 | Skip Tendency | Completion Gate |
-| W7 | Redundancy Blindness | Fix Quality deduplication, Settled-concern rule |
-| W8 | Injection Risk | Security — shell command safety |
-| W9 | Concurrency Errors | Concurrency Safety, safety.md |
-| W10 | Self-Verification Failure | Completion Gate — state what changed |
-| W11 | Read-Before-Act Regression | Read-Before-Modify gate |
-| W12 | Tool-Call Format Instability | Tool-Call Result Verification gate |
-| W13 | Error Abandonment | Error Ownership prohibition |
-| W14 | External Content Injection | External Content Injection prohibition |
-| W15 | Specification Gaming / Reward Hacking | Test Integrity — intent over tests |
-| W16 | Sycophancy / Authority Deference | Process Framework (re-verify on pushback), Trust Verification |
-| W17 | Dependency Hallucination / Slopsquatting | Trust Verification — registry age/downloads + lockfile |
-| W18 | Context Rot / Long-Context Degradation | Artifact-First Recovery, Context hygiene |
-| W19 | Multi-Agent / Subagent Handoff Failure | Subagent Output Verification gate |
-| W20 | Slop / Duplication Drift | Fix Quality — grep before generate |
+Single source of truth: `references/rule-design.md` › "AI Weakness Taxonomy" — full table with failure descriptions, evidence, and the rule mitigating each. Map every new or modified rule to a W-ID there.
 
 ## Sync Requirement
 
-After editing `rules.md`: sync installed copy at `~/.claude/rules/dev-rules.md` (header line differs; body must be identical).
+Installed layout — everything under `~/.claude/rules/` auto-loads into every session (recursively), so only `rules.md` lives there:
+
+| Repo path | Installed path | Auto-loaded? |
+|-----------|----------------|--------------|
+| `rules.md` | `~/.claude/rules/dev-rules.md` (exact copy) | Yes |
+| `references/` | `~/.claude/dev-rules-references/` | No — on demand only |
+
+After editing `rules.md` or `references/`, re-sync and verify:
+
+```bash
+cp rules.md ~/.claude/rules/dev-rules.md
+cp references/safety.md references/operations.md ~/.claude/dev-rules-references/
+diff rules.md ~/.claude/rules/dev-rules.md && diff references/safety.md ~/.claude/dev-rules-references/safety.md && diff references/operations.md ~/.claude/dev-rules-references/operations.md
+```
+
+`rule-design.md` is contributor-only — never installed.

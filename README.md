@@ -1,7 +1,7 @@
 # dev-rules
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tool](https://img.shields.io/badge/works_with-Claude_Code_·_Cursor_·_Copilot_·_Windsurf_·_Codex_·_Aider-green)]()
+![Works with](https://img.shields.io/badge/works_with-Claude_Code_·_Cursor_·_Copilot_·_Windsurf_·_Codex_·_Aider-green)
 
 AI coding assistants hallucinate APIs, break dependent files, weaken tests to make them pass, claim errors are "pre-existing" to skip fixing them, and silently drop data during conversions. These rules prevent that.
 
@@ -27,7 +27,7 @@ AI skills run when you invoke them. Rules run **all the time** — during every 
 
 **Operational awareness** — observability baseline, production-grade defaults, database migration safety
 
-**Process discipline** — structured workflow, artifact-first recovery after context gaps, LSP-first navigation, subagent model routing
+**Process discipline** — structured workflow, artifact-first recovery after context gaps, LSP-first navigation, subagent capability routing
 
 **Reference files** — detailed security and operations rules, loaded on demand when working on auth, payments, deployment, caching, etc.
 
@@ -66,14 +66,17 @@ AI skills run when you invoke them. Rules run **all the time** — during every 
 ```bash
 git clone https://github.com/sungurerdim/dev-rules.git /tmp/dev-rules
 cp /tmp/dev-rules/rules.md ~/.claude/rules/dev-rules.md
-cp -r /tmp/dev-rules/references ~/.claude/rules/dev-rules-references
+mkdir -p ~/.claude/dev-rules-references
+cp /tmp/dev-rules/references/safety.md /tmp/dev-rules/references/operations.md ~/.claude/dev-rules-references/
 rm -rf /tmp/dev-rules
 ```
+
+> **Keep references out of the auto-load path.** Claude Code loads everything under `~/.claude/rules/` (recursively) into every session. Reference files belong outside it — e.g. `~/.claude/dev-rules-references/` — so they cost tokens only when the AI actually needs them.
 
 ## How it works
 
 ```
-rules.md                    always loaded (~270 lines)
+rules.md                    always loaded (< 300 lines)
 references/
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability
@@ -100,7 +103,7 @@ dev-rules works great on its own. If you also use [dev-skills](https://github.co
 | **What** | How to work (behavioral guardrails) | What to do (execution workflows) |
 | **Example** | "Verify imports exist before using" | Full code review with 97 checks across 9 scopes |
 
-Together: always-on guardrails + 21 structured workflows covering scaffold → code → design → test → review → commit → PR → deploy → launch → analytics.
+Together: always-on guardrails + 26 structured workflows covering scaffold → code → design → test → review → commit → PR → deploy → launch → analytics.
 
 ## For contributors
 
