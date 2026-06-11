@@ -76,7 +76,7 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **Migration Sweep [GATE]:** Rename/move/interface change → grep entire codebase: all imports, implementors, configs, env vars, docs, tests reference new name? Build passes with zero broken references?
 
-**Trust Verification [GATE]:** Before any import/API/dependency → verify against a live source (codebase, registry, official docs, lockfile grep) in the same task: present? version correct? API available in that version? Package: exists in the registry with non-trivial age + download history AND already in the lockfile before import; not deprecated at the current date; a cross-ecosystem or near-miss name is a suspected typosquat until proven (W17). Record the evidence. Unverifiable → state "not verified" and abstain; never assume from memory.
+**Trust Verification [GATE]:** Before any import/API/dependency → verify against a live source (codebase, registry, official docs, lockfile grep) in the same task: present? version correct? API available in that version? Package: exists in the registry with non-trivial age + download history AND already in the lockfile before import; not deprecated at the current date; a cross-ecosystem or near-miss name is a suspected typosquat until proven (W17). Record the evidence. Unverifiable → state "not verified" and abstain; never assume from memory. New dependency requires justification — prefer stdlib or an already-present dep; never import a library for a few lines.
 
 **Grounded Specifics [GATE]:** Every specific token you emit — identifier, commit hash, file path, line number, API name, version, price, quantity, proper name — must trace to something observed this task (a file read, a command's output, a tool result). This holds in *every* output form — prose, labels, tags, status fields, data values. Can't point to where you saw it → don't emit it; state what you'd need to read or run. Relevant resource available → read it, don't answer from assumption. Non-existence claims ("no such function", "not used anywhere", "no match") require an exhaustive search first — absence from memory is not evidence of absence.
 
@@ -147,7 +147,7 @@ Never say "done" on self-assessment alone — a check must have passed, and all 
 | INFO | Business events — user actions, state transitions |
 | DEBUG | Dev diagnostics only |
 
-**Production Defaults** — validate all required env vars at startup; fail fast on missing config:
+**Production Defaults** — validate all required env vars at startup, fail fast on missing config; no hardcoded environment-specific values (URLs, ports, paths, model IDs) — config comes from env/config files:
 
 | Setting | Wrong | Right |
 |---------|-------|-------|
@@ -156,6 +156,8 @@ Never say "done" on self-assessment alone — a check must have passed, and all 
 | Rate limit | unlimited | Per endpoint |
 
 **Database Changes:** Schema migrations: backward-compatible (expand-contract). Include `up` + `down`. Test rollback before production. Data-destructive operations → flag for human review. See `references/operations.md`.
+
+**Idempotency:** Anything that can be retried or re-run — script, migration, webhook/queue handler, API mutation — must be safe to execute twice. Verify by re-running; payments: idempotency keys (see `references/safety.md`).
 
 ## Conventional Commits
 
