@@ -52,7 +52,7 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **Cross-file Consistency:** Modify A → grep all consumers of changed interfaces/exports/types first. Change that breaks a dependent file = not done.
 
-**Over-engineering:** Make only changes directly requested or clearly necessary. Don't add features, refactor, improve, or create helpers beyond what was asked. Three similar lines > premature abstraction.
+**Over-engineering (YAGNI):** Make only changes directly requested or clearly necessary. Don't add features, refactor, improve, or create helpers beyond what was asked. Three similar lines > premature abstraction.
 
 **File Creation:** Don't create files unless absolutely necessary; prefer editing existing files. Working artifacts are ephemeral: scratch files, debug scripts, one-off helpers, and a completed `tasks.md` are deleted at completion (or per user instruction) — never committed. Comments: only where WHY is non-obvious — never explain WHAT.
 
@@ -225,4 +225,4 @@ Before re-reading a file already read this session → modified since? If unchan
 | MEDIUM | Suboptimal but works |
 | LOW | Style only |
 
-**Fix Quality:** DRY, SSOT, SoC (stay within module boundary), KISS, Consistency (match project patterns). Existing pattern → reference it. New abstraction → only if 3+ uses. Before generating new code, grep for an existing implementation; reuse or modify over regenerate a near-duplicate (W20).
+**Fix Quality:** DRY, SSOT, SoC (stay within module boundary), KISS, YAGNI, Consistency (match project patterns). Existing pattern → reference it. New abstraction → only if 3+ uses. Before generating new code, grep for an existing implementation; reuse or modify over regenerate a near-duplicate (W20).
