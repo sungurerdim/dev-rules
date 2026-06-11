@@ -199,16 +199,16 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 
 | ID | Weakness | What Happens | Rule Mitigation |
 |----|----------|-------------|-----------------|
-| W1 | Hallucination | Fabricates APIs, packages, file paths, commit hashes, prices | Trust Verification + Grounded Specifics — every emitted specific must trace to an observation, in any output form |
+| W1 | Hallucination | Fabricates APIs, packages, file paths, commit hashes, prices | Trust Verification + Grounded Specifics — every emitted specific must trace to an observation, in any output form; Finding Triage — confirm each reported finding against current code before planning a fix |
 | W2 | Tunnel Vision | Edits file A, breaks file B | Cross-file Consistency + Migration Sweep |
-| W3 | Scope Creep | Reformats untouched code, adds unrequested features | Scope Boundary + Over-engineering Prevention |
-| W4 | Memory Decay | Relies on stale conversation context | Artifact-First Recovery — re-read before modifying |
-| W5 | Confidence Bias | Assigns higher severity than evidence warrants | Severity levels — when uncertain, choose lower |
-| W6 | Skip Tendency | Declares done before all steps executed | Completion Gate — explicit done checklist |
+| W3 | Scope Creep | Reformats untouched code, adds unrequested features | Scope Boundary + Over-engineering Prevention + File Creation no-residue rule — working artifacts (scratch files, debug scripts, one-off helpers) deleted at completion |
+| W4 | Memory Decay | Relies on stale conversation context | Artifact-First Recovery — re-read before modifying; Spec Artifact live ledger — mark `[x]` the moment a check passes, update `tasks.md` on approach change (the artifact is the progress ledger, not conversation memory) |
+| W5 | Confidence Bias | Assigns higher severity than evidence warrants | Severity levels — when uncertain, choose lower; Finding Triage — unconfirmed findings are false positives, excluded from the plan |
+| W6 | Skip Tendency | Declares done before all steps executed | Completion Gate — explicit done checklist incl. no-residue; Spec Artifact — live ledger keeps unexecuted steps visible |
 | W7 | Redundancy Blindness | Reports same issue multiple times; re-raises resolved concerns (Opus 4.7 loops) | Deduplication in Fix Quality + settled-concern rule (don't re-litigate without new evidence) |
 | W8 | Injection Risk | Unsanitized input in shell commands | Security Awareness — quote paths, use `--`, reject metacharacters |
 | W9 | Concurrency Errors | AI-generated code misuses concurrency primitives 2× more than human-written (CodeRabbit 2025) | Safety reference — explicit concurrency checklist |
-| W10 | Self-Verification Failure | 63% of model self-checks still contain hallucinated content | Completion Gate — state what changed + how to verify |
+| W10 | Self-Verification Failure | 63% of model self-checks still contain hallucinated content | Completion Gate — state what changed + how to verify; Spec Artifact — per-task verify check + expected signal named at plan time, not improvised at completion |
 | W11 | Read-Before-Act Regression | Claude 4.6: reads-per-edit dropped 6.6× → 2.0× after Feb 2026 update; modifies files without reading them first (GitHub #47901, 6,852 sessions) | Read-Before-Modify gate — explicit read required before every edit |
 | W12 | Tool-Call Format Instability | Kimi K2: malformed `tool_call_id` format breaks tool-call parsing in multi-round agentic sessions; assumed success causes silent failure | Tool-Call Result Verification gate — verify result before proceeding |
 | W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently | Error Ownership — every detected problem must be addressed regardless of origin |
@@ -218,7 +218,7 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 | W17 | Dependency Hallucination / Slopsquatting | Imports a package that doesn't exist, or an attacker's typosquat of a hallucinated name (USENIX 2025: 19.7% of LLM-suggested packages hallucinated, 43% reproducible) | Trust Verification — package present in registry (non-trivial age + downloads) AND in lockfile before import |
 | W18 | Context Rot / Long-Context Degradation | Accuracy degrades as input grows even within the window; mid-context instructions silently dropped (Chroma 18-model study; arXiv 2601.15300). Distinct from W4 (post-compaction staleness) | Artifact-First Recovery + Token/Context — front-load constraints, re-ground every ~20 calls, summarize don't accumulate |
 | W19 | Multi-Agent / Subagent Handoff Failure | Trusts subagent-returned data as ground truth; specs/results distorted or lost across handoffs (MAST 2503.13657, 1,600+ traces; 2505.00212: 53.5% inter-agent attribution) | Subagent Output Verification gate — apply Grounded Specifics + Trust Verification to returned data; explicit handoff contract; turn budget → escalate |
-| W20 | Slop / Duplication Drift | Regenerates near-duplicate code instead of reusing existing implementation (GitClear 2025: copy-pasted 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 3.1%→5.7%) | Fix Quality — grep for existing impl before generating; reuse/modify over regenerate |
+| W20 | Slop / Duplication Drift | Regenerates near-duplicate code instead of reusing existing implementation (GitClear 2025: copy-pasted 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 3.1%→5.7%) | Fix Quality — grep for existing impl before generating; reuse/modify over regenerate; no-residue rule — slop artifacts never committed |
 
 Each rule in `rules.md` addresses one or more weaknesses. New rules: explicitly identify weaknesses mitigated.
 
