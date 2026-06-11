@@ -22,6 +22,8 @@ Every task runs this loop, in order — don't skip or reorder stages.
 
 **Exempt:** 1–2 file cosmetic changes, trivial lookups.
 
+**Gate Recall:** The pre-flight statement names the gates that apply to this task — a named gate stays active; unnamed gates fade over long contexts (W18).
+
 ### Spec Artifact [GATE]
 
 Multi-phase or multi-session tasks: produce `tasks.md` before writing code:
@@ -66,6 +68,8 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **Finding Triage [GATE]:** Working from a findings list (lint, review, bug report, audit) → reproduce or confirm each finding against current code before planning any fix. Unconfirmed → false positive, exclude it. Plan only confirmed findings.
 
+**Verification-Infrastructure Gap [GATE]:** A required check has no tooling in the project (no test setup, no CI, no linter) → never silently skip the check: report the gap, offer to set it up, record the user's decision (W13).
+
 **Tool-Call Result Verification [GATE]:** After each tool/API call, confirm the result by observed effect — file actually changed on disk, exit code 0, expected output present — not by finish_reason or status code. Empty result with success status, `tool_calls` empty after a `tool_calls` finish, or a tool call emitted as plain text instead of executed = silent failure; investigate before continuing.
 
 **Change Verification [GATE]:** Modify function → verify: all other behaviors unchanged? All callers unaffected? Return type/shape unchanged?
@@ -92,7 +96,7 @@ Before reporting done: machine check green (test/type-check/lint/build for touch
 
 Never say "done" on self-assessment alone — a check must have passed, and all of the above satisfied.
 
-**Outcome Report:** Close every task with a very short plain-language summary — "what we did + concrete benefits gained" in user/developer terms (faster, safer, cheaper, fewer errors). Outcome-focused, minimal technical detail; technical specifics go above it, not in it.
+**Outcome Report:** Close every task with a very short plain-language summary — "what we did + concrete benefits gained" in user/developer terms (faster, safer, cheaper, fewer errors). Outcome-focused, minimal technical detail; technical specifics go above it, not in it. Also list open human-owned actions (approvals, account/repo settings, credentials, reviews only a human can do) — they must never vanish into the log.
 
 ## Process Framework
 
