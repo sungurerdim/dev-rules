@@ -1,12 +1,12 @@
 # Safety Reference
 
-Detailed rules for security-critical code. Load when working on: authentication, payments, cryptography, multi-tenant systems, CORS, concurrent/async code, URL-fetching features (SSRF), dependency/supply-chain changes, AI agents & MCP tools, secrets handling, or AI-assisted code review.
+Detailed rules for security-critical code. Load when working on: authentication, payments, cryptography, multi-tenant systems, CORS, concurrent/async code, user-input handling (injection), URL-fetching features (SSRF), dependency/supply-chain changes, AI agents & MCP tools, secrets handling, or AI-assisted code review.
 
 ---
 
 ## Async & Concurrency Safety
 
-AI-generated code misuses concurrency primitives 2x more than human-written code (CodeRabbit 2025). Extra vigilance required.
+AI-generated code shows ~2x more concurrency + dependency-correctness issues than human-written code (CodeRabbit 2025). Extra vigilance required.
 
 Concurrent code (locks, mutexes, event loops, queues, shared state) requires explicit synchronization verification.
 
@@ -121,6 +121,11 @@ When building APIs, verify against top risks:
 | API3 | Broken Object Property-Level Authorization | Return only fields requester is authorized to see |
 | API4 | Unrestricted Resource Consumption | Rate limiting, pagination limits, request size caps |
 | API5 | Broken Function-Level Authorization | RBAC on every endpoint, not just UI-visible ones |
+| API6 | Unrestricted Access to Sensitive Business Flows | Rate/abuse limits on purchase, booking, posting flows — not just auth endpoints |
+| API7 | Server-Side Request Forgery | See SSRF section below |
+| API8 | Security Misconfiguration | Harden defaults — see AI-Generated Insecure Defaults below |
+| API9 | Improper Inventory Management | Track all API versions/environments; retire undocumented + legacy endpoints |
+| API10 | Unsafe Consumption of APIs | Validate + sanitize third-party API responses like any untrusted input |
 
 Source: [OWASP API Security Top 10 (2023)](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
 
@@ -128,7 +133,7 @@ Source: [OWASP API Security Top 10 (2023)](https://owasp.org/API-Security/editio
 
 ## AI-Generated Insecure Defaults
 
-AI assistants favor permissive, demo-friendly configuration. Veracode (2026) found ~45% of AI-generated samples carried a known weakness; Tenzai (2026) found 0 of 15 AI-built apps set basic security headers. Treat any AI-proposed config that disables a check or widens access as suspect until justified.
+AI assistants favor permissive, demo-friendly configuration. Veracode (2025, 100+ LLMs) found ~45% of AI code-generation tasks introduce a known security flaw; Tenzai (2026) found 69 vulnerabilities across 15 AI-built apps, with security headers consistently absent. Treat any AI-proposed config that disables a check or widens access as suspect until justified.
 
 | Insecure default | Secure replacement |
 |------------------|--------------------|
@@ -144,7 +149,7 @@ Source: [Veracode GenAI 2026](https://www.veracode.com/blog/genai-security-and-v
 
 ## SSRF — Server-Side Request Forgery (CWE-918)
 
-Every AI coding agent in Tenzai's 2026 study introduced SSRF in a URL-preview feature (100% rate). Any feature that fetches a user-supplied URL (webhooks, link previews, image/PDF proxies, "import from URL"):
+SSRF was among the most common flaws across all agents in Tenzai's 2026 study of AI-built apps. Any feature that fetches a user-supplied URL (webhooks, link previews, image/PDF proxies, "import from URL"):
 
 1. Block private/loopback/link-local targets: RFC 1918 (`10/8`, `172.16/12`, `192.168/16`), `127/8`, `169.254/16`, `::1`, and cloud metadata `169.254.169.254`.
 2. Prefer an allowlist of permitted hosts; `https` scheme only; disable `file:`/`gopher:`/`ftp:`.
@@ -168,9 +173,24 @@ Source: [OWASP API1: BOLA](https://owasp.org/API-Security/editions/2023/en/0xa1-
 
 ---
 
+## Injection Defense (SQLi, XSS, Path, Command)
+
+Injection remains a top OWASP category (Top 10:2025), and AI-generated code fails hardest on XSS — Veracode (2025, 100+ LLMs) found ~86% of applicable samples missing XSS defenses. Rules per sink:
+
+| Sink | Rule |
+|------|------|
+| SQL / NoSQL | Parameterized queries / prepared statements only — never string-concatenate user input into a query |
+| HTML output | Context-aware output encoding; keep framework auto-escaping on; sanitize rich text with an allowlist |
+| File paths | Resolve, then verify the result stays under the intended base directory; reject `..`, absolute paths, null bytes |
+| Shell | Prefer exec-array APIs over shell strings; quote everything, pass `--` before dynamic args, reject metacharacters |
+
+Source: [Veracode 2025 GenAI Code Security Report](https://www.veracode.com/resources/analyst-reports/2025-genai-code-security-report/); [OWASP Top 10:2025](https://owasp.org/Top10/)
+
+---
+
 ## Secrets Sprawl & Scanning
 
-GitGuardian's State of Secrets Sprawl 2026 recorded 28.65M new secrets in public GitHub commits; AI-assisted commits leak at 3.2% vs a 1.5% baseline (~2×), and MCP config files exposed 24,008 secrets in their first year.
+GitGuardian's State of Secrets Sprawl 2026 recorded 28.65M new secrets in public GitHub commits; Claude Code-assisted commits leak at 3.2% vs a 1.5% baseline (~2×), and MCP config files exposed 24,008 secrets in their first year.
 
 1. Run a pre-commit + CI secret scanner (gitleaks, trufflehog, GitGuardian); block on hit.
 2. `.gitignore` the files/dirs that accumulate keys: `.env`, `.cursor/`, `.continue/`, `**/mcp.json`, `.claude/settings.local.json`.
@@ -215,7 +235,7 @@ Source: [OWASP Agentic Top 10 2026](https://genai.owasp.org/resource/owasp-top-1
 
 ## License & IP Contamination
 
-AI assistants can emit near-verbatim third-party or copyleft code without attribution. In *Doe v. GitHub* most claims were dismissed, but an open-source-license-violation claim survives and the DMCA "identicality" question is on appeal — provenance still matters. The EU AI Act (Reg. 2024/1689): GPAI obligations (Art. 53 — training-data summaries, copyright compliance) applied 2 Aug 2025; full applicability, including Article 50 transparency for AI-generated content, begins 2 Aug 2026.
+AI assistants can emit near-verbatim third-party or copyleft code without attribution. In *Doe v. GitHub*, surviving claims include open-source-license breach, DMCA §1202(b), and breach of contract, with the DMCA "identicality" question on appeal (9th Cir.) — provenance still matters. The EU AI Act (Reg. 2024/1689): GPAI obligations (Art. 53 — training-data summaries, copyright compliance) applied 2 Aug 2025; full applicability, including Article 50 transparency for AI-generated content, begins 2 Aug 2026.
 
 1. Run a license/SCA scan (FOSSA, ScanCode) on AI-assisted PRs; flag GPL/AGPL/copyleft entering permissively-licensed code.
 2. Large verbatim AI-emitted blocks → verify provenance before merge; prefer generating from your own interfaces.

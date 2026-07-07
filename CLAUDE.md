@@ -19,7 +19,7 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 
 - `rules.md` must be self-contained — all core rules function without reference files
 - All rules tool-agnostic — no Claude-specific or tool-specific syntax
-- No rule duplicated across files — each rule lives in exactly one location
+- No rule duplicated across files — each rule has exactly one canonical location; a one-line summary + pointer in `rules.md` backed by detail in a reference file is the intended pattern, not duplication
 - Reference files never auto-loaded — only when AI agent is working in their domain
 - `rules.md` token budget: target ~240 lines, hard limit 300 lines
 
@@ -44,7 +44,7 @@ Each has a prompt-expressible shadow that *does* live in `rules.md` (e.g. "verif
 1. Map to weakness taxonomy W1–W20 (see `references/rule-design.md`) — unmapped rules may belong in a skill instead
 2. Evidence: ≥2 documented real-world failure cases (not hypothetical)
 3. Token budget: rule body >10 lines → move detail to reference file, keep summary in `rules.md`
-4. Overlap check: search existing rules — reinforce, don't contradict
+4. Overlap check: search existing rules and dev-skills SKILL.md files — reinforce, don't contradict
 5. Self-contained check: rule must be actionable without reading other rules or reference files
 6. Evaluate with rubric in `rule-design.md` — target ≥15/18
 
