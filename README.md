@@ -101,9 +101,9 @@ dev-rules works great on its own. If you also use [dev-skills](https://github.co
 |---|---|---|
 | **When** | Always on | On demand (`/ds-review`, `/ds-test`, etc.) |
 | **What** | How to work (behavioral guardrails) | What to do (execution workflows) |
-| **Example** | "Verify imports exist before using" | Full code review with 97 checks across 9 scopes |
+| **Example** | "Verify imports exist before using" | A full multi-scope code review workflow |
 
-Together: always-on guardrails + 26 structured workflows covering scaffold → code → design → test → review → commit → PR → deploy → launch → analytics.
+Together: always-on guardrails + structured workflows covering the full lifecycle — scaffold → code → test → review → commit → PR → deploy → launch.
 
 ## For contributors
 
