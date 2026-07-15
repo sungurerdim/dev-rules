@@ -103,3 +103,23 @@ diff rules.md ~/.claude/rules/dev-rules.md && diff references/safety.md ~/.claud
 `rule-design.md` is contributor-only — never installed.
 
 Prior art for one-source→many-tools sync at scale: [Ruler](https://github.com/intellectronica/ruler) (30+ tool formats, CI drift check). The manual `cp` + `diff` above stays deliberate while only one target exists; adopt a sync tool if targets multiply.
+
+## Blueprint Profile
+
+Type: developer-tool | Stack: markdown-rules-artifact (no runtime) | Target: production
+Priorities: docs-accuracy, dx | Constraints: rules.md self-contained ≤300 lines, tool-agnostic, zero runtime deps
+Integrations: none
+Data: none | Regulations: none
+Audience: public (developers using AI coding tools) | Deploy: git clone / copy-paste install
+
+Entry: rules.md (no framework — plain markdown)
+Modules: rules.md=core-rules(1); references/=on-demand-reference(3); research/2026-07=provenance-artifacts(6); .github/workflows=ci(1)
+Data Flow: contributor-edit→CI(markdownlint+line-budget+lychee)→merge→copy/paste-install(consumer AI tool)
+External: none (zero runtime dependencies)
+Toolchain: markdownlint-cli2, lychee | CI: GitHub Actions | Container: none
+
+Ideal: coupling=1 cohesion=9 complexity=1 coverage=N/A
+
+Scores: sec=92 quality=80 arch=88 perf=N/A resil=75 test=78 stack=82 dx=70 docs=85 overall=81 model=claude-sonnet-5
+
+## End Blueprint Profile

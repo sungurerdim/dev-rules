@@ -16,3 +16,6 @@ Desktop.ini
 # Temporary
 *.tmp
 *.bak
+
+# dev-skills ship/audit state
+ds/audit/
