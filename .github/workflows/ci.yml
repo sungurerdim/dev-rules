@@ -18,7 +18,10 @@ jobs:
       - name: markdownlint
         uses: DavidAnson/markdownlint-cli2-action@v23
         with:
-          globs: "**/*.md"
+          # research/2026-07/ holds raw machine-generated artifacts — not doc-standard material
+          globs: |
+            **/*.md
+            !research/2026-07/**
 
   links:
     runs-on: ubuntu-latest
@@ -29,5 +32,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: --no-progress --max-concurrency 4 --max-retries 3 --retry-wait-time 5 --accept '200..=299,429' "**/*.md"
+          args: --no-progress --max-concurrency 4 --max-retries 3 --retry-wait-time 5 --accept '200..=299,429' --exclude-path research/2026-07 "**/*.md"
           fail: true
