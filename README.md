@@ -40,7 +40,7 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 
 **Operational awareness** — observability baseline, production-grade defaults, database migration safety
 
-**Process discipline** — structured workflow, artifact-first recovery after context gaps, LSP-first navigation, subagent capability routing
+**Process discipline** — structured workflow, artifact-first recovery after context gaps, code-intelligence-first navigation, subagent capability routing — with adaptive binding: named tools/artifacts are defaults, the host's native equivalent takes precedence
 
 **Reference files** — detailed security and operations rules, loaded on demand when working on auth, payments, deployment, caching, etc.
 

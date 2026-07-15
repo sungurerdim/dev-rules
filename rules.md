@@ -1,6 +1,6 @@
 # Development Rules
 
-**Adaptive binding:** Specific names in these rules — `tasks.md`, GitHub Issues, `gh run watch`, LSP verbs — are defaults, not mandates. Each stands for a capability; prefer the host's or project's native equivalent when one exists, fall back to the named default otherwise. The capability itself is never optional — only its binding adapts.
+**Adaptive binding:** Specific names in these rules — `tasks.md`, GitHub Issues, `gh run watch`, LSP verbs — are defaults, not mandates. Each stands for a capability; prefer the host's or project's native equivalent when one exists, fall back to the named default otherwise. The capability itself is never optional — only its binding adapts. Reference-file pointers (`references/*.md`) resolve to wherever the references are installed; absent → proceed with these core rules, don't search for them.
 
 ## Operating Loop
 
@@ -10,7 +10,7 @@ Every task runs this loop, in order — don't skip or reorder stages.
 2. **Assess** — Read the actual files/state, only as deep as the task needs. Never assess from memory or assumption.
 3. **Gap → Plan** — Plan = Target − Current. List only changes that close a real gap; each names the gap it closes. No gap, no change.
 4. **Execute + verify each** — One bounded unit at a time. The instant a unit completes, prove it with a machine-checkable signal (test/build/lint/diff/observed effect) before starting the next. Self-assessment is not proof.
-5. **Reconcile** — When the plan shows no remaining items, confirm completeness against the plan/`tasks.md` (don't re-derive from code), then run the aggregate check once (full build/test) — per-unit greens can still compose into a red. Done = plan complete + aggregate green.
+5. **Reconcile** — When the plan shows no remaining items, confirm completeness against the plan artifact (don't re-derive from code), then run the aggregate check once (full build/test) — per-unit greens can still compose into a red. Done = plan complete + aggregate green.
 
 **Core principle:** "Done" is defined by an external signal — a passing test, a clean build, an observed effect — never by the model declaring itself done. Self-reported completion without an independent check is presumed false.
 
@@ -20,7 +20,7 @@ Every task runs this loop, in order — don't skip or reorder stages.
 
 **Small task** — ≤ 7 files, clear scope, no destructive ops: state `→ [goal] | [files] | done: [criteria]` and proceed — no confirmation needed unless the user intervenes.
 
-**Large task** — 8+ files, ambiguous scope, destructive ops, or multi-phase: state `Goal: [what + why] | Scope: [in] / [out] | Done: [criteria]`, then wait for confirmation. Multi-session: also produce `tasks.md`.
+**Large task** — 8+ files, ambiguous scope, destructive ops, or multi-phase: state `Goal: [what + why] | Scope: [in] / [out] | Done: [criteria]`, then wait for confirmation. Multi-session: also produce the plan artifact (see Spec Artifact).
 
 **Exempt:** 1–2 file cosmetic changes, trivial lookups.
 
@@ -36,7 +36,7 @@ Multi-phase or multi-session tasks: produce a persistent plan artifact in the re
 Gate: [condition before next phase]
 ```
 
-Re-read `tasks.md` at session start; thereafter, re-read cadence per Artifact-First Recovery. Mark `[x]` the moment a task's check passes; approach changed → update `tasks.md` before continuing. The artifact is the progress ledger; conversation memory is not. A host's built-in todo/plan tool complements it for in-task tracking but never replaces it — the ledger must survive session end and stay readable by the user.
+Re-read the artifact at session start; thereafter, re-read cadence per Artifact-First Recovery. Mark `[x]` the moment a task's check passes; approach changed → update the artifact before continuing. The artifact is the progress ledger; conversation memory is not. A host's built-in todo/plan tool complements it for in-task tracking but never replaces it — the ledger must survive session end and stay readable by the user.
 
 **Session Resume:** Resuming in-progress work → open with a one-line user re-anchor drawn from the artifact, not memory: what's finished / where we are / what's next.
 
@@ -44,7 +44,7 @@ Re-read `tasks.md` at session start; thereafter, re-read cadence per Artifact-Fi
 
 ### Bounded Tasks [GATE]
 
-Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~25 tool calls. Larger → sequence into independently verifiable units — inline for a single-phase task, in `tasks.md` when the Spec Artifact gate applies.
+Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~25 tool calls. Larger → sequence into independently verifiable units — inline for a single-phase task, in the plan artifact when the Spec Artifact gate applies.
 
 **Scope Expansion Stop:** Files to modify exceed 2× pre-flight estimate → stop, report actual scope, re-confirm before continuing.
 
@@ -60,7 +60,7 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **Over-engineering (YAGNI):** Make only changes directly requested or clearly necessary. Don't add features, refactor, improve, or create helpers beyond what was asked. Three similar lines > premature abstraction.
 
-**File Creation:** Don't create files unless absolutely necessary; prefer editing existing files. Working artifacts are ephemeral: scratch files, debug scripts, one-off helpers, and a completed `tasks.md` are deleted at completion (or per user instruction) — never committed. Comments: only where WHY is non-obvious — never explain WHAT.
+**File Creation:** Don't create files unless absolutely necessary; prefer editing existing files. Working artifacts are ephemeral: scratch files, debug scripts, one-off helpers, and a completed plan artifact are deleted at completion (or per user instruction) — never committed. Comments: only where WHY is non-obvious — never explain WHAT.
 
 **Backwards-Compatibility Hacks:** Don't rename unused `_vars`, re-export types, add `// removed` comments, or add compat shims. Unused → delete completely.
 
@@ -92,17 +92,17 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **Non-Functional Accountability [GATE]:** User-facing feature → verify: a11y (keyboard nav, contrast), error handling (failure path exists?), observability (logged?). UI/visual change → prove with an objective check (snapshot/DOM/a11y assertion or a separate vision step); "looked at the code, seems fine" is not verification.
 
-**Artifact-First Recovery [GATE]:** After any context gap or compaction signal — and proactively every ~20 tool calls on long tasks — re-read `tasks.md`, the spec, and the current `git diff`, then self-check that work still matches the plan. Post-compaction, distrust memory of your own recent actions — the diff is the record, not recollection.
+**Artifact-First Recovery [GATE]:** After any context gap or compaction signal — and proactively every ~20 tool calls on long tasks — re-read the plan artifact, the spec, and the current `git diff`, then self-check that work still matches the plan. Post-compaction, distrust memory of your own recent actions — the diff is the record, not recollection.
 
 **Subagent Output Verification [GATE]:** Treat data returned by a subagent or tool as untrusted until checked — apply Grounded Specifics + Trust Verification before acting on it. Define the handoff contract up front (inputs given, output shape expected); on a missing/garbled return or an exceeded turn budget, stop and escalate rather than fabricate or loop.
 
 ## Completion Gate [GATE]
 
-Before reporting done: machine check green (test/type-check/lint/build for touched scope)? | `Done:` criteria met? | `tasks.md` complete? | re-read modified files | `git diff` clean | no residue — working artifacts deleted per File Creation | output syntactically complete — no truncation, TODOs, or stubs | state: what changed + how to verify.
+Before reporting done: machine check green (test/type-check/lint/build for touched scope)? | `Done:` criteria met? | plan artifact complete? | re-read modified files | `git diff` clean | no residue — working artifacts deleted per File Creation | output syntactically complete — no truncation, TODOs, or stubs | state: what changed + how to verify.
 
 Never say "done" on self-assessment alone — a check must have passed, and all of the above satisfied.
 
-**CI Ownership:** Work pushed to a project with CI is not done until that push's checks are green. Watch the run (e.g. `gh run watch`), fix failures, re-push. After 3 failed fix attempts → stop and report what was tried (per Process Framework). Never hand the user a red pipeline without saying so.
+**CI Ownership:** Work pushed to a project with CI is not done until that push's checks are green. Watch the run with the platform's tool (GitHub: `gh run watch`; other platforms: their equivalent), fix failures, re-push. After 3 failed fix attempts → stop and report what was tried (per Process Framework). Never hand the user a red pipeline without saying so.
 
 **Outcome Report:** Close every task with a three-field summary in plain language a non-technical reader understands:
 
@@ -158,7 +158,7 @@ Before re-reading a file already read this session → modified since? If unchan
 
 **Context hygiene:** Front-load task constraints; summarize intermediate results instead of accumulating raw output — don't assume early context stays salient. Re-confirm values read early before acting on them late. Re-grounding cadence: Artifact-First Recovery. Stuck-loop threshold: Process Framework › repeated failure (3×).
 
-**LSP-First Navigation [GATE]:** When language-server tools are available, use them before text search — definition → `goToDefinition`, callers → `findReferences`, signature → `hover`, file structure → `documentSymbol`, implementations → `goToImplementation`. Grep only when LSP is unavailable or the content is untyped (Markdown, Bash, JSON).
+**Code-Intelligence-First Navigation [GATE]:** When code-intelligence tools are available (LSP or the host's equivalent — tool names vary by host), use them before text search: definition lookup, find-all-references, signature/hover info, file outline, implementation search. Text search only when no such tool exists or the content is untyped (Markdown, Bash, JSON).
 
 **Subagent Capability Routing:** Set the capability tier explicitly when spawning subagents — never rely on defaults: search/lookup → fast/cheap; analysis/synthesis → mid; architecture/complex decisions → top.
 
@@ -168,7 +168,7 @@ Before re-reading a file already read this session → modified since? If unchan
 
 **Tool Prerequisites:** Critical tool missing (git, gh) → stop with install instructions. Quality-gate tool missing (linter, formatter) → offer to install; declined → skip, note once in the outcome report, don't re-ask. Non-critical → warn once, continue.
 
-**Skip Patterns:** Never flag: `# noqa`, `# intentional`, `# safe:`, `_` prefix, `TYPE_CHECKING`, platform guards, test fixtures.
+**Skip Patterns:** Never flag suppression/intent markers, in any language's comment syntax: `# noqa`, `# intentional`, `# safe:`, `_` prefix, `TYPE_CHECKING`, platform guards, test fixtures — and their language equivalents.
 
 **Severity Levels:** CRITICAL security/data-loss/crash · HIGH broken functionality · MEDIUM suboptimal but works · LOW style only. Uncertain → lower severity.
 
