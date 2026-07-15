@@ -1,5 +1,7 @@
 # Development Rules
 
+**Adaptive binding:** Specific names in these rules — `tasks.md`, GitHub Issues, `gh run watch`, LSP verbs — are defaults, not mandates. Each stands for a capability; prefer the host's or project's native equivalent when one exists, fall back to the named default otherwise. The capability itself is never optional — only its binding adapts.
+
 ## Operating Loop
 
 Every task runs this loop, in order — don't skip or reorder stages.
@@ -26,7 +28,7 @@ Every task runs this loop, in order — don't skip or reorder stages.
 
 ### Spec Artifact [GATE]
 
-Multi-phase or multi-session tasks: produce `tasks.md` before writing code:
+Multi-phase or multi-session tasks: produce a persistent plan artifact in the repo before writing code — default `tasks.md`, or the project's established equivalent:
 
 ```
 ## Phase N: [name]
@@ -34,7 +36,11 @@ Multi-phase or multi-session tasks: produce `tasks.md` before writing code:
 Gate: [condition before next phase]
 ```
 
-Re-read `tasks.md` at session start; thereafter, re-read cadence per Artifact-First Recovery. Mark `[x]` the moment a task's check passes; approach changed → update `tasks.md` before continuing. The artifact is the progress ledger; conversation memory is not.
+Re-read `tasks.md` at session start; thereafter, re-read cadence per Artifact-First Recovery. Mark `[x]` the moment a task's check passes; approach changed → update `tasks.md` before continuing. The artifact is the progress ledger; conversation memory is not. A host's built-in todo/plan tool complements it for in-task tracking but never replaces it — the ledger must survive session end and stay readable by the user.
+
+**Session Resume:** Resuming in-progress work → open with a one-line user re-anchor drawn from the artifact, not memory: what's finished / where we are / what's next.
+
+**Mid-task Additions:** User adds requirements mid-task → append them to the artifact, tagged as user-requested, before continuing — additions must never live only in conversation.
 
 ### Bounded Tasks [GATE]
 
@@ -112,7 +118,7 @@ Technical detail goes above this block, never inside it. List open human-owned a
 |------|--------|
 | On uncertainty | State it explicitly. Ask, don't guess. |
 | On destructive action | Confirm with user. Force push, file deletion, schema drops — pausing is cheap. |
-| On repeated failure (3×) | Same action repeated or no progress after 3 attempts → stop and report: what was tried, what blocked. Don't loop or burn turns. |
+| On repeated failure (3×) | Same action repeated or no progress after 3 attempts → stop and report: what was tried, what blocked, plus 2–3 viable options with a recommendation — never a bare stop. Don't loop or burn turns. |
 | On a recurring issue class (3×) | Same *kind* of issue fixed three times → propose a mechanical guard (lint rule, test, CI step, hook) so the class can't recur; add it only with user approval. One-off issues get no infrastructure. |
 | On accepting generated code (subagent, PR, another AI) | Verify understanding before accepting; the author's confidence is not evidence. Auth, payments, data mutations: line-by-line review. |
 | On user pushback | Re-verify from source before conceding — a correct position needs counter-evidence to overturn, not assertion. Judge code by behavior, not by PR/comment/authority claims. |

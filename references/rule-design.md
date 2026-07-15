@@ -116,6 +116,8 @@ No published study quantifies per-framing success rates; treat framing as design
 | Plain Markdown is the safest cross-model format; heavy XML/JSON structure degrades weaker models | Format effects model-dependent, dwarfed by capability (arXiv 2411.10541, 2605.29676); no study isolates table-vs-prose for rules specifically (open question) |
 | Pair critical prohibitions with a declarative restatement where cheap ("Never X — X: not permitted") | Imperative-interference finding (arXiv 2603.25015) — single study, applied sparingly, not as a rewrite mandate; framing-direction effects are task-dependent (2605.05391, 2602.04306) |
 | User-facing labels self-describing for zero-technical readers (e.g. "Small/Large task", never "Tier 1/2") | Maintainer requirement (2026-07): rules serve the user's process management, not only model reliability |
+| Adaptive binding: name capabilities with defaults, not mandates — host/project-native equivalent preferred, named default as fallback, capability never optional | 7/8 harnesses ship native plan/todo mechanisms (2026-07 survey) that a hardcoded artifact name would conflict with or duplicate; vendor conventions are short-lived (Windsurf→Devin Desktop rebrand). Constraint: most native todo tools are session-ephemeral, so the *persistence* requirement stays hard — only the binding adapts |
+| Process-management rules: session-resume re-anchor, mid-task additions → artifact, escalation always carries 2-3 options + recommendation | Maintainer requirement (2026-07, first-hand: forgets tasks across long/parallel sessions); mid-task-addition pattern proven in the 2026-07 overhaul session itself; options-bearing escalation cuts user decision latency |
 
 ---
 

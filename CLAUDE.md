@@ -58,7 +58,7 @@ User-facing friction (manual tracking, opaque labels, activity-only reports) is 
 5. Token budget: rule body >10 lines → move detail to reference file, keep summary in `rules.md`
 6. Overlap check: search existing rules and dev-skills SKILL.md files — reinforce, don't contradict
 7. Self-contained check: rule must be actionable without reading other rules or reference files
-8. Naming check: user-facing labels self-describing for zero-technical readers
+8. Naming check: user-facing labels self-describing for zero-technical readers; tool/artifact references follow adaptive binding — capability with a named default, never a hard mandate on one host's convention
 9. Evaluate with rubric in `rule-design.md` — target ≥15/18
 
 ### Rule Lifecycle
