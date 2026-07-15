@@ -1,0 +1,356 @@
+{
+  "topic": "Peer/competitor AI coding assistant 'rules files' landscape (AGENTS.md standard, notable rule-set repos, official vendor guidance, and effectiveness debates) — informing a redesign of a universal tool-agnostic rules.md",
+  "generatedAt": "2026-07-15",
+  "accessDate": "2026-07-15",
+  "findings": [
+    {
+      "claim": "AGENTS.md is an intentionally schema-free format: plain Markdown, any headings, no required fields; nested files are supported and the closest AGENTS.md to the edited file wins, with explicit user chat prompts overriding everything.",
+      "value": null,
+      "sources": [
+        {"url": "https://agents.md/", "quote": "AGENTS.md is just standard Markdown. Use any headings you like; the agent simply parses the text you provide.", "date": "2026-07-15 (accessed)"},
+        {"url": "https://www.iuriio.com/blog/posts/2026/05/agents-md-field-guide-2026", "quote": "the agents.md FAQ states 'AGENTS.md is just standard Markdown. Use any headings you like; the agent simply parses the text you provide.'", "date": "2026-05"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Validates a schema-free, plain-Markdown, heading-flexible design for rules.md; precedence model (closest/most-specific file wins, explicit user instruction overrides file) is a pattern worth adopting for nested reference files."
+    },
+    {
+      "claim": "AGENTS.md's governance transferred to the Agentic AI Foundation (AAIF), a new Linux Foundation-hosted consortium launched 9 Dec 2025, with OpenAI (AGENTS.md), Anthropic (MCP) and Block (goose) as founding project contributors; AAIF grew to 170-180+ member orgs by mid-2026 including Google, Microsoft, AWS, Bloomberg, Cloudflare.",
+      "value": "AAIF launched 2025-12-09",
+      "sources": [
+        {"url": "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation", "quote": "The Linux Foundation announced the formation of the Agentic AI Foundation (AAIF), and founding contributions of three leading projects driving innovation in open source AI; Anthropic's Model Context Protocol (MCP), Block's goose, and OpenAI's AGENTS.md.", "date": "2025-12-09"},
+        {"url": "https://techcrunch.com/2025/12/09/openai-anthropic-and-block-join-new-linux-foundation-effort-to-standardize-the-ai-agent-era/", "quote": "Anthropic, Block, and OpenAI are backing the Linux Foundation's new Agentic AI Foundation, donating MCP, Goose, and AGENTS.md to standardize AI agents, boost interoperability, and curb proprietary fragmentation", "date": "2025-12-09"},
+        {"url": "https://openai.com/index/agentic-ai-foundation/", "quote": "By co-founding the AAIF and donating AGENTS.md, we're helping establish open, transparent practices that make AI agent development more predictable, interoperable, and safe", "date": "2025-12-09"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Signals AGENTS.md is becoming the de facto cross-tool convention with heavyweight vendor backing; a tool-agnostic rules.md should treat AGENTS.md compatibility (or at least an easy migration/pointer path) as a first-class design constraint, not an afterthought."
+    },
+    {
+      "claim": "AGENTS.md originated at OpenAI (shipped with Codex, August 2025) after a naming consolidation with Sourcegraph's Amp team (which had proposed singular AGENT.md in May 2025); the joint effort included Google (Jules/Gemini), Cursor, and Factory.",
+      "value": null,
+      "sources": [
+        {"url": "https://factory.ai/news/agents-md", "quote": "Factory has joined the industry working group convened by OpenAI to define AGENTS.md, a simple, open standard that gives coding agents a predictable way to understand and operate within software projects.", "date": "2025-08"},
+        {"url": "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation", "quote": "Released by OpenAI in August 2025, AGENTS.md is a simple, universal standard that gives AI coding agents a consistent source of project-specific guidance", "date": "2025-12-09"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Confirms AGENTS.md's origin story is genuinely cross-vendor (not single-vendor lock-in), reinforcing it as the safest common denominator for a tool-agnostic file; the singular-vs-plural naming standoff is a cautionary tale about premature naming decisions in our own rule-file conventions."
+    },
+    {
+      "claim": "AGENTS.md adoption is self-reported at '60,000+' open-source repositories as of the AAIF launch and through mid-2026, with 28-30+ tools listed as natively supporting it.",
+      "value": "60000+ repos (self-reported)",
+      "sources": [
+        {"url": "https://agents.md/", "quote": "over 60,000 open-source repositories on GitHub include an AGENTS.md file", "date": "2026-06 (as of writing)"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Adoption scale looks real but the figure traces back to OpenAI/agents.md's own self-reporting (repeated verbatim by the Linux Foundation press release, which is not an independent count) — treat adoption-scale claims as directionally true but unverified by a third-party audit."
+    },
+    {
+      "claim": "Whether Claude Code natively reads AGENTS.md (vs. only CLAUDE.md) is unresolved/contested as of mid-2026: one 2026 guide claims Claude Code added AGENTS.md support in spring 2026, while OpenCode's official docs (accessed 2026-07) still describe CLAUDE.md as Claude Code's convention with AGENTS.md as a separate, opencode-native file, and community guidance recommends a manual workaround.",
+      "value": null,
+      "sources": [
+        {"url": "https://opencode.ai/docs/rules/", "quote": "Project rules use CLAUDE.md in your project directory (used if no AGENTS.md exists)... The first matching file wins in each category.", "date": "2026 (accessed 2026-07-15)"},
+        {"url": "https://www.betterclaw.io/blog/agents-md-best-practices", "quote": "Claude Code now reads AGENTS.md too... having added AGENTS.md support over the spring of 2026", "date": "2026"}
+      ],
+      "confidence": "contested",
+      "relevance": "Do not assume Claude Code auto-reads AGENTS.md; the safe cross-tool pattern (also recommended by community guides) is a CLAUDE.md whose first line imports/points at AGENTS.md, or maintaining both. See contradictions[0]."
+    },
+    {
+      "claim": "Community/industry guidance converges on keeping AGENTS.md-style root context files short (roughly 150-200 lines commonly cited), using nested/subdirectory files for monorepos, and preferring exact shell commands over prose; ETH Zurich research-based commentary suggests professional teams keep theirs tighter, under ~60-100 lines.",
+      "value": null,
+      "sources": [
+        {"url": "https://www.morphllm.com/agents-md-guide", "quote": "keep it short, command-first, and hierarchical — aim for roughly 150 to 200 lines at the root, use nested AGENTS.md files in monorepo packages", "date": "2026"},
+        {"url": "https://www.marktechpost.com/2026/02/25/new-eth-zurich-study-proves-your-ai-coding-agents-are-failing-because-your-agents-md-files-are-too-detailed/", "quote": "the general consensus for high-performance context files is under 300 lines, with professional teams often keeping theirs even tighter—under 60 lines", "date": "2026-02-25"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Two independent sources converge directionally (shorter is better) but disagree on the exact number (60-300 lines); there is no single authoritative ceiling across the ecosystem — dev-rules.md's stated ~240-line target / 300-line hard limit sits inside this converged range, which is a useful validation point."
+    },
+    {
+      "claim": "A proposed AGENTS.md 1.1 spec revision (GitHub issue #135) would add optional YAML frontmatter fields (description, tags) to support progressive disclosure in monorepos with many nested files, letting harnesses index files without reading every body; as of the source's writing (May 2026) this was open, not merged.",
+      "value": null,
+      "sources": [
+        {"url": "https://www.iuriio.com/blog/posts/2026/05/agents-md-field-guide-2026", "quote": "the current 1.0 spec defines no YAML frontmatter, but Issue #135 proposes a 1.1 revision adding optional description and tags fields... status as of May 2026 is open, not merged", "date": "2026-05"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Worth monitoring but not yet actionable; if merged, frontmatter-based indexing could let a tool-agnostic rules.md declare machine-readable metadata (e.g., applicability scope) the way Cursor's .mdc frontmatter already does."
+    },
+    {
+      "claim": "steipete/agent-rules, a widely-used personal/curated collection of Claude Code and Cursor rules (global-rules/ and project-rules/ directories, ~5.5k GitHub stars before archiving), was archived (read-only) by its owner on 31 Dec 2025.",
+      "value": "archived 2025-12-31",
+      "sources": [
+        {"url": "https://github.com/steipete/agent-rules", "quote": "Rules and Knowledge to work better with agents such as Claude Code or Cursor", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "One of the most-cited community rule repos is no longer maintained — a caution that community rule-set repos have a short shelf life; a durable universal rules.md project should not assume any single community repo will remain the reference over time."
+    },
+    {
+      "claim": "PatrickJS/awesome-cursorrules is a large curated collection (36.9k-40.3k GitHub stars as of different 2026 snapshots) of .cursorrules files organized by category: Frontend Frameworks, Backend/Full-Stack, Mobile, CSS/Styling, State Management, Database/API, Testing, Build Tools, Language-Specific, Other.",
+      "value": "36900-40300 stars",
+      "sources": [
+        {"url": "https://github.com/PatrickJS/awesome-cursorrules", "quote": "Configuration files that enhance Cursor AI editor experience with custom rules and behaviors", "date": "accessed 2026-07-15"},
+        {"url": "https://awesome.ecosyste.ms/projects/github.com/PatrickJS/awesome-cursorrules", "quote": "https://github.com/PatrickJS/awesome-cursorrules | Ecosyste.ms: Awesome", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "The dominant organizing principle in the wild is per-framework/per-language rule files rather than universal principles — reinforces that a tool-agnostic rules.md should stay in the 'universal principle' layer and push framework-specific conventions to reference/on-demand files, mirroring this repo's category split."
+    },
+    {
+      "claim": "Ruler (intellectronica/ruler) centralizes AI-agent instructions in a .ruler/ directory of Markdown files and distributes them to 30+ tool-specific config formats (Claude, Cursor, Copilot, Aider, Windsurf, Gemini CLI, etc.) via 'ruler apply', supports MCP server config sync, skills propagation, and a CI check mode ('ruler apply --no-gitignore') to catch drift.",
+      "value": null,
+      "sources": [
+        {"url": "https://github.com/intellectronica/ruler", "quote": "Ruler solves this by providing a single source of truth for all your AI agent instructions, automatically distributing them to the right configuration files.", "date": "accessed 2026-07-15"},
+        {"url": "https://addozhang.medium.com/ruler-unified-configuration-management-for-multiple-ai-coding-assistants-247df7d4754a", "quote": "Ruler: Unified Configuration Management for Multiple AI Coding Assistants", "date": "2026"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Directly validates the dev-rules premise (one canonical source synced to many tool configs) at tooling scale; dev-rules' manual 'cp + diff' sync approach documented in CLAUDE.md is the same pattern Ruler automates — could be worth adopting Ruler (or a similar sync mechanism) instead of manual copy commands, or at minimum citing it as prior art."
+    },
+    {
+      "claim": "A newer competitor to Ruler, AlignTrue (aligntrue-sync), offers direct migration ('aligntrue migrate ruler') and a similar sync-across-agents model, indicating the multi-tool-rule-sync space has more than one active entrant as of 2026.",
+      "value": null,
+      "sources": [
+        {"url": "https://github.com/AlignTrue/aligntrue-sync", "quote": "aligntrue migrate ruler", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Confirms the 'sync one source to many tool configs' pattern is becoming a recognized category, not a one-off tool; low priority for design but useful ecosystem context."
+    },
+    {
+      "claim": "Aider's CONVENTIONS.md is loaded explicitly (via --read or /read, or persistently through .aider.conf.yml's 'read:' key), which also marks it read-only and cacheable; a community repo (Aider-AI/conventions) collects example convention files. Guidance recommends imperative, specific instructions and keeping the file under ~150-200 lines.",
+      "value": null,
+      "sources": [
+        {"url": "https://aider.chat/docs/usage/conventions.html", "quote": "it's best to load the conventions file with /read CONVENTIONS.md or aider --read CONVENTIONS.md, since this marks it as read-only and caches it if prompt caching is enabled", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Note: this is Aider's own single official documentation (the GitHub community repo shares the same originator/organization, so it does not count as an independent second source under the independence rule). The 'mark as read-only + cache' loading mechanic is a useful pattern for any tool implementing rules-file loading, but is currently only single-sourced from Aider itself."
+    },
+    {
+      "claim": "Cline's '.clinerules/' directory holds behavioral rule files, and its 'Memory Bank' methodology (projectbrief.md, productContext.md, activeContext.md, systemPatterns.md, techContext.md, progress.md) compensates for Cline's complete memory reset between sessions by requiring the agent to read all memory-bank files at the start of every task.",
+      "value": null,
+      "sources": [
+        {"url": "https://docs.cline.bot/best-practices/memory-bank", "quote": "I am Cline, an expert software engineer with a unique characteristic: my memory resets completely between sessions... I MUST read ALL memory bank files at the start of EVERY task - this is not optional.", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Official Cline docs are the only originator found (cline.bot blog shares the same organization, not independent); still, the multi-file 'memory bank' decomposition (brief/context/patterns/tech/progress) is a distinct structural idea from a single monolithic rules file, worth considering as an optional pattern for larger projects even though dev-rules currently favors one file."
+    },
+    {
+      "claim": "Anthropic's official Claude Code docs give no fixed line-count limit for CLAUDE.md ('There's no required format... but keep it short and human-readable') but do give an explicit self-test: 'For each line, ask: Would removing this cause Claude to make mistakes? If not, cut it,' and explicitly warn 'Bloated CLAUDE.md files cause Claude to ignore your actual instructions!' and 'If your CLAUDE.md is too long, Claude ignores half of it because important rules get lost in the noise.'",
+      "value": null,
+      "sources": [
+        {"url": "https://code.claude.com/docs/en/best-practices", "quote": "Keep it concise. For each line, ask: \"Would removing this cause Claude to make mistakes?\" If not, cut it. Bloated CLAUDE.md files cause Claude to ignore your actual instructions!", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "This is Anthropic's own vendor guidance (T1, directly fetched) and the closest thing to an official mechanism for pruning a rules file — recommend adding this exact 'would removing this line cause a mistake' test as an explicit authoring heuristic in dev-rules' own contributor guide (references/rule-design.md), since it is officially vendor-endorsed even though only single-sourced here."
+    },
+    {
+      "claim": "Anthropic's official docs give an explicit include/exclude table for CLAUDE.md: include bash commands Claude can't guess, non-default code style rules, testing instructions, repo etiquette, project-specific architectural decisions, environment quirks, non-obvious gotchas; exclude anything inferable from code, standard language conventions, detailed API docs (link instead), frequently-changing info, long explanations/tutorials, file-by-file descriptions, and self-evident practices like 'write clean code.'",
+      "value": null,
+      "sources": [
+        {"url": "https://code.claude.com/docs/en/best-practices", "quote": "Standard language conventions Claude already knows | ... | Self-evident practices like \"write clean code\"", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Directly reinforces dev-rules' own 'no rule duplicated / self-contained' design principle and matches the ETH study's finding that generic/inferable instructions waste tokens; a strong candidate to cross-check dev-rules.md line-by-line against this include/exclude table to prune anything Claude/other models would already infer."
+    },
+    {
+      "claim": "Anthropic's docs confirm emphasis markers work: 'You can tune instructions by adding emphasis (e.g., \"IMPORTANT\" or \"YOU MUST\") to improve adherence,' but community guides caveat that these should be reserved for genuinely critical rules to avoid dilution.",
+      "value": null,
+      "sources": [
+        {"url": "https://code.claude.com/docs/en/best-practices", "quote": "You can tune instructions by adding emphasis (e.g., \"IMPORTANT\" or \"YOU MUST\") to improve adherence.", "date": "accessed 2026-07-15"},
+        {"url": "https://www.datacamp.com/tutorial/claude-code-best-practices", "quote": "Emphasis markers like IMPORTANT and YOU MUST actually improve adherence... However, reserve these markers for the one or two rules that are genuinely critical.", "date": "2026"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Validates dev-rules' existing use of bracketed [GATE]/[PROHIBITION] tags as an emphasis mechanism; both sources converge on 'use sparingly' which supports keeping such markers reserved for true hard-stop rules rather than scattering them throughout."
+    },
+    {
+      "claim": "Cursor's official docs define rules as .mdc files with frontmatter (description, globs, alwaysApply) controlling four behaviors — a plain .md file in .cursor/rules is ignored because it lacks this frontmatter. Nested .cursor/rules/ directories auto-attach when files in that directory are referenced. Community guidance recommends 5-8 total rules, <500 lines per rule file (ideally <100), and <200 words specifically for Always-Apply rules since those load on every request ('token tax').",
+      "value": null,
+      "sources": [
+        {"url": "https://cursor.com/docs/rules", "quote": "Rules are system-level instructions to Agent that bundle prompts, scripts, and more together, making it easy to manage and share workflows across a team", "date": "accessed 2026-07-15"},
+        {"url": "https://www.vibecodingacademy.ai/blog/cursor-rules-complete-guide", "quote": "Cursor's docs suggest keeping individual rules under 500 lines... aiming for under 100 lines per rule is better since shorter rules are easier to maintain and cost fewer tokens", "date": "2026"}
+      ],
+      "confidence": "partial",
+      "relevance": "The exact numeric ceilings (500/100/200-word) trace mainly back to Cursor's own docs restated by community guides (not fully independent originators), so treat the exact numbers as single-sourced/approximate, but the underlying mechanism — always-loaded rules cost tokens on every request, so keep them minimal, and use glob-scoped/auto-attached rules for anything narrower — is a directly transferable design principle for a rules.md + on-demand reference-file split."
+    },
+    {
+      "claim": "Windsurf/Devin's official docs enforce hard character limits: workspace rule files are capped at 12,000 characters each, and the global rules file is capped at 6,000 characters; rules declare one of four activation modes via a 'trigger' frontmatter field (always_on, model_decision, glob, manual), and official guidance explicitly discourages generic rules ('no need to add generic rules... already baked into Cascade's training data').",
+      "value": "12000 chars workspace / 6000 chars global",
+      "sources": [
+        {"url": "https://docs.devin.ai/desktop/cascade/memories", "quote": "Workspace rule files are limited to 12,000 characters each... The global rules file is limited to 6,000 characters.", "date": "accessed 2026-07-15 (redirected from docs.windsurf.com)"}
+      ],
+      "confidence": "single-source",
+      "relevance": "The only vendor in this survey with a hard machine-enforced character cap rather than soft/recommended guidance — a concrete existence proof that some vendors mechanically enforce brevity; also directly confirms the 'don't restate what the model already knows' principle now appears in at least two independent vendors' official docs (Windsurf/Devin and Anthropic)."
+    },
+    {
+      "claim": "Windsurf rebranded to 'Devin Desktop' on 2 June 2026 after Cognition's acquisition/consolidation; windsurf.com now redirects to devin.ai, and the Cascade agent has been folded into Devin Local, though the underlying rules mechanics (.windsurfrules, .windsurf/rules/, now also .devin/rules/) remain functionally the same.",
+      "value": "rebrand 2026-06-02",
+      "sources": [
+        {"url": "https://docs.windsurf.com/windsurf/cascade/memories", "quote": "REDIRECT: docs.windsurf.com -> docs.devin.ai (307 Temporary Redirect)", "date": "observed 2026-07-15"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Directly observed via live redirect (not just reported) — a caution that vendor-specific rule-file conventions and even vendor identities can be short-lived; reinforces the value of a genuinely tool-agnostic rules.md that doesn't hard-depend on any single vendor's current branding or file convention."
+    },
+    {
+      "claim": "GitHub Copilot supports three tiers of custom instructions: repository-wide (.github/copilot-instructions.md), path-specific (.github/instructions/*.instructions.md matched by glob), and agent instructions (AGENTS.md, nearest-file-wins). VS Code auto-detects copilot-instructions.md and surfaces it as a 'reference' in chat responses so usage is verifiable. Official guidance: 'short and self-contained,' one statement per instruction, and for code-review instructions specifically, 'Limit any single instruction file to a maximum of about 1,000 lines. Beyond this, the quality of responses may deteriorate.'",
+      "value": "1000 lines max (code review instructions)",
+      "sources": [
+        {"url": "https://docs.github.com/en/copilot/tutorials/use-custom-instructions", "quote": "Shorter instruction files are more likely to be fully processed by Copilot... Limit any single instruction file to a maximum of about 1,000 lines. Beyond this, the quality of responses may deteriorate.", "date": "accessed 2026-07-15"},
+        {"url": "https://code.visualstudio.com/docs/agent-customization/custom-instructions", "quote": "good instructions should be: short and self-contained. Each instruction should be a single, simple statement.", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "partial",
+      "relevance": "GitHub and VS Code are both Microsoft products (not fully independent originators) but represent distinct engineering/docs teams describing consistent, complementary guidance; the three-tier split (repo-wide / path-specific / agent-specific AGENTS.md) is a useful reference architecture for how dev-rules' rules.md (repo-wide) + references/*.md (path/domain-specific, on-demand) split maps onto vendor conventions."
+    },
+    {
+      "claim": "Gemini CLI's GEMINI.md uses hierarchical loading (global ~/.gemini/GEMINI.md, project root ./GEMINI.md, subdirectory ./src/GEMINI.md), concatenating all found files into every prompt; supports @file.md imports for modularization; provides /memory show and /memory reload commands to inspect/refresh loaded context; official best practice explicitly recommends negative constraints ('Do not use class components' framed as more effective than vague positive instructions) and periodic pruning of outdated rules.",
+      "value": null,
+      "sources": [
+        {"url": "https://geminicli.com/docs/cli/gemini-md/", "quote": "The CLI searches for a GEMINI.md file in your current working directory and then in each parent directory up to the project root", "date": "accessed 2026-07-15"},
+        {"url": "https://geminicli.com/docs/cli/tutorials/memory-management/", "quote": "Use negative constraints: Explicitly telling the agent what not to do (for example, \"Do not use class components\") is often more effective than vague positive instructions.", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Both citations are Google's own gemini-cli docs (same originator), but the explicit 'negative constraints beat vague positive ones' guidance independently echoes Anthropic's identical recommendation from a different vendor's docs — worth noting as convergent-but-technically-single-sourced-per-vendor evidence supporting dev-rules' existing heavy use of 'Never X' prohibitions."
+    },
+    {
+      "claim": "OpenCode's official docs specify precedence rules for migrating from Claude Code: if both AGENTS.md and CLAUDE.md exist in a project, only AGENTS.md is used; opencode.json's 'instructions' array can combine multiple external files (including remote URLs with a 5-second fetch timeout and glob patterns like packages/*/AGENTS.md for monorepos) with the AGENTS.md content.",
+      "value": null,
+      "sources": [
+        {"url": "https://opencode.ai/docs/rules/", "quote": "if you have both AGENTS.md and CLAUDE.md, only AGENTS.md is used. Similarly, ~/.config/opencode/AGENTS.md takes precedence over ~/.claude/CLAUDE.md.", "date": "accessed 2026-07-15"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Shows a concrete cross-tool interoperability implementation (fallback chain + explicit precedence), which is a practical model for how a universal rules.md could be layered underneath tool-specific files rather than requiring every tool to natively parse the exact same filename."
+    },
+    {
+      "claim": "A February 2026 ETH Zurich/LogicStar.ai study (Gloaguen et al., arXiv:2602.11988, 'Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?') built a 138-task benchmark (AGENTbench) from niche (non-memorized) Python repos and tested Claude Sonnet 4.5, Codex GPT-5.2/GPT-5.1-mini, and Qwen Code across no-file / LLM-generated-file / human-written-file conditions: LLM-generated files reduced task success rate by ~3% on average (worse in 5 of 8 settings) and added 20-23% inference cost plus 2.45-3.92 extra agent steps per task; human-written files improved success by ~4% but still cost ~19% more; using a stronger model to generate the file did not help.",
+      "value": "-3% (LLM-gen) / +4% (human-written) success rate delta",
+      "sources": [
+        {"url": "https://www.infoq.com/news/2026/03/agents-context-file-value-review/", "quote": "reducing the task success rate by an average of 3% compared to providing no context file at all... driving up inference costs by over 20%... a 4% average increase in task success rate", "date": "2026-03"},
+        {"url": "https://www.marktechpost.com/2026/02/25/new-eth-zurich-study-proves-your-ai-coding-agents-are-failing-because-your-agents-md-files-are-too-detailed/", "quote": "New ETH Zurich Study Proves Your AI Coding Agents are Failing Because Your AGENTS.md Files are too Detailed", "date": "2026-02-25"},
+        {"url": "https://arxiviq.substack.com/p/evaluating-agentsmd-are-repository", "quote": "Auto-generated context files reduced task success rates by about 3%, human-written files improved success by about 4%, and both increased inference costs by more than 20%.", "date": "2026"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "This is the single most important effectiveness data point for redesigning rules.md: it is direct empirical evidence that (a) AI-generated rules files can actively hurt task success, (b) even good human-written files carry a real cost tax, and (c) the study's own recommendation — 'omit LLM-generated context files entirely and limit human-written instructions to non-inferable details' — matches dev-rules' existing philosophy of hand-curated, evidence-gated rules rather than auto-generated boilerplate."
+    },
+    {
+      "claim": "A January 2026 paper (Lulla et al., arXiv:2601.20404, presented at ICSE's JAWs 2026, 'On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents') analyzed 124 real GitHub pull requests across 10 repositories and found AGENTS.md presence associated with a 28.64% lower median agent runtime and 16.58% reduced median output-token consumption, with comparable task-completion behavior; the authors explicitly note this measures efficiency, not correctness, and leave full correctness evaluation as future work.",
+      "value": "-28.64% median runtime / -16.58% median output tokens",
+      "sources": [
+        {"url": "https://arxiv.org/abs/2601.20404", "quote": "On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents", "date": "2026-01"},
+        {"url": "https://conf.researchr.org/details/icse-2026/jaws-2026-papers/31/On-the-Impact-of-AGENTS-md-Files-on-the-Efficiency-of-AI-Coding-Agents", "quote": "On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents (Journal Ahead Workshop (JAWs) 2026 - JAWs 2026) - ICSE 2026", "date": "2026"},
+        {"url": "https://github.com/AkihikoWatanabe/paper_notes/issues/4775", "quote": "[Paper Note] On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents, Jai Lal Lulla+, arXiv'26, 2026.01", "date": "2026-01"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Provides a positive counterweight to the ETH Zurich correctness study: even if a rules file doesn't reliably raise success rate, a good one can meaningfully cut wasted exploration steps/tokens on real PR-sized tasks — supports keeping rules.md primarily as an efficiency/consistency aid (fewer wrong turns, less re-discovery) rather than oversized promise of correctness gains. See contradictions[1] for the tension between the two studies."
+    },
+    {
+      "claim": "A synthesis/follow-up analysis reconciles the Gloaguen (ETH) and Lulla studies by noting they measured different things (efficiency vs. correctness) under different task-budget regimes: Lulla's real PR tasks likely had generous step/cost budgets relative to task complexity, while Gloaguen's AGENTbench tasks ran under tighter default agent settings — suggested by the follow-up paper 'Probe-and-Refine Tuning of Repository Guidance for Coding Agents' as an explanation for why guidance helps in one context but hurts in another.",
+      "value": null,
+      "sources": [
+        {"url": "https://arxiv.org/html/2606.20512", "quote": "Probe-and-Refine Tuning of Repository Guidance for Coding Agents", "date": "2026-06"}
+      ],
+      "confidence": "single-source",
+      "relevance": "If accurate, implies rules-file effectiveness may be budget/step-constraint-dependent — a caution that any 'rules files help/hurt' claim needs its evaluation conditions specified; not enough independent corroboration yet to treat as settled, flagged as a knownUnknown as well."
+    },
+    {
+      "claim": "A practitioner analysis (DEV Community) argues most public/community rules files are net-negative: a typical 200-line rules file may contain only ~15 essential lines and 185 lines of noise, causing token waste and a 'lost in the middle' attention-dilution effect; many common rules are redundant because tools already infer the same facts from config files (e.g. tsconfig.json implies TypeScript), and some 'rules' (e.g., 'avoid var', 'enforce strict mode') belong in a linter/CI check rather than as an AI instruction — 'the key distinction being detection vs. enforcement.'",
+      "value": null,
+      "sources": [
+        {"url": "https://dev.to/alexefimenko/i-analyzed-a-lot-of-ai-agent-rules-files-most-are-making-your-agent-worse-2fl", "quote": "the rules file most developers copy-paste from cursor.directory or generate with ChatGPT is actively making their AI agent slower, more expensive, and less accurate", "date": "2026"}
+      ],
+      "confidence": "single-source",
+      "relevance": "This 'detection vs. enforcement' distinction is directly actionable: dev-rules already has a related design doctrine ('Out of Scope for rules.md — Harness/CI/Orchestration') separating prompt-expressible rules from mechanically-enforced gates; this finding is independent corroboration (from outside dev-rules) that the same split is the correct general principle, though it is currently only single-sourced as a specific blog analysis."
+    },
+    {
+      "claim": "Developers report on Hacker News and in a GitHub issue (anthropics/claude-code#22022, titled 'Claude Code ignores AGENTS.md rules and doesn't act as gatekeeper') that CLAUDE.md/AGENTS.md rules are frequently not followed reliably in practice, including hard restrictions such as 'do not modify this file without explicit request' — even when the model claims to have read the file — with compliance appearing to degrade over long sessions or long rule files.",
+      "value": null,
+      "sources": [
+        {"url": "https://github.com/anthropics/claude-code/issues/22022", "quote": "Claude Code ignores AGENTS.md rules and doesn't act as gatekeeper", "date": "accessed 2026-07-15"},
+        {"url": "https://news.ycombinator.com/item?id=46102048", "quote": "Claude often ignores CLAUDE.md... The more information you have in the file tha[n needed, the more it ignores]", "date": "2026"},
+        {"url": "https://news.ycombinator.com/item?id=45791391", "quote": "In my experience, neither Claude nor any other agent actually reads AGENTS.md (o...)", "date": "2026"}
+      ],
+      "confidence": "confirmed",
+      "relevance": "Direct real-world corroboration (3 independent postings/platforms) of the exact failure mode Anthropic's own docs warn about ('bloated CLAUDE.md files cause Claude to ignore your actual instructions') — reinforces that dev-rules.md's hard 300-line ceiling and its explicit split of core-vs-reference files is a load-bearing design decision, not a nice-to-have; also argues for keeping genuinely load-bearing prohibitions ([GATE]/[PROHIBITION]) as few and high-signal as possible rather than growing the list unchecked."
+    },
+    {
+      "claim": "A security researcher warning (SC Media) recommends developers review all AI rules files for malicious content injection (e.g., invisible Unicode characters, unusual formatting used to hide instructions) and treat rules/configuration files with the same review scrutiny as executable code.",
+      "value": null,
+      "sources": [
+        {"url": "https://www.scworld.com/news/how-ai-coding-assistants-could-be-compromised-via-rules-file", "quote": "How AI coding assistants could be compromised via rules file", "date": "2025 (accessed 2026-07-15)"}
+      ],
+      "confidence": "single-source",
+      "relevance": "Reinforces (from a security angle) dev-rules' existing 'External Content Injection' rule classifying file/web/tool content as untrusted data; also suggests rules.md itself, if imported/synced across many repos and tools, should be reviewed for encoding-based injection risks as part of any sync tooling (e.g., Ruler) adopted."
+    }
+  ],
+  "contradictions": [
+    {
+      "field": "Does Claude Code natively read AGENTS.md as of mid-2026?",
+      "candidates": [
+        {"url": "https://www.betterclaw.io/blog/agents-md-best-practices", "claim": "Claude Code now reads AGENTS.md too, having added support over spring 2026", "date": "2026"},
+        {"url": "https://opencode.ai/docs/rules/", "claim": "OpenCode's official docs (accessed July 2026) still describe CLAUDE.md, not AGENTS.md, as Claude Code's own convention, used as a fallback only when opencode finds no AGENTS.md", "date": "accessed 2026-07-15"}
+      ],
+      "delta": "One 2026 third-party guide asserts native support was added; a live, currently-accessed official doc from a different vendor (OpenCode) treats CLAUDE.md as still being Claude Code's primary/native convention as of the access date, and independent practitioner reports (GitHub issue #22022, HN threads) describe AGENTS.md/CLAUDE.md compliance problems consistent with partial or unreliable support rather than confirmed full native parsing.",
+      "winner": "unresolved — treat as unconfirmed; the safe cross-tool workaround (documented in the field guide) is a CLAUDE.md whose first line is '@AGENTS.md', or maintaining both files, rather than assuming automatic dual-format support."
+    },
+    {
+      "field": "Do AGENTS.md/context files help or hurt AI coding agent performance?",
+      "candidates": [
+        {"url": "https://arxiv.org/abs/2602.11988", "claim": "Gloaguen et al. (ETH Zurich, Feb 2026): LLM-generated context files reduce task success rate by ~3% on average (worse in 5/8 settings); human-written files improve success by only ~4%; both add 19-23% inference cost. Recommendation: omit LLM-generated files, keep human-written ones minimal.", "date": "2026-02"},
+        {"url": "https://arxiv.org/abs/2601.20404", "claim": "Lulla et al. (ICSE JAWs 2026, Jan 2026): AGENTS.md presence is associated with 28.64% lower median runtime and 16.58% reduced output tokens on real PR tasks, with comparable completion behavior — a clearly positive efficiency effect.", "date": "2026-01"}
+      ],
+      "delta": "The two studies measured different outcome variables (task-success/correctness vs. runtime/token efficiency) under different task regimes (a constructed 138-task benchmark under tight/default agent budgets vs. 124 real GitHub PRs likely with more generous budgets), which a follow-up paper (arXiv:2606.20512) offers as the likely explanation for the apparently opposite headline conclusions.",
+      "winner": "no single winner — both findings appear to hold within their own measurement scope; design implication: a rules file's realistic value proposition is 'may reduce wasted exploration/tokens on well-scoped tasks' rather than 'reliably increases correctness,' and low-quality/LLM-generated rules content is the specific thing shown to actively hurt correctness."
+    },
+    {
+      "field": "What is the 'right' maximum length for a universal root instructions file?",
+      "candidates": [
+        {"url": "https://www.morphllm.com/agents-md-guide", "claim": "~150-200 lines at the root for AGENTS.md"},
+        {"url": "https://www.marktechpost.com/2026/02/25/new-eth-zurich-study-proves-your-ai-coding-agents-are-failing-because-your-agents-md-files-are-too-detailed/", "claim": "general consensus under 300 lines; professional teams under 60 lines"},
+        {"url": "https://www.vibecodingacademy.ai/blog/cursor-rules-complete-guide", "claim": "Cursor per-rule ceiling ~500 lines (ideally <100 lines); <200 words specifically for Always-Apply rules"},
+        {"url": "https://docs.github.com/en/copilot/tutorials/use-custom-instructions", "claim": "GitHub Copilot code-review instructions: hard practical ceiling ~1,000 lines"},
+        {"url": "https://docs.devin.ai/desktop/cascade/memories", "claim": "Windsurf/Devin: hard character caps of 12,000 (workspace) / 6,000 (global) characters — roughly 1,700-2,000 words"}
+      ],
+      "delta": "No two sources agree on an exact number; recommendations range from ~60 lines to ~1,000 lines depending on vendor, file type (always-loaded vs. glob-scoped vs. code-review-specific), and whether the constraint is a soft recommendation or a hard machine-enforced cap.",
+      "winner": "no universal number — the only sources that impose a hard cap (Windsurf/Devin, and GitHub Copilot's practical ~1,000-line ceiling for a specific instruction type) are also the narrowest in scope; treat 'shorter is better, with the exact number depending on file role (always-loaded core vs. on-demand reference)' as the transferable principle rather than any single line count. dev-rules' own ~240-line target / 300-line hard limit sits within the converged low-to-mid end of this range."
+    }
+  ],
+  "unknowns": [
+    {
+      "question": "What is the current (July 2026) ground-truth support matrix for AGENTS.md across every major coding agent (in particular Claude Code), rather than relying on third-party guides of varying recency?",
+      "why": "Sources conflict (see contradictions[0]); agents.md's own tool list and vendor changelogs were not independently cross-checked against a live compatibility test in this pass.",
+      "triedSources": ["https://agents.md/", "https://opencode.ai/docs/rules/", "https://www.betterclaw.io/blog/agents-md-best-practices"],
+      "triedQueries": ["agents.md AGENTS.md format conventions recommended length 2025 2026", "reddit hacker news CLAUDE.md AGENTS.md \"doesn't work\" OR \"ignores\" rules file experience"]
+    },
+    {
+      "question": "Has the proposed AGENTS.md 1.1 spec (optional frontmatter: description, tags — GitHub issue #135) been merged as of July 2026?",
+      "why": "Only one source (dated May 2026) was found describing this as still open/unmerged; no more recent confirmation was located in this pass.",
+      "triedSources": ["https://www.iuriio.com/blog/posts/2026/05/agents-md-field-guide-2026"],
+      "triedQueries": ["agents.md AGENTS.md format conventions recommended length 2025 2026"]
+    },
+    {
+      "question": "Do the ETH Zurich (Gloaguen et al.) findings generalize beyond Python repositories?",
+      "why": "Reviewers of the paper itself flagged a heavy bias toward Python-based projects in AGENTbench's construction; no replication in other languages/ecosystems was found in this research pass.",
+      "triedSources": ["https://arxiviq.substack.com/p/evaluating-agentsmd-are-repository", "https://arxiv.org/abs/2602.11988"],
+      "triedQueries": ["arxiv AGENTbench context files coding agents ETH Zurich paper 2026"]
+    },
+    {
+      "question": "Is there independent, third-party (non-self-reported) verification of the '60,000+ repositories contain AGENTS.md' adoption figure?",
+      "why": "The only figure found traces to agents.md's own site, repeated verbatim by the Linux Foundation press release without an independent GitHub-search-based audit being cited.",
+      "triedSources": ["https://agents.md/", "https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation"],
+      "triedQueries": ["AGENTS.md standard specification 2026 adoption openai"]
+    },
+    {
+      "question": "Is 'kirill-markin's Cursor rules' a maintained, versioned public repo with adoption metrics (stars/forks), or purely a personal blog methodology with no repo to evaluate for categories/standout rules the way steipete/agent-rules or PatrickJS/awesome-cursorrules can be?",
+      "why": "Search results surfaced articles/blog posts (kirill-markin.com) describing a personal rule-authoring methodology, but no GitHub repository with community adoption metrics was found to assess as a 'notable public rule-set repo' on the same footing as the others requested.",
+      "triedSources": ["https://kirill-markin.com/articles/cursor-ide-rules-for-ai/"],
+      "triedQueries": ["kirill-markin cursor rules cursor.directory rules website"]
+    },
+    {
+      "question": "What does dotcursorrules/cursor.directory itself recommend as design principles (as opposed to just being a directory of community-submitted rules), and how does its curation/quality bar compare to PatrickJS/awesome-cursorrules?",
+      "why": "cursor.directory was identified as a rules marketplace ('84.7k+ developers') but this pass did not fetch the site directly to extract its own stated design principles or standout rules, only third-party descriptions of it.",
+      "triedSources": ["https://cursor.directory/"],
+      "triedQueries": ["kirill-markin cursor rules cursor.directory rules website"]
+    }
+  ],
+  "runMetadata": {
+    "toolMode": "fetch",
+    "toolCallCount": 20,
+    "startedAt": "2026-07-15",
+    "finishedAt": "2026-07-15",
+    "workers": 1
+  },
+  "partial": false,
+  "error": null
+}

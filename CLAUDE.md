@@ -14,6 +14,7 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 | `references/rule-design.md` | Rule authoring guide + research sources | Never |
 | `CLAUDE.md` | This file — project contributor guide | Never |
 | `README.md` | Human-facing project docs | Never |
+| `research/` | Raw research artifacts (provenance for rule evidence) | Never |
 
 ## Invariants
 
