@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Universal AI coding guardrails. `rules.md` is the deployed artifact — loads into Claude Code, Cursor, Copilot, Codex, Windsurf, Kimi, DeepSeek, and similar tools via their config files.
+Universal AI coding guardrails. `rules.md` is the deployed artifact — loads into Claude Code, Cursor, Copilot, Codex, Windsurf, Aider, Cline, and similar tools via their config files.
 
 ## File Structure
 
