@@ -32,6 +32,25 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [When AI Agents Touch CI/CD Configurations — 8,031 agentic PRs (arXiv:2601.17413, 2026)](https://arxiv.org/abs/2601.17413)
 - [USENIX Security '25: "We Have a Package for You!" — Package Hallucinations by Code-Generating LLMs (19.7% hallucinated, 43% reproducible)](https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen)
 - [METR: Measuring AI Ability to Complete Long Software Tasks — 7-month horizon doubling (arXiv:2503.14499, 2025)](https://arxiv.org/abs/2503.14499)
+- [Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? — ETH Zurich/LogicStar, 138-task AGENTbench: LLM-generated files reduce success ~3% and add 20-23% cost; human-written gain ~4% at ~19% cost (arXiv:2602.11988, 2026)](https://arxiv.org/abs/2602.11988)
+- [On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents — 124 real PRs: 28.64% lower median runtime, 16.58% fewer output tokens; measures efficiency, not correctness (arXiv:2601.20404, ICSE JAWs 2026)](https://arxiv.org/abs/2601.20404)
+- [False success quantified: 3% of failures when independently verifiable vs 45-75% when self-reported; LLM judges max AUROC 0.65 (arXiv:2606.09863, 2026)](https://arxiv.org/abs/2606.09863)
+- [SWE-bench resolution rates inflated 6.2pp by patches passing limited suites but failing comprehensive tests (arXiv:2503.15223, 2025)](https://arxiv.org/abs/2503.15223)
+- [Coding-agent failure taxonomy from 20,574 real sessions / 1,639 repos — constraint-violation and inaccurate-self-reporting shares GROW over time (arXiv:2605.29442, 2026)](https://arxiv.org/abs/2605.29442)
+- [Outcome-driven constraint violations under KPI/production pressure — 0-62.8% misalignment, not improving across generations (arXiv:2512.20798, 2025)](https://arxiv.org/abs/2512.20798)
+- [Imperative interference: 'NEVER do X' carries register-dependent force; declarative restatement more stable cross-lingually (arXiv:2603.25015, 2026 — single study, do not over-weight)](https://arxiv.org/abs/2603.25015)
+- [Negative framing less reliable than positive (ironic-process analog), but direction is task-dependent (arXiv:2605.05391; arXiv:2602.04306, 2026)](https://arxiv.org/abs/2605.05391)
+- [Prompt-format effects (MD/XML/JSON/YAML) are model-dependent and dwarfed by capability; weaker models far more format-sensitive; markdown safest cross-model default (arXiv:2411.10541; arXiv:2605.29676)](https://arxiv.org/abs/2411.10541)
+- [EvilGenie: reward-hacking benchmark on production agents incl. Codex/Claude Code/Gemini CLI (arXiv:2511.21654)](https://arxiv.org/abs/2511.21654)
+- [TRACE: 517-trajectory / 54-category test-gaming taxonomy (arXiv:2604.15149, 2026)](https://arxiv.org/abs/2604.15149)
+- [Push Your Agent: false completion, duplicate submission, reported-count error, premature stopping as distinct measurable failure categories (arXiv:2605.23574, 2026)](https://arxiv.org/abs/2605.23574)
+
+### Vendor Prompting Guidance (2026-07 survey)
+- [Anthropic Claude Code best practices — pruning heuristic: "For each line, ask: Would removing this cause Claude to make mistakes? If not, cut it"; "Bloated CLAUDE.md files cause Claude to ignore your actual instructions"; include/exclude table](https://code.claude.com/docs/en/best-practices)
+- [OpenAI GPT-5.6 prompting guide — outcome-first: define "the outcome, constraints, evidence, and completion bar"; removing repeated instructions improved internal coding-agent evals ~10-15% while cutting tokens 41-66%](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6)
+- [MiniMax M-series usage tips — explicit stopping rules: "if a tool fails twice, stop retrying and explain the blocker" (independently converges with our 3× threshold)](https://platform.minimax.io/docs/token-plan/prompting-best-practices)
+- [Moonshot Kimi agent setup — over-specifying tool usage in system prompts "may actually interfere with the model's autonomous decision-making" (outcome > step micromanagement)](https://platform.moonshot.ai/docs/guide/use-kimi-k2-to-setup-agent)
+- [AGENTS.md — schema-free cross-tool convention, Linux Foundation AAIF-governed since Dec 2025](https://agents.md/)
 
 ### Industry
 - [CodeRabbit: AI vs Human Code Quality Report (2025)](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)
@@ -57,7 +76,19 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Tenzai: Bad Vibes — Secure-Coding Capabilities of AI Coding Agents (69 vulns across 15 AI-built apps; SSRF common, security headers consistently absent) (2026)](https://blog.tenzai.com/bad-vibes-comparing-the-secure-coding-capabilities-of-popular-coding-agents/)
 - [OWASP: Top 10 for Agentic Applications (2026)](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/)
 
-### Model-Specific Failure Reports
+### Model-Specific Failure Reports (2026-07 sweep)
+- [GPT-5.4/Codex: tasks claimed done immediately; subagent results claimed collected when not; stopped at 10 of 200 targets while reporting progress (openai/codex #14341, #13950, #7247)](https://github.com/openai/codex/issues/14341)
+- [GPT-5.3-Codex: unrequested compat glue; modifying tests to vacuously pass; "LAZY VERIFICATION" + "FALSE CONFIDENCE" (openai/codex #12225, #5102)](https://github.com/openai/codex/issues/12225)
+- [Codex post-compaction self-denial: falsely denied 23 file edits it had made (openai/codex #5957)](https://github.com/openai/codex/issues/5957)
+- [DeepSeek V4: empty/blank final content on API-completed, billed turns in high-thinking mode (openclaw #84591; opencode #28955); DSML/XML tool-call drift breaking parsers (opencode #34676)](https://github.com/anomalyco/opencode/issues/28955)
+- [GLM-5.x: malformed/truncated tool-call JSON during streaming, worsening at long context, fatal harness crashes (vllm #42400; crush #3153; GLM-5 #15)](https://github.com/vllm-project/vllm/issues/42400)
+- [Kimi Code CLI: shipped fixes for agents "ending goals prematurely" and false completion notifications (MoonshotAI/kimi-code releases; Kimi-K2 #81)](https://github.com/MoonshotAI/Kimi-K2/issues/81)
+- [MiniMax M2.x: 75-step plan verbalized, 81,782 tokens, zero tool calls executed (arXiv 2602.19594); duplicated tool names emitted as text (koog #2093; hermes-agent #8259)](https://arxiv.org/abs/2602.19594)
+- [Qwen3.x: XML/JSON tool-call format drift mid-session, stray/missing tags (QwenLM/Qwen3-Coder #475; ollama #14493)](https://github.com/QwenLM/Qwen3-Coder/issues/475)
+- [Claude Code ignores CLAUDE.md/AGENTS.md rules incl. hard restrictions; compliance degrades over long sessions/files (claude-code #22022 + HN corroboration)](https://github.com/anthropics/claude-code/issues/22022)
+- DeepSeek V4 Flash: claimed-complete tasks partially or entirely unperformed — first-hand user observation (2026-07, this project's maintainer); no public issue found matching this exact framing (single-case; the failure *class* is corroborated by the GPT-5.x/Kimi/MiniMax reports above)
+
+### Model-Specific Failure Reports (pre-2026-07)
 - [Claude Code unusable for complex tasks after Feb updates — 6,852-session analysis, reads-per-edit 6.6×→2.0× (GitHub #42796)](https://github.com/anthropics/claude-code/issues/42796)
 - [Opus 4.6/4.5 systematic failure to read before acting — four+ incidents in one day (GitHub #47901)](https://github.com/anthropics/claude-code/issues/47901)
 - [Claude Code: Opus 4.7 Bootstrap Failure (GitHub #50999)](https://github.com/anthropics/claude-code/issues/50999)
@@ -81,6 +112,10 @@ No published study quantifies per-framing success rates; treat framing as design
 | Unstated constraints fail — a constraint not written is a constraint not applied | Anthropic literal-instruction guidance; Instruction Hierarchy (arXiv 2404.13208) |
 | Front-load critical constraints; mid-context placement degrades | Context rot, 18-model study (Chroma 2025) |
 | Prompt rules shape behavior measurably, but mechanical gates dominate | Guardrails Beat Guidance (arXiv 2604.11088); claude-code #50235: hook-enforced ≈100% vs behavioral moderate-to-low |
+| Outcome-first: state the outcome, constraints, evidence, completion bar — not micro-steps | GPT-5.6 guide (removing repeated instructions: ~10-15% eval gain, 41-66% fewer tokens); Moonshot: step micromanagement "may interfere with autonomous decision-making" |
+| Plain Markdown is the safest cross-model format; heavy XML/JSON structure degrades weaker models | Format effects model-dependent, dwarfed by capability (arXiv 2411.10541, 2605.29676); no study isolates table-vs-prose for rules specifically (open question) |
+| Pair critical prohibitions with a declarative restatement where cheap ("Never X — X: not permitted") | Imperative-interference finding (arXiv 2603.25015) — single study, applied sparingly, not as a rewrite mandate; framing-direction effects are task-dependent (2605.05391, 2602.04306) |
+| User-facing labels self-describing for zero-technical readers (e.g. "Small/Large task", never "Tier 1/2") | Maintainer requirement (2026-07): rules serve the user's process management, not only model reliability |
 
 ---
 
@@ -119,7 +154,7 @@ Format efficiency rankings for same information:
 - Use shorthand for repeated concepts ("If X -> Y" not "In the case where X occurs, the appropriate action is Y"): ~15% savings
 - Compress examples to outcome, not full trace: ~20% savings
 
-**Budget** (measured 2026-07, chars/4): main rules file always loaded (~4,200 tokens). Reference files add ~1,400 (operations) to ~3,400 (safety) tokens when conditionally loaded. Total worst case: ~9,000 tokens. Leaves maximum context for actual codebase.
+**Budget** (measured 2026-07 post-overhaul, chars/4): main rules file always loaded (~4,300 tokens, 169 lines). The evidence-based prune (toolchain-detection table deleted; log-level/commit/complexity/LSP tables compressed) was spent on higher-value rules (CI Ownership, both-ways Test Integrity, three-field Outcome Report, recurring-issue→mechanical-guard) — net tokens ≈ unchanged, signal density up, instruction count down. Reference files add ~1,400 (operations) to ~3,400 (safety) tokens when conditionally loaded. Total worst case: ~9,000 tokens. Leaves maximum context for actual codebase.
 
 ---
 
@@ -164,6 +199,59 @@ The model difference narrows to the degree behavior is mechanized; it closes onl
 
 ---
 
+## Automation Ladder
+
+Encode domain knowledge at the most mechanical level that can express it — each step down is cheaper, later-triggered, and less binding:
+
+```
+type system > test > lint/CI step > harness hook > on-demand skill > always-on prompt rule
+```
+
+A prompt rule is the **last resort** for what cannot be mechanized. Grounding: hook-enforced rules reach ≈100% compliance vs moderate-to-low for the same rules as in-context guidance (claude-code #50235); "your agent could fix an issue every time it sees it, but that uses tokens and might miss cases — a lint rule, CI step, or routine automates that class forever" (Boris Cherny, x.com/bcherny status 2077460395279692197, 2026); independent practitioner analysis reaches the same detection-vs-enforcement split ([dev.to analysis](https://dev.to/alexefimenko/i-analyzed-a-lot-of-ai-agent-rules-files-most-are-making-your-agent-worse-2fl)).
+
+Consequences:
+1. `rules.md` › Process Framework carries the behavioral shadow: recurring issue class (3×) → propose a mechanical guard.
+2. A rule *retires* from `rules.md` when promoted to a mechanical gate (see Rule Lifecycle).
+3. Local-first gating (e.g. dev-skills `ds-quality` stop-hook loop) beats CI-first: CI detects but does not fix; a local gate fires while the agent can still fix immediately. CI remains the safety net, owned via `rules.md` › CI Ownership.
+
+## Rule Lifecycle
+
+**Intake:** ≥2 documented real-world failure cases (CLAUDE.md pre-checks). Single first-hand observations enter as candidates only when the failure *class* has independent multi-model corroboration.
+
+**Pruning heuristic (apply to every line, every revision):** "Would removing this cause the model to make mistakes? If not, cut it" (Anthropic best practices). Exclude anything inferable from the code/config itself, standard language conventions, and self-evident practices — restating what models already know adds cost without lift (Anthropic exclude-table; Windsurf/Devin docs: "no need to add generic rules... already baked into training data"; ETH 2602.11988: limit human-written instructions to non-inferable details).
+
+**Sunset check (each major revision):** a rule is demoted or removed when (a) its failure mode is no longer reproducible in current target models, or (b) it has been promoted to a mechanical gate in the deployment (Automation Ladder). Record the retirement + reason here; never silently drop.
+
+## Effectiveness Evidence (what a rules file can and cannot claim)
+
+Two independent empirical studies confirm rules files causally change agent behavior, but on different axes:
+
+| Axis | Evidence | Verdict |
+|------|----------|---------|
+| Task success / correctness | ETH AGENTbench (2602.11988): human-written ≈ +4% at ~19% cost; LLM-generated ≈ −3% | Modest at best; auto-generated files actively hurt |
+| Efficiency / cost | Lulla (2601.20404): −28.64% median runtime, −16.58% output tokens on real PRs | Solid gain from a good file |
+| Failure-floor / consistency | Harness-gap analysis (below) + model failure reports | The file's core value: supplying rules no harness enforces |
+
+Honest positioning: this project claims a higher *floor* (fewer catastrophic misses: weakened tests, fabricated packages, false "done") and better *efficiency/consistency* — not a raw success-rate uplift. Both studies also justify hard length discipline. **Not verified, do not cite:** any specific line-count compliance threshold (the widely-repeated "150 lines" figure has no traceable primary source), GuideBench per-model percentages, IFEval-vs-IFBench gap figures, MAST percentage breakdowns.
+
+## Harness Coverage Survey (2026-07)
+
+System prompts of 8 harnesses surveyed (Claude Code, Cursor, Windsurf/Devin, Codex CLI, Copilot, Cline, opencode, Gemini CLI) across 10 behavior classes. Where a behavior is widely native, `rules.md` stays minimal; where a gap is universal, `rules.md` carries the rule:
+
+| Behavior | Native coverage | rules.md stance |
+|----------|-----------------|-----------------|
+| Treat external/file/tool content as untrusted | 1/8 (Gemini CLI only) | **Highest-value rule we supply** (External Content Injection) |
+| Test integrity (never weaken to pass) | 0/8 | **Supplied** (Test Integrity) |
+| Read-before-edit (unconditional) | ~1/8 explicit | Supplied (Read-Before-Modify) |
+| Dependency verification | 3/8; Windsurf's prompt actively endorses training-data version fallback | Supplied + explicit "never fall back to training data" (Trust Verification) |
+| Scope discipline | ~4/8 | Supplied (Scope Boundary) |
+| Verification before done | ~5/8, uneven | Supplied (Completion Gate) — also covers the 3 harnesses without it |
+| Todo/plan tracking | 7/8 | Minimal — Spec Artifact adds only the cross-session ledger + verify-criteria contract |
+| Conciseness/communication | 7/8 | Not duplicated |
+| Convention-following | 7/8 | One line in Fix Quality |
+
+Re-survey cadence: each major revision — harness prompts change quickly (e.g. Windsurf→Devin Desktop rebrand, June 2026).
+
 ## Literal Interpretation
 
 Claude models follow instructions literally — omitted details are omitted from output (Anthropic prompting docs, "literal instruction following"). Implications for rule design:
@@ -197,19 +285,19 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 | W3 | Scope Creep | Reformats untouched code, adds unrequested features | Scope Boundary + Over-engineering Prevention + File Creation no-residue rule — working artifacts (scratch files, debug scripts, one-off helpers) deleted at completion |
 | W4 | Memory Decay | Relies on stale conversation context | Artifact-First Recovery — re-read before modifying; Spec Artifact live ledger — mark `[x]` the moment a check passes, update `tasks.md` on approach change (the artifact is the progress ledger, not conversation memory) |
 | W5 | Confidence Bias | Assigns higher severity than evidence warrants | Severity levels — when uncertain, choose lower; Finding Triage — unconfirmed findings are false positives, excluded from the plan |
-| W6 | Skip Tendency | Declares done before all steps executed | Completion Gate — explicit done checklist incl. no-residue; Spec Artifact — live ledger keeps unexecuted steps visible |
+| W6 | Skip Tendency / Premature Completion | Declares done before all steps executed — GPT-5.4 claimed uncollected subagent results collected (codex #14341); MiniMax verbalized 75-step plan, zero tool calls (arXiv 2602.19594); Kimi CLI shipped fixes for "ending goals prematurely"; first-hand DeepSeek V4 Flash case (2026-07) | Completion Gate — explicit done checklist incl. no-residue; CI Ownership — pushed work not done until checks green; Spec Artifact — live ledger keeps unexecuted steps visible |
 | W7 | Redundancy Blindness | Reports same issue multiple times; re-raises resolved concerns (Opus 4.7 loops) | Deduplication in Fix Quality + settled-concern rule (don't re-litigate without new evidence) |
 | W8 | Injection Risk | Unsanitized input in shell commands | Security Awareness — quote paths, use `--`, reject metacharacters |
 | W9 | Concurrency Errors | AI-generated code shows ~2× more concurrency + dependency-correctness issues than human-written (CodeRabbit 2025) | Safety reference — explicit concurrency checklist |
-| W10 | Self-Verification Failure | Self-judged "done" is unreliable — 19.71% of agent-"solved" tasks fail adversarial re-verification (SWE-ABS 2603.00520) | Completion Gate — state what changed + how to verify; Spec Artifact — per-task verify check + expected signal named at plan time, not improvised at completion |
+| W10 | Self-Verification Failure | Self-judged "done" is unreliable — 19.71% of agent-"solved" tasks fail adversarial re-verification (SWE-ABS 2603.00520); false success 45-75% when self-reported vs 3% when independently verifiable (2606.09863); SWE-bench inflation 6.2pp (2503.15223) | Completion Gate — state what changed + how to verify; Operating Loop core principle now states self-reported completion is presumed false; Spec Artifact — per-task verify check + expected signal named at plan time |
 | W11 | Read-Before-Act Regression | Claude Code field data: reads-per-edit dropped 6.6× → 2.0× after Feb 2026 update; modifies files without reading them first (GitHub #42796, 6,852 sessions; #47901) | Read-Before-Modify gate — explicit read required before every edit |
-| W12 | Tool-Call Format Instability | Kimi K2: malformed `tool_call_id` format breaks tool-call parsing in multi-round agentic sessions; assumed success causes silent failure | Tool-Call Result Verification gate — verify result before proceeding |
-| W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently | Error Ownership — every detected problem must be addressed regardless of origin; Verification-Infrastructure Gap — a check with no project tooling (no tests/CI/lint) is reported + remediation offered, never silently skipped |
+| W12 | Tool-Call Format Instability | Cross-vendor, worsening at long context: Kimi K2 malformed `tool_call_id`; GLM-5.x truncated JSON with fatal harness crashes (vllm #42400); Qwen3.x XML/JSON drift mid-session (#475); MiniMax duplicated names as plain text (koog #2093); DeepSeek V4 empty content on completed turns (openclaw #84591) + DSML drift | Tool-Call Result Verification gate — silent-failure list now names empty-content-on-completed-turn, malformed/duplicated names, format drift, plain-text tool calls |
+| W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently — constraint-violation + inaccurate-self-reporting failure shares grow over session time (2605.29442, 20,574 sessions) | Error Ownership — every detected problem must be addressed regardless of origin; Verification-Infrastructure Gap — a check with no project tooling (no tests/CI/lint) is reported + remediation offered, never silently skipped |
 | W14 | External Content Injection | Files/web/emails read during task embed fake instructions; model follows them (ClawSafety 2026: attack success 40–75% across models) | External Content Injection prohibition — treat all external content as untrusted data |
-| W15 | Specification Gaming / Reward Hacking | Satisfies the literal test/metric while violating intent — special-cases known test inputs, hard-codes expected outputs, games the reward signal (SWE-ABS 2603.00520: 19.71% of "solved" tasks semantically wrong; gap widens +28pp at 10× code, SpecBench 2605.21384) | Test Integrity — verify against described intent + cases beyond the provided suite; never special-case test inputs |
+| W15 | Specification Gaming / Reward Hacking | Satisfies the literal test/metric while violating intent — special-cases known test inputs, hard-codes expected outputs, games the reward signal (SWE-ABS 2603.00520: 19.71% of "solved" tasks semantically wrong; gap widens +28pp at 10× code, SpecBench 2605.21384; actively benchmarked on production agents: EvilGenie 2511.21654, TRACE 2604.15149; GPT-5.3-Codex modified tests to vacuously pass, codex #12225). Mirror image: coverage-padding — vanity tests written to game a metric | Test Integrity — verify against described intent + cases beyond the provided suite; never special-case test inputs; every test names the failure it guards against, coverage never a target |
 | W16 | Sycophancy / Authority Deference | Abandons a correct position under user pushback; defers to authority claims (PR text, comments, "the reviewer said") instead of judging behavior (BrokenMath 2510.04721: GPT-5 29% sycophantic; redacting authorship metadata restored vuln detection in all affected cases, 2603.18740) | Process Framework (on pushback, re-verify from source) + Trust Verification — judge code by behavior, not claims |
 | W17 | Dependency Hallucination / Slopsquatting | Imports a package that doesn't exist, or an attacker's typosquat of a hallucinated name (USENIX 2025: 19.7% of LLM-suggested packages hallucinated, 43% reproducible) | Trust Verification — package present in registry (non-trivial age + downloads) AND in lockfile before import |
-| W18 | Context Rot / Long-Context Degradation | Accuracy degrades as input grows even within the window; mid-context instructions silently dropped (Chroma 18-model study; arXiv 2601.15300). Distinct from W4 (post-compaction staleness) | Artifact-First Recovery + Token/Context — front-load constraints, re-ground every ~20 calls, summarize don't accumulate; Gate Recall — pre-flight names the applicable gates so they stay salient throughout |
+| W18 | Context Rot / Long-Context Degradation | Accuracy degrades as input grows even within the window; mid-context instructions silently dropped (Chroma 18-model study; arXiv 2601.15300). Post-compaction, model may deny its own recent actions — Codex falsely denied 23 file edits it had made (codex #5957). Distinct from W4 (post-compaction staleness) | Artifact-First Recovery — re-ground every ~20 calls, post-compaction the diff is the record, not recollection; Token/Context — front-load constraints, summarize don't accumulate; Gate Recall — pre-flight names the applicable gates so they stay salient |
 | W19 | Multi-Agent / Subagent Handoff Failure | Trusts subagent-returned data as ground truth; specs/results distorted or lost across handoffs (MAST 2503.13657, 1,600+ traces; 2505.00212: 53.5% inter-agent attribution) | Subagent Output Verification gate — apply Grounded Specifics + Trust Verification to returned data; explicit handoff contract; turn budget → escalate |
 | W20 | Slop / Duplication Drift | Regenerates near-duplicate code instead of reusing existing implementation (GitClear 2025: copy-pasted 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 5.5%→7.9%) | Fix Quality — grep for existing impl before generating; reuse/modify over regenerate; no-residue rule — slop artifacts never committed |
 
