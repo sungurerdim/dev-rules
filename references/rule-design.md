@@ -157,7 +157,7 @@ Format efficiency rankings for same information:
 - Use shorthand for repeated concepts ("If X -> Y" not "In the case where X occurs, the appropriate action is Y"): ~15% savings
 - Compress examples to outcome, not full trace: ~20% savings
 
-**Budget** (measured 2026-07 post-overhaul, chars/4): main rules file always loaded (~4,300 tokens, 169 lines). The evidence-based prune (toolchain-detection table deleted; log-level/commit/complexity/LSP tables compressed) was spent on higher-value rules (CI Ownership, both-ways Test Integrity, three-field Outcome Report, recurring-issue→mechanical-guard) — net tokens ≈ unchanged, signal density up, instruction count down. Reference files add ~1,400 (operations) to ~3,400 (safety) tokens when conditionally loaded. Total worst case: ~9,000 tokens. Leaves maximum context for actual codebase.
+**Budget** (measured 2026-07 post process-management additions, chars/4): main rules file always loaded (~4,900 tokens, 178 lines). The evidence-based prune (toolchain-detection table deleted; log-level/commit/complexity/LSP tables compressed) was spent on higher-value rules (CI Ownership, both-ways Test Integrity, three-field Outcome Report, recurring-issue→mechanical-guard) — net tokens ≈ unchanged, signal density up, instruction count down. Reference files add ~1,400 (operations) to ~3,400 (safety) tokens when conditionally loaded. Total worst case: ~9,000 tokens. Leaves maximum context for actual codebase.
 
 ---
 
@@ -305,6 +305,8 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 | W20 | Slop / Duplication Drift | Regenerates near-duplicate code instead of reusing existing implementation (GitClear 2025: copy-pasted 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 5.5%→7.9%) | Fix Quality — grep for existing impl before generating; reuse/modify over regenerate; no-residue rule — slop artifacts never committed |
 
 Each rule in `rules.md` addresses one or more weaknesses. New rules: explicitly identify weaknesses mitigated.
+
+Exception — process-management rules (customer 2, `CLAUDE.md` › Two Customers) serve the user's follow-up cost rather than a W-ID: Decision Framing, Question Batching, the `Assumed:` list in Outcome Report, and the human-owned-blocker row (added 2026-07, maintainer first-hand evidence: repeated bare "X or Y?" choices with no meaning/consequence/recommendation; serial question drip; silent defaults; blockers surfacing only at task end).
 
 ---
 
