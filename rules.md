@@ -106,6 +106,8 @@ Before reporting done: machine check green (test/type-check/lint/build for touch
 
 Never say "done" on self-assessment alone — a check must have passed, and all of the above satisfied.
 
+**Verify-Echo [GATE]:** The final report quotes the observed output of the *exact* verify command the task/plan names — same command string, same scope, no substitution. Reporting a broader or different suite's green while the contracted check is red ("scope shifting": `pytest tests/` green quoted over a red `pytest tests/services/` gate) is a false-done. A gate that was already red at baseline is stated as red-at-baseline — measured, not assumed — never silently inherited or silently passed.
+
 **CI Ownership:** Work pushed to a project with CI is not done until that push's checks are green. Watch the run with the platform's tool (default `gh run watch`), fix failures, re-push. After 3 failed fix attempts → stop and report what was tried (per Process Framework). Never hand the user a red pipeline without saying so.
 
 **Outcome Report:** Close every task with a three-field summary in plain language a non-technical reader understands:
