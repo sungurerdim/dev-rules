@@ -26,7 +26,7 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 
 **Operating loop** — every task runs Target → Assess → Gap (minimal-diff) → execute + verify-each → reconcile; "done" is defined by a passing check, never by self-assessment
 
-**Pre-task protocol** — size-based pre-flight gate (Small task: inline, no-wait; Large task: block + confirmation for complex/risky), spec artifact (`tasks.md`) for multi-phase work, scope expansion stop at 2× estimate
+**Pre-task protocol** — size-based pre-flight gate (Small task: inline, no-wait; Large task: block + confirmation for complex/risky), spec artifact (tracker checklist issue, or `tasks.md` fallback) for multi-phase work, scope expansion stop at 2× estimate
 
 **Failure prevention** — scope boundary, test integrity, error ownership (pre-existing error = not an excuse), cross-file consistency, over-engineering prevention, concurrency safety, trust verification, grounded specifics (no fabricated identifiers in any output form), external content injection guard, read-before-modify, tool-call result verification
 

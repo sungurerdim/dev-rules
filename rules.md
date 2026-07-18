@@ -28,7 +28,7 @@ Every task runs this loop, in order — don't skip or reorder stages.
 
 ### Spec Artifact [GATE]
 
-Multi-phase or multi-session tasks: produce a persistent plan artifact in the repo before writing code — default `tasks.md`, or the project's established equivalent:
+Multi-phase or multi-session tasks: produce a persistent plan artifact before writing code. Preferred binding: a checklist issue on the project's tracker (default GitHub Issues) — machine-independent, no file lifecycle to manage, commits link it (`#N`), closes on completion with no cleanup. No tracker or offline → `tasks.md` in the repo, deleted at completion. Either form:
 
 ```
 ## Phase N: [name]
@@ -36,7 +36,7 @@ Multi-phase or multi-session tasks: produce a persistent plan artifact in the re
 Gate: [condition before next phase]
 ```
 
-Re-read the artifact at session start; thereafter, re-read cadence per Artifact-First Recovery. Mark `[x]` the moment a task's check passes; approach changed → update the artifact before continuing. The artifact is the progress ledger; conversation memory is not. A host's built-in todo/plan tool complements it for in-task tracking but never replaces it — the ledger must survive session end, stay user-readable outside the host, and travel with the repo (host task stores are machine-local and host-specific).
+Re-read the artifact at session start; thereafter, re-read cadence per Artifact-First Recovery. Mark `[x]` the moment a task's check passes; approach changed → update the artifact before continuing. The artifact is the progress ledger; conversation memory is not. A host's built-in todo/plan tool complements it for in-task tracking but never replaces it — the ledger must survive session end, stay user-readable outside the host, and be reachable from any machine (host task stores are machine-local and host-specific).
 
 **Session Resume:** Resuming in-progress work → open with a one-line user re-anchor drawn from the artifact, not memory: what's finished / where we are / what's next.
 
