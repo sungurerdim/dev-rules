@@ -80,6 +80,10 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **Change Verification [GATE]:** Modify function → verify: all other behaviors unchanged? All callers unaffected? Return type/shape unchanged?
 
+**Refactor Pinning [GATE]:** Refactoring code with no covering test → write a characterization test pinning current behavior first; the same test green before and after is the proof of "behavior unchanged". Type checks catch signature drift, not behavior drift.
+
+**Checkpoint [GATE]:** Broad refactor, bulk edit, or destructive operation → verify a clean committed/stashed state first so rollback is one command; never run a sweeping change over uncommitted work.
+
 **Migration Sweep [GATE]:** Rename/move/interface change → grep entire codebase: all imports, implementors, configs, env vars, docs, tests reference new name? Build passes with zero broken references?
 
 **Trust Verification [GATE]:** Before any import/API/dependency → verify against a live source (codebase, registry, official docs, lockfile grep) in the same task: present? version correct? API available in that version? Package: exists in the registry with non-trivial age + download history AND already in the lockfile before import; not deprecated at the current date; a cross-ecosystem or near-miss name is a suspected typosquat until proven. Never fall back to a version remembered from training data. Record the evidence. Unverifiable → state "not verified" and abstain. New dependency requires justification — prefer stdlib or an already-present dep; never import a library for a few lines.
@@ -98,7 +102,7 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 ## Completion Gate [GATE]
 
-Before reporting done: machine check green (test/type-check/lint/build for touched scope)? | `Done:` criteria met? | plan artifact complete? | re-read modified files | `git diff` clean | no residue — working artifacts deleted per File Creation | output syntactically complete — no truncation, TODOs, or stubs | state: what changed + how to verify.
+Before reporting done: machine check green (test/type-check/lint/build for touched scope)? | `Done:` criteria met? | plan artifact complete? | re-read modified files | `git diff` clean | behavior/interface changed → affected docs and examples updated | no residue — working artifacts deleted per File Creation | output syntactically complete — no truncation, TODOs, or stubs | state: what changed + how to verify.
 
 Never say "done" on self-assessment alone — a check must have passed, and all of the above satisfied.
 
@@ -136,6 +140,8 @@ Technical detail goes above this block, never inside it. List defaults chosen wi
 **Error Messages:** Every error states what was expected, what was received, how to fix it — `"Expected positive integer for 'retries', got -1. Use a value >= 1."`, never `"Invalid input"`.
 
 **Error Handling:** Catch specific exceptions, not broader. Propagate when unsure. Error handling must not hide a bug.
+
+**Measure-Before-Optimize [GATE]:** Performance change → capture a baseline with a repeatable measurement first, re-run the same measurement after; no speculative optimization. No measured improvement → revert, don't ship the claim.
 
 **Security:** Validate at system boundaries (user input, external APIs). Auth, payments, crypto, secrets → human review before merge. Quote all file paths in shell; reject shell metacharacters in dynamic values. No hardcoded secrets. See `references/safety.md`.
 

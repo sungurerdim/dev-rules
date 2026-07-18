@@ -51,7 +51,7 @@ User-facing friction (manual tracking, opaque labels, activity-only reports) is 
 
 ### Pre-checks (all must pass)
 
-1. Map to weakness taxonomy W1–W20 (see `references/rule-design.md`) — unmapped rules may belong in a skill instead
+1. Map to weakness taxonomy W1–W24 (see `references/rule-design.md`) — unmapped rules may belong in a skill instead
 2. Evidence: ≥2 documented real-world failure cases (not hypothetical); single first-hand cases only when the failure class has independent multi-model corroboration
 3. Automation Ladder check (`rule-design.md`): can a type/test/lint/CI/hook express this instead? Then it belongs there — a prompt rule is the last resort
 4. Pruning heuristic per line: "Would removing this cause the model to make mistakes? If not, cut it" — never restate what models infer from code/config or standard conventions
@@ -79,7 +79,7 @@ Types:
 
 Defined once in `rules.md` › Task Pre-flight — that is the single source of truth; this guide intentionally holds no copy.
 
-## Weakness Taxonomy (W1–W20)
+## Weakness Taxonomy (W1–W24)
 
 Single source of truth: `references/rule-design.md` › "AI Weakness Taxonomy" — full table with failure descriptions, evidence, and the rule mitigating each. Map every new or modified rule to a W-ID there.
 
