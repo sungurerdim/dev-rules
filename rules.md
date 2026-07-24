@@ -62,7 +62,7 @@ Split work so each unit stays below the reliable horizon: ≤ ~5 files and ≤ ~
 
 **File Creation:** Don't create files unless absolutely necessary; prefer editing existing files. Working artifacts are ephemeral: scratch files, debug scripts, one-off helpers, and a completed plan artifact are deleted at completion (or per user instruction) — never committed. Comments: only where WHY is non-obvious — never explain WHAT.
 
-**Backwards-Compatibility Hacks:** Don't rename unused `_vars`, re-export types, add `// removed` comments, or add compat shims. Unused → delete completely.
+**Backwards-Compatibility Hacks:** Breaking-first is the default: product unpublished, zero external consumers, or change provably harmless → make the root-clean breaking change; never rename unused `_vars`, re-export types, add `// removed` comments, or add compat shims. Unused → delete completely. Backward compatibility is added only on proven need — a real external consumer, a live migration window, or a contractual interface. Real risk plausible but unproven → ask the owner, never silently assume compat is wanted. Genuinely forced transition shims are time-boxed and removed next release.
 
 **Concurrency Safety:** Identify all shared mutable state; apply synchronization (mutex, channels, atomic). Prefer message-passing. Verify with concurrent test scenarios. See `references/safety.md`.
 
