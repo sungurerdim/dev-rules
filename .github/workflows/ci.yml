@@ -10,11 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Line budget — rules.md hard limit 300
+      - name: Line budget — rules.md hard limit 130
         run: |
           lines=$(wc -l < rules.md)
-          echo "rules.md: ${lines} lines (target ~240, hard limit 300)"
-          [ "${lines}" -le 300 ]
+          echo "rules.md: ${lines} lines (target ~110, hard limit 130)"
+          [ "${lines}" -le 130 ]
+      - name: Profile delta — supplement must not restate rules.md
+        run: |
+          python3 - <<'PY'
+          import re, sys
+          def shingles(path, n=7):
+              words = re.sub(r'[^a-z0-9 ]', ' ', open(path).read().lower()).split()
+              return {' '.join(words[i:i+n]) for i in range(len(words) - n + 1)}
+          overlap = shingles('rules.md') & shingles('references/portable-supplement.md')
+          print(f"shared 7-grams: {len(overlap)}")
+          for s in sorted(overlap):
+              print("  ", s)
+          sys.exit(1 if len(overlap) > 2 else 0)
+          PY
       - name: markdownlint
         uses: DavidAnson/markdownlint-cli2-action@v23
         with:

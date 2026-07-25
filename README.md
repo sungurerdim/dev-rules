@@ -21,6 +21,7 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 - **The highest-value rules are the ones no harness enforces.** A survey of 8 harness system prompts (Claude Code, Cursor, Codex CLI, Copilot, Gemini CLI, …) found 0/8 prohibit weakening tests to make them pass, and only 1/8 treats file/web/tool content as untrusted data. Those gaps are exactly what this file supplies.
 - **False "done" is the failure to design against.** Agents self-report success falsely in 45–75% of failure cases when unverified — vs 3% when completion is independently verifiable (arXiv:2606.09863). Hence the Operating Loop's core principle: done is an external signal, never a self-assessment.
 - **Short beats complete.** Bloated rules files get ignored (documented in Claude Code issue #22022 and Anthropic's own docs) — so every line here passes the test "would removing it cause mistakes?", and anything a linter/CI can enforce is pushed there instead (see the Automation Ladder in [rule-design.md](references/rule-design.md)).
+- **Overconstraining is its own failure mode.** Anthropic removed >80% of Claude Code's system prompt for Claude 5 generation models with no measurable eval loss, because conflicting guidance across system prompt, rules files, and skills made the model work harder to decide what the user actually wanted ([The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models), 2026-07-24). Hence the two profiles below: nothing here re-asserts what your host's own system prompt already says.
 
 ## What's inside
 
@@ -34,21 +35,28 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 
 **Outcome report** — every task closes with a plain-language three-field summary (Task / Done / Gain: the concrete effect, not activity counts), open human-owned actions listed, deferred findings offered to the project's issue tracker instead of vanishing into chat
 
-**Code quality** — complexity limits (CC ≤ 15, nesting ≤ 3), readability-over-cleverness, error message quality, error handling discipline
+**Security** — human-verification gate for auth/payments/crypto, shell command safety, no hardcoded secrets — the one domain kept inline, because it has no safe default
 
-**Security** — OWASP top 10, human-verification gate for auth/payments/crypto, shell command safety, no hardcoded secrets
+**Process discipline** — structured workflow, artifact-first recovery after context gaps, decision framing, question batching — with adaptive binding: named tools/artifacts are defaults, the host's native equivalent takes precedence
 
-**Operational awareness** — observability baseline, production-grade defaults, database migration safety
-
-**Process discipline** — structured workflow, artifact-first recovery after context gaps, code-intelligence-first navigation, subagent capability routing — with adaptive binding: named tools/artifacts are defaults, the host's native equivalent takes precedence
-
-**Reference files** — detailed security and operations rules, loaded on demand when working on auth, payments, deployment, caching, etc.
+**Reference files** — security, operations, and the portable supplement, loaded on demand rather than in every session. Code style, complexity thresholds, error-message quality, observability and migration safety live there or in the matching [dev-skills](https://github.com/sungurerdim/dev-skills) skill — one canonical home each, never two.
 
 ## Install
 
+### Pick your profile first
+
+| Your setup | Install | Why |
+|---|---|---|
+| **Claude Code on a Claude 5 generation model** | `rules.md` alone | The host system prompt already supplies ordinary engineering judgment; adding a second copy creates conflicting guidance |
+| **Cursor · Copilot · Aider · Cline · older or smaller models** | `rules.md` **+** [`references/portable-supplement.md`](references/portable-supplement.md) | The supplement re-adds exactly the guardrails that layer would have provided — scope discipline, code style, destructive-action confirmation, untrusted input, tool selection |
+
+The supplement is a delta, not an alternative version: it never restates a line of `rules.md`, and CI enforces that.
+
+On Claude Code you can also run `/doctor` to have the harness rightsize your own `CLAUDE.md` and skills against the same principles.
+
 ### Quick start: one file, ready to go
 
-`rules.md` is fully self-contained — all core rules work without any other file. Copy it to your AI tool's rules directory:
+`rules.md` is fully self-contained on the lean profile — all core rules work without any other file. Copy it to your AI tool's rules directory:
 
 | Tool | Command |
 |------|---------|
@@ -80,17 +88,20 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 git clone https://github.com/sungurerdim/dev-rules.git /tmp/dev-rules
 cp /tmp/dev-rules/rules.md ~/.claude/rules/dev-rules.md
 mkdir -p ~/.claude/dev-rules-references
-cp /tmp/dev-rules/references/safety.md /tmp/dev-rules/references/operations.md ~/.claude/dev-rules-references/
+cp /tmp/dev-rules/references/safety.md /tmp/dev-rules/references/operations.md /tmp/dev-rules/references/portable-supplement.md ~/.claude/dev-rules-references/
 rm -rf /tmp/dev-rules
 ```
+
+On the portable profile, move `portable-supplement.md` into the always-loaded directory instead — for Claude Code that is `~/.claude/rules/`, for Cursor `.cursor/rules/`, and so on.
 
 > **Keep references out of the auto-load path.** Claude Code loads everything under `~/.claude/rules/` (recursively) into every session. Reference files belong outside it — e.g. `~/.claude/dev-rules-references/` — so they cost tokens only when the AI actually needs them.
 
 ## How it works
 
 ```
-rules.md                    always loaded (< 300 lines)
+rules.md                    always loaded (< 130 lines)
 references/
+  portable-supplement.md    always loaded on the portable profile only
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability
   rule-design.md            contributor reference — never loaded at runtime
@@ -104,7 +115,8 @@ CLAUDE.md                   AI contributor guide — never loaded at runtime
 - **Prevent harm, don't just detect it.** Rules catch mistakes as they happen, not after.
 - **Positive framing.** "Verify imports exist before using" instead of "Don't use unverified imports." A constraint not written is a constraint not applied — rules state the action first, name the fallback, and use prohibitions only as reinforcement ([research](references/rule-design.md)).
 - **Tool-agnostic.** Works with any AI tool that accepts markdown instructions — no lock-in, no platform dependencies.
-- **Token-efficient.** ~4,700 tokens for the main file. References add ~1,400–3,800 each, only when needed.
+- **Token-efficient.** ~3,100 tokens for the main file on the lean profile. References add ~1,000–3,800 each, only when needed.
+- **One canonical home per rule.** Nothing is repeated between `rules.md`, the supplement, the reference files, or the dev-skills skills — repetition was a workaround for older models' position bias, and on current models it costs context and creates conflicts.
 - **Honest about what it can't do.** A prompt file can't be a mechanical gate — anything a type system, test, linter, CI step, or hook can enforce belongs there (Automation Ladder). The rules push the model to defer to those signals and to propose new mechanical guards when the same issue class recurs.
 
 ## Using with dev-skills

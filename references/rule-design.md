@@ -10,6 +10,7 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Anthropic: Claude Prompting Best Practices (2026)](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
 - [Anthropic: Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
 - [Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)
+- [The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models) — Thariq Shihipar, Anthropic, 2026-07-24. >80% of Claude Code's system prompt removed for Claude 5 generation models with no measurable eval loss; six then→now shifts (rules→judgment, examples→interface design, upfront→progressive disclosure, repetition→single description, manual→auto memory, simple specs→rich references)
 
 ### Academic
 - [Wharton: Chain-of-Thought Technical Report (2025)](https://gail.wharton.upenn.edu/research-and-insights/tech-report-chain-of-thought/)
@@ -118,6 +119,10 @@ No published study quantifies per-framing success rates; treat framing as design
 | User-facing labels self-describing for zero-technical readers (e.g. "Small/Large task", never "Tier 1/2") | Maintainer requirement (2026-07): rules serve the user's process management, not only model reliability |
 | Adaptive binding: name capabilities with defaults, not mandates — host/project-native equivalent preferred, named default as fallback, capability never optional | 7/8 harnesses ship native plan/todo mechanisms (2026-07 survey) that a hardcoded artifact name would conflict with or duplicate; vendor conventions are short-lived (Windsurf→Devin Desktop rebrand). Constraint: most native todo tools are session-ephemeral, so the *persistence* requirement stays hard — only the binding adapts |
 | Literalism hardening: condition concrete names at the rule site ("GitHub: `gh run watch`; other platforms: their equivalent"), not only in a global preamble — and keep the concrete example, don't fully abstract | Agents follow file instructions literally even when counterproductive (ETH 2602.11988); a single global disclaimer fades over long contexts (context rot / Gate Recall logic) while the local rule text stays salient; but full abstraction hurts weaker models — examples reduce misinterpretation (Example Density above) |
+| Host-layer deduplication: before adding a rule, read the target host's system prompt — already stated there → portable supplement, never the always-on core | Anthropic removed >80% of Claude Code's system prompt for Claude 5 generation models with no measurable eval loss (2026-07-24 blog). The named failure is *conflicting* guidance, e.g. "leave documentation as appropriate" in one layer against "DO NOT add comments" in another: the model must resolve the clash before acting. Two layers asserting the same thing is not redundant safety |
+| Hard thresholds and absolute negatives need a documented case where judgment alone failed; otherwise state the outcome and let context decide | Same source: the removed rule "default to writing no comments. Never write multi-paragraph docstrings" was replaced by "Write code that reads like the surrounding code: match its comment density, naming, and idiom" — the hard form was wrong for a real subset of prompts, and newer models handle the decision unaided |
+| Prefer interface design over usage examples: expressive parameters, enumerated states, and explicit IO contracts guide better than sample invocations | Same source: examples constrain the model to the exploration space they demonstrate. A Todo tool's `pending`/`in_progress`/`completed` enumeration conveys intended use more cheaply than an example call |
+| Rich references beat prose specs: a test suite, a working function to port, an HTML mockup, or a rubric carries higher-fidelity intent than a description of the same thing | Same source: "prefer files that are in code as it provides clear, high-fidelity instructions to Claude in a language it knows very well"; rubrics let verifier agents check taste (e.g. what good API design looks like) rather than restating it as rules |
 | Process-management rules: session-resume re-anchor, mid-task additions → artifact, escalation always carries 2-3 options + recommendation | Maintainer requirement (2026-07, first-hand: forgets tasks across long/parallel sessions); mid-task-addition pattern proven in the 2026-07 overhaul session itself; options-bearing escalation cuts user decision latency |
 
 ---
@@ -223,7 +228,25 @@ Consequences:
 
 **Pruning heuristic (apply to every line, every revision):** "Would removing this cause the model to make mistakes? If not, cut it" (Anthropic best practices). Exclude anything inferable from the code/config itself, standard language conventions, and self-evident practices — restating what models already know adds cost without lift (Anthropic exclude-table; Windsurf/Devin docs: "no need to add generic rules... already baked into training data"; ETH 2602.11988: limit human-written instructions to non-inferable details).
 
-**Sunset check (each major revision):** a rule is demoted or removed when (a) its failure mode is no longer reproducible in current target models, or (b) it has been promoted to a mechanical gate in the deployment (Automation Ladder). Record the retirement + reason here; never silently drop.
+**Sunset check (each major revision):** a rule is demoted or removed when (a) its failure mode is no longer reproducible in current target models, (b) it has been promoted to a mechanical gate in the deployment (Automation Ladder), or (c) the target host's own system prompt now asserts it, making a second copy a conflict rather than reinforcement. Record the retirement + reason here; never silently drop.
+
+### Retirement record — 2026-07-25 (Claude 5 context-engineering revision)
+
+`rules.md` went from 187 to 118 lines. Nothing was deleted outright: every clause below moved to exactly one new home, verified present there before the removal landed.
+
+| Rule | Moved to | Reason |
+|------|----------|--------|
+| Scope Boundary · Over-engineering (YAGNI) · File Creation · External Content Injection · destructive-action confirmation · Code Standards · Error Messages · Error Handling · Format Preservation · Context hygiene · Code-Intelligence-First Navigation · Subagent Capability Routing · Tool Prerequisites | `references/portable-supplement.md` | (c) — the Claude Code system prompt asserts each of these for the Claude 5 generation; kept for weaker hosts as an explicit profile, not as an always-on default |
+| The comments clause of File Creation ("never explain WHAT") | rewritten in the supplement as "match the surrounding code's comment density" | (a) + conflict — the hard form contradicted the host system prompt verbatim, reproducing the article's own documented failure case |
+| The harness enumeration inside Tool-Call Result Verification (empty `tool_calls` after a tool-call finish, format drift, plain-text tool calls) | `references/portable-supplement.md` › Tool-Call Failure Modes | (b) — a harness owns these; `CLAUDE.md` § Out of Scope already excluded them, so the rule was self-inconsistent. The model-actionable core (verify by observed effect) stayed |
+| Observability · Production Defaults · Database Changes · Idempotency | `references/operations.md` | Progressive disclosure — relevant in a minority of sessions, paid for in all of them. Idempotency and the timeout/rate-limit and no-environment-literals clauses had no prior home there and were written in as part of this move |
+| Complexity Limits | dev-skills `ds-fix` › Phase 4 Lint, framed linter-first | (b) — Automation Ladder; a linter enforces thresholds, model recall does not |
+| Severity Levels · Skip Patterns · Fix Quality | dev-skills `ds-review` | Already present there verbatim; the `rules.md` copy was cross-repo duplication |
+| Commit History (WIP collapse) | dev-skills `ds-commit` (`--fixup` + non-interactive autosquash) | Already present there |
+| Concurrency Safety · Security detail · i18n/a11y detail | `references/safety.md` pointer · merged into Non-Functional Accountability | Pointer pattern, not duplication |
+| Migration Sweep · Refactor Pinning · Meaningful Test Data · Gate Recall · Session Resume · Mid-task Additions · Scope Expansion Stop | absorbed inline into the gate they belonged to | Not retired — merged to cut heading overhead without losing a clause |
+
+Retained deliberately despite the "cut it" pressure: Operating Loop, done-as-external-signal, Verify-Echo, Spec Artifact, CI Ownership, three-field Outcome Report, Decision Framing. These encode the maintainer's process requirements, not a model capability gap, so the shrinking-model-gap argument does not apply to them.
 
 ## Effectiveness Evidence (what a rules file can and cannot claim)
 

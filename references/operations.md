@@ -66,6 +66,23 @@ Every cache interaction must define: TTL, invalidation strategy, + stale-data to
 
 **Feature flags:** Every flag has owner + expiration date. Flags older than 90 days without explicit extension: schedule for removal. Dead flags increase complexity + test surface.
 
+**No environment-specific literals:** URLs, ports, paths, model IDs and their kind come from env or config files — never hardcoded per environment.
+
+**Explicit limits everywhere:** every outbound call carries its own timeout (interactive paths: 5–10s) and every exposed endpoint a rate limit. An unlimited default is a defect, not a convenience — deadline or KPI pressure does not relax this.
+
+---
+
+## Idempotency
+
+Anything retryable or re-runnable — a script, a migration, a webhook or queue handler, an API mutation — must be safe to execute twice. The proof is behavioral: run it twice against the same input and confirm the second run changes nothing beyond what the first already did.
+
+| Surface | Mechanism |
+|---------|-----------|
+| Scripts, migrations | Guard on current state (`IF NOT EXISTS`, version check) rather than assuming a fresh target |
+| Webhook / queue handlers | Deduplicate on the provider's event ID; at-least-once delivery is the norm, not the exception |
+| API mutations | Client-supplied idempotency key, stored with the result, replayed on repeat |
+| Payments | Idempotency key is mandatory — see `safety.md` › Payment & Financial Code for the double-charge case |
+
 ---
 
 ## Database Migration Safety
