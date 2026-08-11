@@ -8,6 +8,7 @@ How + why rules are written as they are. For rule authors and contributors — n
 
 ### Official
 - [Anthropic: Claude Prompting Best Practices (2026)](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
+- [Anthropic: Prompting Claude Fable 5 (2026)](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5) — prior-generation prescriptive prompt styles "are often too prescriptive for Claude Fable 5 and can degrade output quality"; official confirmation that over-instruction is a measured failure mode for this model class, not merely a token cost
 - [Anthropic: Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
 - [Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)
 - [The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models) — Thariq Shihipar, Anthropic, 2026-07-24. >80% of Claude Code's system prompt removed for Claude 5 generation models with no measurable eval loss; six then→now shifts (rules→judgment, examples→interface design, upfront→progressive disclosure, repetition→single description, manual→auto memory, simple specs→rich references)
@@ -21,6 +22,8 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Ten Simple Rules for AI-Assisted Coding in Science (arXiv 2025)](https://arxiv.org/html/2510.22254v2)
 - [The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions (arXiv 2024)](https://arxiv.org/html/2404.13208v1)
 - [How Many Instructions Can LLMs Follow at Once? (arXiv:2507.11538, 2025)](https://arxiv.org/abs/2507.11538)
+- [Prompt-engineering gains shrink as models mature — significant on GPT-3.5/4.0 (+10.6%/+3.2%), statistically insignificant on advanced optimized variants, P=.07–.94 (PMC12488032, 2025)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12488032/)
+- [Prompting-technique efficacy is model-contingent: CoT/AoT help GPT-5-Thinking but hurt GPT-5-mini and Gemini-2.5-Pro — "no single approach proving universally superior" (arXiv:2511.21591, 2025)](https://arxiv.org/pdf/2511.21591)
 - [SHIELDA: Structured Handling of Exceptions in LLM-Driven Agentic Workflows](https://arxiv.org/html/2508.07935v1)
 - [SpecBench: Measuring Reward Hacking in Long-Horizon Coding Agents — +28pp per 10× code size (arXiv:2605.21384, 2026)](https://arxiv.org/abs/2605.21384)
 - [Reward Hacking Benchmark: Measuring Exploits in LLM Agents with Tool Use (arXiv:2605.02964, 2026)](https://arxiv.org/abs/2605.02964)
@@ -71,6 +74,7 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Guardrails Beat Guidance: A Large-Scale Study of Rules, Skills, and Persistent Configuration for Coding Agents (arXiv:2604.11088, 2026)](https://arxiv.org/abs/2604.11088)
 - [ClawSafety: "Safe" LLMs, Unsafe Agents — attack success 40–75% across models (arXiv:2604.01438, 2026)](https://arxiv.org/abs/2604.01438)
 - [Chroma: Context Rot — How Increasing Input Tokens Impacts LLM Performance, 18-model study (2025)](https://www.trychroma.com/research/context-rot)
+- [Databricks: Benchmarking Coding Agents on a Multi-Million-Line Codebase (2026)](https://www.databricks.com/blog/benchmarking-coding-agents-databricks-multi-million-line-codebase) — harness choice dramatically shifts cost and quality on real merged-PR tasks with held-out tests (no LLM judge); the minimal Pi harness (4 tools, <1k-token system prompt) matched vendor harnesses' success with Opus-class models at ~2× lower cost, attributed to ~3× less context per turn — field evidence that context-per-turn discipline, not instruction volume, drives agentic success
 - [GitClear: AI Copilot Code Quality — 2025 Research Report (copy/paste 8.3%→12.3%, moved/refactored 24.1%→9.5%, churn 5.5%→7.9%)](https://www.gitclear.com/ai_assistant_code_quality_2025_research)
 - [GitGuardian: The State of Secrets Sprawl 2026 (28.65M secrets; Claude Code-assisted commits leak 3.2% vs 1.5% baseline; 24,008 secrets in MCP configs)](https://blog.gitguardian.com/the-state-of-secrets-sprawl-2026/)
 - [Cloud Security Alliance: Slopsquatting & the AI Supply Chain (2026)](https://labs.cloudsecurityalliance.org/research/csa-research-note-slopsquatting-ai-supply-chain-20260419-csa/)
@@ -88,6 +92,11 @@ How + why rules are written as they are. For rule authors and contributors — n
 - [Qwen3.x: XML/JSON tool-call format drift mid-session, stray/missing tags (QwenLM/Qwen3-Coder #475; ollama #14493)](https://github.com/QwenLM/Qwen3-Coder/issues/475)
 - [Claude Code ignores CLAUDE.md/AGENTS.md rules incl. hard restrictions; compliance degrades over long sessions/files (claude-code #22022 + HN corroboration)](https://github.com/anthropics/claude-code/issues/22022)
 - DeepSeek V4 Flash: claimed-complete tasks partially or entirely unperformed — first-hand user observation (2026-07, this project's maintainer); no public issue found matching this exact framing (single-case; the failure *class* is corroborated by the GPT-5.x/Kimi/MiniMax reports above)
+
+### Model-Specific Reports (2026-08 sweep)
+- [DeepSeek V4-Flash-0731 model card (Hugging Face)](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731) — re-post-trained Flash, API beta 2026-07-31; vendor agentic scores measured on an unreleased internal harness, with DeepSeek's own caveat that "agent scores are extremely sensitive to the harness"
+- [Artificial Analysis: DeepSeek V4 Flash independent measurement (2026-08)](https://artificialanalysis.ai/models/deepseek-v4-flash) — Terminal-Bench 2.1 ~79% (+17pp vs preview), hallucination −12pp: a real capability jump. The reliability gap persists per secondary reporting (answers instead of abstaining in 94–96% of uncertain cases; weak multi-turn tool orchestration) → the portable-profile target class: raw capability near-frontier, agentic floor still supplied by harness + rules
+- [Composio: DeepSeek V4 Flash across 4 harnesses (2026, X-thread)](https://x.com/composio/status/2085330850300797394) — 7 of 30 agentic tasks pass or fail purely by harness choice; methodology unpublished — directional only, do not cite the percentages
 
 ### Model-Specific Failure Reports (pre-2026-07)
 - [Claude Code unusable for complex tasks after Feb updates — 6,852-session analysis, reads-per-edit 6.6×→2.0× (GitHub #42796)](https://github.com/anthropics/claude-code/issues/42796)
@@ -258,7 +267,7 @@ Two independent empirical studies confirm rules files causally change agent beha
 | Efficiency / cost | Lulla (2601.20404): −28.64% median runtime, −16.58% output tokens on real PRs | Solid gain from a good file |
 | Failure-floor / consistency | Harness-gap analysis (below) + model failure reports | The file's core value: supplying rules no harness enforces |
 
-Honest positioning: this project claims a higher *floor* (fewer catastrophic misses: weakened tests, fabricated packages, false "done") and better *efficiency/consistency* — not a raw success-rate uplift. Both studies also justify hard length discipline. **Not verified, do not cite:** any specific line-count compliance threshold (the widely-repeated "150 lines" figure has no traceable primary source), GuideBench per-model percentages, IFEval-vs-IFBench gap figures, MAST percentage breakdowns.
+Honest positioning: this project claims a higher *floor* (fewer catastrophic misses: weakened tests, fabricated packages, false "done") and better *efficiency/consistency* — not a raw success-rate uplift. Both studies also justify hard length discipline. **Not verified, do not cite:** any specific line-count compliance threshold (the widely-repeated "150 lines" figure has no traceable primary source), GuideBench per-model percentages, IFEval-vs-IFBench gap figures, MAST percentage breakdowns, Composio harness-benchmark percentages (X-thread only, methodology unpublished, inference-time sampling variance unaddressed), and any independent replication of Anthropic's "no measurable loss" 80%-cut claim (none found as of 2026-08-11 — the claim rests on Anthropic's own evals).
 
 ## Harness Coverage Survey (2026-07)
 
@@ -277,6 +286,8 @@ System prompts of 8 harnesses surveyed (Claude Code, Cursor, Windsurf/Devin, Cod
 | Convention-following | 7/8 | One line in Fix Quality |
 
 Re-survey cadence: each major revision — harness prompts change quickly (e.g. Windsurf→Devin Desktop rebrand, June 2026).
+
+2026-08 roster addition: **Pi** (badlogic/Earendil) — deliberately minimal harness: four tools (read/write/edit/bash), system prompt under ~1k tokens, no MCP/sub-agents/plan-mode in core. It sits at the far-minimal end of the native-coverage spectrum: nearly all 10 behavior classes fall to the rules file, making it a portable-profile host despite typically running frontier models. Its Databricks result (vendor-harness success at ~2× lower cost) is also the strongest field evidence for this project's token-budget discipline. Survey its per-class coverage properly at the next major revision.
 
 ## Literal Interpretation
 
