@@ -9,6 +9,7 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 | File | Role | Loaded at runtime? |
 |------|------|-------------------|
 | `rules.md` | Lean core rules — always in context | Yes (always) |
+| `floor.md` | Six-rule floor for budget (Haiku-class) models — replaces `rules.md` on that profile | Yes, on floor profile only |
 | `references/portable-supplement.md` | Delta for hosts without a strong system prompt | Yes, on weak-host profile only |
 | `references/safety.md` | Auth, payments, crypto, concurrency, CORS | On demand |
 | `references/operations.md` | Deployment, caching, DB migrations, infra | On demand |
@@ -17,16 +18,17 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 | `README.md` | Human-facing project docs | Never |
 | `research/` | Raw research artifacts (provenance for rule evidence) | Never |
 
-## Two Profiles
+## Profiles
 
-Since 2026-07-25 the rule set ships in two profiles, driven by [The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models) (Anthropic, 2026-07-24): Anthropic removed >80% of Claude Code's system prompt for Claude 5 generation models with no measurable eval loss, and re-asserting what the harness already says produces the conflicting-instruction failure that article documents.
+Since 2026-07-25 the rule set ships in host-matched profiles (the floor profile joined 2026-08-12, A/B-validated), driven by [The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models) (Anthropic, 2026-07-24): Anthropic removed >80% of Claude Code's system prompt for Claude 5 generation models with no measurable eval loss, and re-asserting what the harness already says produces the conflicting-instruction failure that article documents.
 
 | Profile | Install | Target |
 |---------|---------|--------|
 | **Lean** | `rules.md` alone | Claude Code on the Claude 5 generation — the host system prompt already supplies ordinary engineering judgment |
 | **Portable** | `rules.md` + `references/portable-supplement.md` | Cursor, Copilot, Aider, Cline, or any weaker model |
+| **Floor** | `floor.md` alone | Budget models (Haiku-class): the full file's measured weak-model value at +1% tokens vs no rules (full file: +18%) — A/B-validated on issue #3, rounds 1-4a (2026-08) |
 
-The supplement is a **delta, never a copy** — it holds only what a strong host layer would have supplied, plus the hard thresholds a capable model handles by judgment. A clause belongs in exactly one of the two files.
+The supplement is a **delta, never a copy** — it holds only what a strong host layer would have supplied, plus the hard thresholds a capable model handles by judgment. A clause belongs in exactly one file. `floor.md` is the deliberate exception: its six rules are compressed restatements of `rules.md` clauses for hosts that never load `rules.md` — the two are alternatives, never co-installed.
 
 ## Invariants
 

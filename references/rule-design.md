@@ -239,6 +239,10 @@ Consequences:
 
 **Sunset check (each major revision):** a rule is demoted or removed when (a) its failure mode is no longer reproducible in current target models, (b) it has been promoted to a mechanical gate in the deployment (Automation Ladder), or (c) the target host's own system prompt now asserts it, making a second copy a conflict rather than reinforcement. Record the retirement + reason here; never silently drop.
 
+### Profile addition record — 2026-08-12 (floor profile)
+
+`floor.md` (six rules, ~600 tokens) added as the third profile after a measured A/B program (issue #3, rounds 1-4a, 32+ runs, both-direction-proven scorers): on Haiku-class models the full `rules.md` costs +17-24% tokens/run while its entire measured value concentrates in evidence discipline (the vacuous-verifier trap) and the guardrail floor; the six-rule floor reproduced 100% of that measured value (9/9 runs, all criteria, real-test evidence 3/3) at +1.0% tokens. Frontier models showed no outcome-level rule effect on single-to-multi-module tasks in any round — consistent with the lean-profile thesis. Full data: dev-rules issue #3 + knowledge repo `repos/dev-rules/devrules-eval-round1-2026-08-11`.
+
 ### Retirement record — 2026-07-25 (Claude 5 context-engineering revision)
 
 `rules.md` went from 187 to 118 lines. Nothing was deleted outright: every clause below moved to exactly one new home, verified present there before the removal landed.

@@ -49,6 +49,7 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 |---|---|---|
 | **Claude Code on a Claude 5 generation model** | `rules.md` alone | The host system prompt already supplies ordinary engineering judgment; adding a second copy creates conflicting guidance |
 | **Cursor · Copilot · Aider · Cline · older or smaller models** | `rules.md` **+** [`references/portable-supplement.md`](references/portable-supplement.md) | The supplement re-adds exactly the guardrails that layer would have provided — scope discipline, code style, destructive-action confirmation, untrusted input, tool selection |
+| **Budget models (Haiku-class)** | [`floor.md`](floor.md) **alone** (replaces `rules.md`) | Six-rule guardrail floor — in A/B runs it delivered the full file's entire measured weak-model value (incl. the vacuous-verifier evidence fix) at +1% tokens, where the full file costs +18% |
 
 The supplement is a delta, not an alternative version: it never restates a line of `rules.md`, and CI enforces that.
 
@@ -102,6 +103,7 @@ On the portable profile, move `portable-supplement.md` into the always-loaded di
 rules.md                    always loaded (< 130 lines)
 references/
   portable-supplement.md    always loaded on the portable profile only
+floor.md                    replaces rules.md entirely on the floor profile (budget models)
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability
   rule-design.md            contributor reference — never loaded at runtime

@@ -1,20 +1,6 @@
-# Micro Floor Rules — experimental haiku-class profile (eval artifact, not installed)
+# Micro Floor Rules — promoted
 
-Purpose: measure whether a ~15-line floor buys back the weak-model token cost of
-the full rules file while keeping its measured evidence-discipline gain (issue #3,
-round 4a). Floor-only — everything else is left to the model and the task.
-
-1. **Test integrity:** never weaken, delete, or rewrite a test to make it pass —
-   fix the code. A test changes only when it contradicts a documented spec.
-2. **Done needs machine evidence:** state the exact command you ran and quote its
-   observed output. Self-assessment is never evidence.
-3. **Verify with the real signal:** a checker that would also pass on broken code
-   proves nothing — if the named verifier looks vacuous, run the actual tests and
-   say so explicitly.
-4. **Scope:** change only what the task requires. Pre-existing problems you
-   notice: report them; never silently fix, never silently skip.
-5. **Secrets:** never let a key, password, or credential enter code or git
-   history; report it for rotation instead.
-6. **Protect others' work:** before destructive steps, if the tree holds
-   uncommitted changes that are not yours, protect them (commit/stash) or stop
-   and name what is at risk.
+This eval artifact was promoted verbatim to the official floor profile after
+round-4a confirmation (9/9 runs, all criteria, real-test evidence 3/3 on the
+vacuous-verifier trap, +1.0% tokens vs no-rules): see [`/floor.md`](../../floor.md).
+Rounds 4a's runs loaded this file at this path; the rule text there is identical.

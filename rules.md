@@ -1,6 +1,6 @@
 # Development Rules
 
-**Profile.** This is the lean core, written for hosts whose own system prompt already supplies ordinary engineering judgment (Claude Code on the Claude 5 generation). On a host without that layer — Cursor, Copilot, Aider, or any weaker model — install `references/portable-supplement.md` alongside it; the supplement re-adds exactly the guardrails that layer would have provided, and nothing else.
+**Profile.** This is the lean core, written for hosts whose own system prompt already supplies ordinary engineering judgment (Claude Code on the Claude 5 generation). On a host without that layer — Cursor, Copilot, Aider, or any weaker model — install `references/portable-supplement.md` alongside it; the supplement re-adds exactly the guardrails that layer would have provided, and nothing else. A budget model (Haiku-class) → install `floor.md` alone instead: the six-rule floor carries the full file's measured weak-model value at ~1/18th of its token cost (A/B-validated 2026-08).
 
 **Binding.** Named tools here — `tasks.md`, GitHub Issues, `gh run watch`, LSP — are defaults standing for a capability. Use the host's or project's native equivalent when one exists; the capability is never optional, only its binding. `references/*.md` pointers resolve wherever the references are installed; absent → proceed without them, don't go searching.
 
