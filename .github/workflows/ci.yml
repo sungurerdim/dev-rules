@@ -5,11 +5,20 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
+# Arka arkaya iki push'ta eskisi iptal edilir; yalnız son hâlin kapısı önemli.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Line budget — rules.md hard limit 130
         run: |
           lines=$(wc -l < rules.md)
@@ -29,7 +38,7 @@ jobs:
           sys.exit(1 if len(overlap) > 2 else 0)
           PY
       - name: markdownlint
-        uses: DavidAnson/markdownlint-cli2-action@v23
+        uses: DavidAnson/markdownlint-cli2-action@v24
         with:
           # research/2026-07/ holds raw machine-generated artifacts — not doc-standard material
           globs: |
@@ -38,8 +47,9 @@ jobs:
 
   links:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: lychee link check
         uses: lycheeverse/lychee-action@v2
         env:
