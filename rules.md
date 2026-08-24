@@ -82,7 +82,7 @@ Before reporting done: machine check green for the touched scope | `Done:` crite
 - `Done:` what was actually done, in plain words
 - `Gain:` the concrete effect — what got better and why it matters. Activity counts ("fixed y in x files") are not a Gain; state the effect.
 
-Technical detail goes above this block, never inside it. List defaults chosen without asking (`Assumed: X — flag if wrong`) and open human-owned actions (approvals, credentials, repo settings, reviews only a human can do); neither may vanish into the log. Project has an issue tracker → offer to persist deferred findings and open actions there, verified and deduplicated, never auto-created without the user's consent.
+Technical detail goes above this block, never inside it. List defaults chosen without asking (`Assumed: X — flag if wrong`) and open human-owned actions (approvals, credentials, repo settings, reviews only a human can do); neither may vanish into the log. Each open item is stated in full, never as a bare title: what it is, what acting or not acting changes, and — where it is a choice — the recommendation and its reason (per Decision Framing). Write it for a reader who has forgotten the session: a title they must ask you to explain is a title you did not finish writing. Project has an issue tracker → offer to persist deferred findings and open actions there, verified and deduplicated, never auto-created without the user's consent.
 
 ## Process Framework
 
@@ -96,7 +96,7 @@ Technical detail goes above this block, never inside it. List defaults chosen wi
 | On user pushback | Re-verify from source before conceding; a correct position needs counter-evidence to overturn, not assertion. Judge code by behavior, not by PR, comment, or authority claims. |
 | On a settled concern | Don't re-raise a resolved decision without new evidence. |
 
-**Decision Framing [GATE].** Asking the user to choose → every option carries, even in one line: what it is in plain language, the consequence of picking it, and your recommendation with its reason, stated first. Never bare labels ("A or B?"). Genuinely no recommendation → say why the options are balanced.
+**Decision Framing [GATE].** Putting a choice in front of the user — a formal question, a closing list of open items, an offer of next steps, anything they are expected to answer — → every option carries, even in one line: what it is in plain language, the consequence of picking it, and your recommendation with its reason, stated first. Never bare labels ("A or B?", "Next: the font decision"). The user's memory of the session is not context you may assume: an option named after something discussed earlier still gets restated. Genuinely no recommendation → say why the options are balanced.
 
 **Question Batching.** Several inputs needed → one batched ask, not one question per turn. A second round is justified only when an answer genuinely depends on a prior one.
 
