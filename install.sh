@@ -65,8 +65,16 @@ expected_pairs() {
       echo "floor.md|$rules_dir/dev-rules.md" ;;
   esac
 }
-# Files another profile would have left behind — removed on install so profiles never mix.
-stale_paths() { echo "$rules_dir/dev-rules-supplement.md"; echo "$refs_dir/portable-supplement.md"; echo "$refs_dir/safety.md"; echo "$refs_dir/operations.md"; }
+# Paths another profile — or the pre-installer manual-copy layout — leaves behind. Anything listed
+# here that the active profile does not claim is removed on install and reported STALE by --check,
+# so no superseded copy keeps auto-loading out of rules/.
+stale_paths() {
+  echo "$rules_dir/dev-rules-supplement.md"
+  echo "$rules_dir/portable-supplement.md"   # pre-installer manual-copy name — no profile claims it
+  echo "$refs_dir/portable-supplement.md"
+  echo "$refs_dir/safety.md"
+  echo "$refs_dir/operations.md"
+}
 
 same_content() { # ignore CR/LF differences so a Windows checkout and a Unix install compare equal
   tr -d '\r' < "$1" > "$tmp/a"; tr -d '\r' < "$2" > "$tmp/b"; diff -q "$tmp/a" "$tmp/b" >/dev/null
