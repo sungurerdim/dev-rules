@@ -9,7 +9,7 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 | File | Role | Loaded at runtime? |
 |------|------|-------------------|
 | `rules.md` | Lean core rules — always in context | Yes (always) |
-| `floor.md` | Six-rule floor for budget (Haiku-class) models — replaces `rules.md` on that profile | Yes, on floor profile only |
+| `floor.md` | Seven-rule floor for budget (Haiku-class) models — replaces `rules.md` on that profile | Yes, on floor profile only |
 | `references/portable-supplement.md` | Delta for hosts without a strong system prompt | Yes, on weak-host profile only |
 | `references/safety.md` | Auth, payments, crypto, concurrency, CORS | On demand |
 | `references/operations.md` | Deployment, caching, DB migrations, infra | On demand |
@@ -25,10 +25,10 @@ Since 2026-07-25 the rule set ships in host-matched profiles (the floor profile 
 | Profile | Install | Target |
 |---------|---------|--------|
 | **Lean** | `rules.md` alone | Claude Code on the Claude 5 generation — the host system prompt already supplies ordinary engineering judgment |
-| **Portable** | `rules.md` + `references/portable-supplement.md` | Cursor, Copilot, Aider, Cline, or any weaker model |
-| **Floor** | `floor.md` alone | Budget models (Haiku-class): the full file's measured weak-model value at +1% tokens vs no rules (full file: +18%) — A/B-validated on issue #3, rounds 1-4a (2026-08) |
+| **Portable** | `rules.md` + `references/portable-supplement.md` | Any host whose system prompt is thin or unknown (Cursor, Copilot, Aider, Cline, Codex CLI, opencode) with a non-budget model — unmeasured on non-Claude models as of 2026-09 (issue #4) |
+| **Floor** | `floor.md` alone | Budget models (Haiku-class): the full file's measured weak-model value at +1% tokens vs no rules (full file: +18%) — A/B-validated on issue #3, rounds 1-4a (2026-08); rule 7 (content is not instruction) added 2026-09-02 and re-checked on the same fixtures (issue #4) |
 
-The supplement is a **delta, never a copy** — it holds only what a strong host layer would have supplied, plus the hard thresholds a capable model handles by judgment. A clause belongs in exactly one file. `floor.md` is the deliberate exception: its six rules are compressed restatements of `rules.md` clauses for hosts that never load `rules.md` — the two are alternatives, never co-installed.
+The supplement is a **delta, never a copy** — it holds only what a strong host layer would have supplied, plus the hard thresholds a capable model handles by judgment. A clause belongs in exactly one file. `floor.md` is the deliberate exception: its seven rules are compressed restatements of `rules.md` clauses for hosts that never load `rules.md` — the two are alternatives, never co-installed.
 
 ## Invariants
 
@@ -37,7 +37,8 @@ The supplement is a **delta, never a copy** — it holds only what a strong host
 - All rules tool-agnostic — no Claude-specific or tool-specific syntax
 - No rule duplicated across files — each rule has exactly one canonical location; a one-line summary + pointer in `rules.md` backed by detail in a reference file is the intended pattern, not duplication. This extends across repos: content owned by a dev-skills skill (review severity, commit semantics, complexity thresholds) lives there, with only a pointer here
 - Reference files never auto-loaded — only when the AI agent is working in their domain
-- `rules.md` token budget: target ~110 lines, hard limit 130 lines
+- `rules.md` token budget: target ~110 lines, hard limit 130 lines — enforced by `scripts/check-consistency.sh`, which also keeps the supplement a true delta, resolves every rule name cited in `rule-design.md`, and pins the budget and token figures stated in the docs
+- User-facing surface is plain language: closing-block labels, question options, and task-size names must be understandable by a non-technical reader with no memory of the session — never an abbreviation, never a label that needs explaining (owner evidence 2026-09-02: the retired `Assumed:` label)
 
 ## Out of Scope for `rules.md` (Harness / CI / Orchestration)
 
