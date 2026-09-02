@@ -117,7 +117,7 @@ CLAUDE.md                   AI contributor guide — never loaded at runtime
 - **Prevent harm, don't just detect it.** Rules catch mistakes as they happen, not after.
 - **Positive framing.** "Verify imports exist before using" instead of "Don't use unverified imports." A constraint not written is a constraint not applied — rules state the action first, name the fallback, and use prohibitions only as reinforcement ([research](references/rule-design.md)).
 - **Tool-agnostic.** Works with any AI tool that accepts markdown instructions — no lock-in, no platform dependencies.
-- **Token-efficient.** ~3,100 tokens for the main file on the lean profile. References add ~1,000–3,800 each, only when needed.
+- **Token-efficient.** ~3,800 tokens for the main file on the lean profile (chars/4, tracked by CI). References add ~1,400–3,800 each, only when needed.
 - **One canonical home per rule.** Nothing is repeated between `rules.md`, the supplement, the reference files, or the dev-skills skills — repetition was a workaround for older models' position bias, and on current models it costs context and creates conflicts.
 - **Honest about what it can't do.** A prompt file can't be a mechanical gate — anything a type system, test, linter, CI step, or hook can enforce belongs there (Automation Ladder). The rules push the model to defer to those signals and to propose new mechanical guards when the same issue class recurs.
 

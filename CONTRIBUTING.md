@@ -14,8 +14,8 @@ cd dev-rules
 1. Read [CLAUDE.md](CLAUDE.md) — the rule-authoring pre-checks, weakness-taxonomy mapping, and sync requirement all live there. Every new or modified rule in `rules.md` must pass those pre-checks.
 2. Run the same checks CI runs:
    ```bash
+   bash scripts/check-consistency.sh --self-test && bash scripts/check-consistency.sh   # line budgets (rules.md <= 130 lines, target ~110), profile overlap, rule-name references, README figures
    npx markdownlint-cli2 "**/*.md" "!research/2026-07/**"
-   wc -l rules.md   # must stay ≤ 300 lines (target ~240)
    ```
 3. If you touched `rules.md` or `references/`, re-sync the installed copies and verify (commands in [CLAUDE.md § Sync Requirement](CLAUDE.md#sync-requirement)).
 
@@ -24,8 +24,8 @@ cd dev-rules
 - One logical change per PR — keep diffs reviewable.
 - Conventional Commits for the title (`docs:`, `fix:`, `ci:`, etc. — see [rules.md § Conventional Commits](rules.md)).
 - New or changed rule → cite the evidence (≥2 documented real-world failure cases) per CLAUDE.md's pre-checks; note it in the PR description.
-- CI (`markdownlint` + `links` + line-budget) must pass before merge — required status checks are enforced on `main`.
+- CI (`lint` = consistency script + markdownlint, `links` = lychee) must pass before merge — required status checks are enforced on `main`.
 
 ## Testing
 
-"Tests" here are the CI gates: markdownlint, the `rules.md` line-budget check, and the lychee link checker. Run them locally (commands above) before pushing.
+"Tests" here are the CI gates: the consistency script (line budgets, profile overlap, rule-name references, README figures — each check proven red by its own `--self-test`), markdownlint, and the lychee link checker. Run them locally (commands above) before pushing.
