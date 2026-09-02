@@ -9,7 +9,9 @@ If you find such an issue, please use [GitHub's private vulnerability reporting]
 ## Scope
 
 - Content of `rules.md` and `references/*.md` that could lead an AI coding agent to behave unsafely.
-- CI/workflow configuration (`.github/workflows/ci.yml`) that could be exploited via a malicious PR (e.g. secret exfiltration through workflow injection).
+- `install.sh`, `scripts/*.sh`, or `.githooks/pre-commit` — shell that runs on a contributor's machine and could be made to execute or install something unintended.
+
+This repository runs no CI: there are no GitHub Actions workflows and no secrets available to a pull request, so workflow-injection and secret-exfiltration reports do not apply.
 
 Not in scope: this repo has no application runtime, no hosted service, and no user data to compromise.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# dev-rules consistency gate — the exact checks CI runs, runnable locally.
+# dev-rules consistency gate — run at commit time by .githooks/pre-commit; this repo has no CI.
 # Portable: bash + coreutils + awk + grep + sed (macOS, Linux, Git Bash on Windows). No python.
 #
 #   bash scripts/check-consistency.sh              run every check against this repo

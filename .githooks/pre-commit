@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# dev-rules commit gate — this repo has no CI, so every mechanical check runs here, before the
+# commit exists. Enable it once per clone:  git config core.hooksPath .githooks
+#
+# The bash gates need nothing but coreutils and always run. markdownlint and lychee run only when
+# already on PATH: a missing one prints SKIPPED and is never silently treated as a pass.
+# Bypass for a genuine emergency: git commit --no-verify (then fix and re-run the gates).
+set -u
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+fail=0
+step() { # step NAME COMMAND... — run one gate, keep going, remember the verdict
+  printf '\n\033[1m» %s\033[0m\n' "$1"; shift
+  if "$@"; then return 0; fi
+  fail=$((fail+1))
+}
+skip() { printf '\n\033[1m» %s\033[0m\n  SKIPPED — %s\n' "$1" "$2"; }
+report() { # report NAME NOTE COMMAND... — run and show the result, but never block on it
+  printf '\n\033[1m» %s\033[0m  (reporting only — %s)\n' "$1" "$2"; shift 2
+  "$@" || true
+}
+
+step 'consistency: line budgets, profile overlap, rule names, doc figures' \
+  bash -c 'bash scripts/check-consistency.sh --self-test && bash scripts/check-consistency.sh'
+
+step 'installer: profile/stale contract' \
+  bash -c 'bash scripts/check-install.sh --self-test && bash scripts/check-install.sh'
+
+# Never blocked anything: on CI runners there was no sibling checkout, so this always printed
+# SKIPPED. Its anchor table is stale against the sibling's current layout (issue #7), so it stays
+# a visible report until that contract is rewritten — making it block now would be a new constraint.
+report 'dev-skills boundary: shared anchor phrases' 'anchor table stale, issue #7' \
+  bash scripts/check-cross-repo.sh --allow-missing-sibling
+
+if command -v markdownlint-cli2 >/dev/null 2>&1; then
+  # research/ is machine-generated; ds/audit/ is git-ignored working state — neither is doc-standard material
+  step 'markdownlint' markdownlint-cli2 '**/*.md' '!research/2026-07/**' '!ds/audit/**'
+else
+  skip 'markdownlint' 'markdownlint-cli2 not on PATH (npm i -g markdownlint-cli2)'
+fi
+
+if command -v lychee >/dev/null 2>&1; then
+  step 'lychee link check' lychee --no-progress --exclude-path research/2026-07 '**/*.md'
+else
+  skip 'lychee link check' 'lychee not on PATH (brew install lychee)'
+fi
+
+if [ "$fail" -eq 0 ]; then
+  printf '\n\033[32mAll gates passed — committing.\033[0m\n'; exit 0
+fi
+printf '\n\033[31mRED: %s gate(s) failed — commit blocked.\033[0m Fix them, or --no-verify if this is an emergency.\n' "$fail"
+exit 1

@@ -53,7 +53,7 @@ Two questions decide it: does the host's own system prompt already supply ordina
 | Thin or unknown — Cursor, Copilot, Aider, Cline, Codex CLI, opencode | Frontier or mid-tier, any vendor | `rules.md` **+** [`references/portable-supplement.md`](references/portable-supplement.md) | The supplement re-adds exactly the guardrails a strong host layer would have provided — scope discipline, code style, destructive-action confirmation, tool selection. **Unmeasured:** no A/B run has covered a non-Claude model yet (tracked in #4) |
 | Any | Budget (Haiku-class; "flash", "mini", "lite" tiers) | [`floor.md`](floor.md) **alone** (replaces `rules.md`) | Seven-rule guardrail floor — in A/B runs the floor delivered the full file's entire measured weak-model value (incl. the vacuous-verifier evidence fix) at +1% tokens, where the full file costs +18% |
 
-The supplement is a delta, not an alternative version: it never restates a line of `rules.md`, and CI enforces that.
+The supplement is a delta, not an alternative version: it never restates a line of `rules.md`, and the commit-time gate enforces that.
 
 On Claude Code you can also run `/doctor` to have the harness rightsize your own `CLAUDE.md` and skills against the same principles.
 
@@ -111,8 +111,10 @@ references/
   rule-design.md            contributor reference — never loaded at runtime
 install.sh                  profile-aware installer + drift check (--check) + updater (--update)
 scripts/
-  check-consistency.sh      the CI gate, runnable locally (--self-test proves each check)
+  check-consistency.sh      doc/rule gate (--self-test proves each check red on a broken copy)
+  check-install.sh          installer profile/stale gate (--self-test proves the same)
   check-cross-repo.sh       drift check against a sibling dev-skills checkout
+.githooks/pre-commit        runs every gate at commit time — this repo has no CI
 CLAUDE.md                   AI contributor guide — never loaded at runtime
 ```
 
@@ -123,7 +125,7 @@ CLAUDE.md                   AI contributor guide — never loaded at runtime
 - **Prevent harm, don't just detect it.** Rules catch mistakes as they happen, not after.
 - **Positive framing.** "Verify imports exist before using" instead of "Don't use unverified imports." A constraint not written is a constraint not applied — rules state the action first, name the fallback, and use prohibitions only as reinforcement ([research](references/rule-design.md)).
 - **Tool-agnostic.** Works with any AI tool that accepts markdown instructions — no lock-in, no platform dependencies.
-- **Token-efficient.** ~3,800 tokens for the main file on the lean profile (chars/4, tracked by CI). References add ~1,400–3,800 each, only when needed.
+- **Token-efficient.** ~3,800 tokens for the main file on the lean profile (chars/4, tracked by the commit gate). References add ~1,400–3,800 each, only when needed.
 - **One canonical home per rule.** Nothing is repeated between `rules.md`, the supplement, and the reference files — repetition was a workaround for older models' position bias, and on current models it costs context and creates conflicts. dev-skills is the one deliberate exception: its skills must install standalone, so its shared `core/` references carry their own copy of the process doctrine, kept aligned by `scripts/check-cross-repo.sh`.
 - **Honest about what it can't do.** A prompt file can't be a mechanical gate — anything a type system, test, linter, CI step, or hook can enforce belongs there (Automation Ladder). The rules push the model to defer to those signals and to propose new mechanical guards when the same issue class recurs.
 

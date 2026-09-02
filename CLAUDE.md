@@ -18,8 +18,10 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 | `README.md` | Human-facing project docs | Never |
 | `research/` | Raw research artifacts (provenance for rule evidence) | Never |
 | `install.sh` | Profile-aware installer: `--profile lean`, `portable` or `floor`, `--target`, `--check` (drift), `--update` | Never |
-| `scripts/check-consistency.sh` | The CI gate, runnable locally; `--self-test` proves every check red on a broken copy | Never |
-| `scripts/check-cross-repo.sh` | Anchor-phrase drift check against a sibling dev-skills checkout | Never |
+| `scripts/check-consistency.sh` | Doc/rule gate; `--self-test` proves every check red on a broken copy | Never |
+| `scripts/check-install.sh` | Installer profile/stale gate; `--self-test` proves it red on an installer with the fix reverted | Never |
+| `scripts/check-cross-repo.sh` | Anchor-phrase drift check against a sibling dev-skills checkout — reporting only until #7 rewrites its contract | Never |
+| `.githooks/pre-commit` | Runs every gate at commit time; enable with `git config core.hooksPath .githooks` | Never |
 
 ## Profiles
 
@@ -124,7 +126,7 @@ Layout the installer produces under `~/.claude` — only `rules/` auto-loads (re
 | `references/safety.md`, `references/operations.md` | `~/.claude/dev-rules-references/` | No — on demand only |
 | — | `~/.claude/dev-rules-references/VERSION` | Stamp: commit, profile, install date |
 
-`rule-design.md` is contributor-only — never installed. The dev-skills boundary has its own check: `bash scripts/check-cross-repo.sh` reads a sibling checkout (default `../dev-skills`) and fails on any drifted anchor phrase; CI runs it with `--allow-missing-sibling`, so the skip is visible, never silent.
+`rule-design.md` is contributor-only — never installed. The dev-skills boundary has its own check: `bash scripts/check-cross-repo.sh` reads a sibling checkout (default `../dev-skills`) and fails on any drifted anchor phrase. Its anchor table names files the sibling no longer has, so the commit hook runs it as a visible report rather than a blocking gate until #7 rewrites the contract — never a silent skip.
 
 Prior art for one-source→many-tools sync at scale: [Ruler](https://github.com/intellectronica/ruler) (30+ tool formats, CI drift check). `install.sh` stays a single bash file while Claude Code is the only scripted target; other hosts take the copy-paste table in the README.
 
@@ -137,10 +139,10 @@ Data: none | Regulations: none
 Audience: public (developers using AI coding tools) | Deploy: git clone / copy-paste install
 
 Entry: rules.md (no framework — plain markdown)
-Modules: rules.md=core-rules(1); references/=on-demand-reference(4); research/2026-07=provenance-artifacts(6); .github/workflows=ci(1)
-Data Flow: contributor-edit→CI(markdownlint+line-budget+lychee)→merge→copy/paste-install(consumer AI tool)
+Modules: rules.md=core-rules(1); references/=on-demand-reference(4); research/2026-07=provenance-artifacts(6); scripts/=commit-gates(3); .githooks/=gate-runner(1)
+Data Flow: contributor-edit→pre-commit gates(consistency+installer+markdownlint)→commit→copy/paste-install(consumer AI tool)
 External: none (zero runtime dependencies)
-Toolchain: markdownlint-cli2, lychee | CI: GitHub Actions | Container: none
+Toolchain: bash gates; markdownlint-cli2 + lychee optional | CI: none — commit-time hook only | Container: none
 
 Ideal: coupling=1 cohesion=9 complexity=1 coverage=N/A
 
