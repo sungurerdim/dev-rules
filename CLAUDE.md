@@ -17,6 +17,9 @@ Universal AI coding guardrails. `rules.md` is the deployed artifact — loads in
 | `CLAUDE.md` | This file — project contributor guide | Never |
 | `README.md` | Human-facing project docs | Never |
 | `research/` | Raw research artifacts (provenance for rule evidence) | Never |
+| `install.sh` | Profile-aware installer: `--profile lean`, `portable` or `floor`, `--target`, `--check` (drift), `--update` | Never |
+| `scripts/check-consistency.sh` | The CI gate, runnable locally; `--self-test` proves every check red on a broken copy | Never |
+| `scripts/check-cross-repo.sh` | Anchor-phrase drift check against a sibling dev-skills checkout | Never |
 
 ## Profiles
 
@@ -105,29 +108,25 @@ Single source of truth: `references/rule-design.md` › "AI Weakness Taxonomy" �
 
 ## Sync Requirement
 
-Installed layout — everything under `~/.claude/rules/` auto-loads into every session (recursively), so only `rules.md` lives there:
+The installed copy lives outside the repo, so every edit to `rules.md`, `floor.md` or `references/` ends with a re-install and a drift check:
+
+```bash
+./install.sh            # lean profile by default; --profile portable|floor, --target DIR
+./install.sh --check    # exit 1 and the file names on any drift
+```
+
+Layout the installer produces under `~/.claude` — only `rules/` auto-loads (recursively) into every session, so the references stay one directory up:
 
 | Repo path | Installed path | Auto-loaded? |
 |-----------|----------------|--------------|
-| `rules.md` | `~/.claude/rules/dev-rules.md` (exact copy) | Yes |
-| `references/` | `~/.claude/dev-rules-references/` | No — on demand only |
+| `rules.md` (`floor.md` on the floor profile) | `~/.claude/rules/dev-rules.md` | Yes |
+| `references/portable-supplement.md` | `~/.claude/rules/dev-rules-supplement.md` on the portable profile; `~/.claude/dev-rules-references/` otherwise | Portable profile only |
+| `references/safety.md`, `references/operations.md` | `~/.claude/dev-rules-references/` | No — on demand only |
+| — | `~/.claude/dev-rules-references/VERSION` | Stamp: commit, profile, install date |
 
-`portable-supplement.md` installs into `~/.claude/rules/` **only on the portable profile**; on Claude Code it stays under `dev-rules-references/` so it never auto-loads.
+`rule-design.md` is contributor-only — never installed. The dev-skills boundary has its own check: `bash scripts/check-cross-repo.sh` reads a sibling checkout (default `../dev-skills`) and fails on any drifted anchor phrase; CI runs it with `--allow-missing-sibling`, so the skip is visible, never silent.
 
-After editing `rules.md` or `references/`, re-sync and verify:
-
-```bash
-cp rules.md ~/.claude/rules/dev-rules.md
-cp references/safety.md references/operations.md references/portable-supplement.md ~/.claude/dev-rules-references/
-diff rules.md ~/.claude/rules/dev-rules.md \
-  && diff references/safety.md ~/.claude/dev-rules-references/safety.md \
-  && diff references/operations.md ~/.claude/dev-rules-references/operations.md \
-  && diff references/portable-supplement.md ~/.claude/dev-rules-references/portable-supplement.md
-```
-
-`rule-design.md` is contributor-only — never installed.
-
-Prior art for one-source→many-tools sync at scale: [Ruler](https://github.com/intellectronica/ruler) (30+ tool formats, CI drift check). The manual `cp` + `diff` above stays deliberate while only one target exists; adopt a sync tool if targets multiply.
+Prior art for one-source→many-tools sync at scale: [Ruler](https://github.com/intellectronica/ruler) (30+ tool formats, CI drift check). `install.sh` stays a single bash file while Claude Code is the only scripted target; other hosts take the copy-paste table in the README.
 
 ## Blueprint Profile
 

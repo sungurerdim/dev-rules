@@ -16,8 +16,9 @@ cd dev-rules
    ```bash
    bash scripts/check-consistency.sh --self-test && bash scripts/check-consistency.sh   # line budgets (rules.md <= 130 lines, target ~110), profile overlap, rule-name references, README figures
    npx markdownlint-cli2 "**/*.md" "!research/2026-07/**"
+   bash scripts/check-cross-repo.sh --allow-missing-sibling   # dev-skills boundary; a checkout at ../dev-skills makes it a real check
    ```
-3. If you touched `rules.md` or `references/`, re-sync the installed copies and verify (commands in [CLAUDE.md § Sync Requirement](CLAUDE.md#sync-requirement)).
+3. If you touched `rules.md`, `floor.md` or `references/`, re-install and verify: `./install.sh && ./install.sh --check` (layout in [CLAUDE.md § Sync Requirement](CLAUDE.md#sync-requirement)).
 
 ## PR expectations
 

@@ -63,7 +63,7 @@ On Claude Code you can also run `/doctor` to have the harness rightsize your own
 
 | Tool | Command |
 |------|---------|
-| **Claude Code** | `cp rules.md ~/.claude/rules/dev-rules.md` |
+| **Claude Code** | `./install.sh` — lean profile; `--profile portable` or `--profile floor`; `--check` for drift; `--update` to pull and re-install |
 | **Cursor** | `cp rules.md .cursor/rules/dev-rules.md` |
 | **Windsurf** | `cp rules.md .windsurf/rules/dev-rules.md` |
 | **GitHub Copilot** | Append to `.github/copilot-instructions.md` |
@@ -88,27 +88,31 @@ On Claude Code you can also run `/doctor` to have the harness rightsize your own
 `rules.md` mentions reference files for topics like auth, payments, and deployment. Without these files, the AI skips the extended rules and uses only the core set. To enable extended coverage:
 
 ```bash
-git clone https://github.com/sungurerdim/dev-rules.git /tmp/dev-rules
-cp /tmp/dev-rules/rules.md ~/.claude/rules/dev-rules.md
-mkdir -p ~/.claude/dev-rules-references
-cp /tmp/dev-rules/references/safety.md /tmp/dev-rules/references/operations.md /tmp/dev-rules/references/portable-supplement.md ~/.claude/dev-rules-references/
-rm -rf /tmp/dev-rules
+git clone https://github.com/sungurerdim/dev-rules.git ~/dev-rules
+cd ~/dev-rules && ./install.sh        # lean profile → ~/.claude/rules/ + ~/.claude/dev-rules-references/
+./install.sh --profile portable       # or --profile floor; --target DIR for another root
+./install.sh --check                  # is the installed copy still identical to this checkout? exit 1 on drift
+./install.sh --update                 # git pull --ff-only, then re-install with the stamped profile
 ```
 
-On the portable profile, move `portable-supplement.md` into the always-loaded directory instead — for Claude Code that is `~/.claude/rules/`, for Cursor `.cursor/rules/`, and so on.
+On the portable profile the installer places the supplement in the always-loaded directory for you; on other hosts copy it next to `rules.md` (`.cursor/rules/`, and so on). The installer is one bash file — macOS, Linux, and Git Bash on Windows — with no dependencies beyond git and coreutils.
 
 > **Keep references out of the auto-load path.** Claude Code loads everything under `~/.claude/rules/` (recursively) into every session. Reference files belong outside it — e.g. `~/.claude/dev-rules-references/` — so they cost tokens only when the AI actually needs them.
 
 ## How it works
 
 ```
-rules.md                    always loaded (< 130 lines)
+rules.md                    always loaded (< 130 lines) — the lean profile
+floor.md                    replaces rules.md on the floor profile (budget models)
 references/
   portable-supplement.md    always loaded on the portable profile only
-floor.md                    replaces rules.md entirely on the floor profile (budget models)
   safety.md                 loaded when: auth, payments, crypto, multi-tenant, CORS, concurrency
   operations.md             loaded when: deployment, caching, infrastructure, observability
   rule-design.md            contributor reference — never loaded at runtime
+install.sh                  profile-aware installer + drift check (--check) + updater (--update)
+scripts/
+  check-consistency.sh      the CI gate, runnable locally (--self-test proves each check)
+  check-cross-repo.sh       drift check against a sibling dev-skills checkout
 CLAUDE.md                   AI contributor guide — never loaded at runtime
 ```
 
@@ -120,7 +124,7 @@ CLAUDE.md                   AI contributor guide — never loaded at runtime
 - **Positive framing.** "Verify imports exist before using" instead of "Don't use unverified imports." A constraint not written is a constraint not applied — rules state the action first, name the fallback, and use prohibitions only as reinforcement ([research](references/rule-design.md)).
 - **Tool-agnostic.** Works with any AI tool that accepts markdown instructions — no lock-in, no platform dependencies.
 - **Token-efficient.** ~3,800 tokens for the main file on the lean profile (chars/4, tracked by CI). References add ~1,400–3,800 each, only when needed.
-- **One canonical home per rule.** Nothing is repeated between `rules.md`, the supplement, the reference files, or the dev-skills skills — repetition was a workaround for older models' position bias, and on current models it costs context and creates conflicts.
+- **One canonical home per rule.** Nothing is repeated between `rules.md`, the supplement, and the reference files — repetition was a workaround for older models' position bias, and on current models it costs context and creates conflicts. dev-skills is the one deliberate exception: its skills must install standalone, so its shared `core/` references carry their own copy of the process doctrine, kept aligned by `scripts/check-cross-repo.sh`.
 - **Honest about what it can't do.** A prompt file can't be a mechanical gate — anything a type system, test, linter, CI step, or hook can enforce belongs there (Automation Ladder). The rules push the model to defer to those signals and to propose new mechanical guards when the same issue class recurs.
 
 ## Using with dev-skills
