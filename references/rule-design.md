@@ -138,6 +138,8 @@ No published study quantifies per-framing success rates; treat framing as design
 
 ## Example Density
 
+**2026-09 note:** on the Claude 5 generation, examples constrain exploration to what they demonstrate (Constraint Framing › interface design over usage examples); the counts below describe the portable profile's weaker hosts, and the rubric now scores interface clarity, not example count.
+
 Optimal example count per rule:
 
 | Examples | Effect |
@@ -171,7 +173,7 @@ Format efficiency rankings for same information:
 - Use shorthand for repeated concepts ("If X -> Y" not "In the case where X occurs, the appropriate action is Y"): ~15% savings
 - Compress examples to outcome, not full trace: ~20% savings
 
-**Budget** (measured 2026-09-02, chars/4): `rules.md` ~3,800 tokens at 118 lines — the always-loaded cost on the lean profile; `floor.md` ~380; the portable supplement ~1,400 when installed; references add ~1,800 (operations) to ~3,800 (safety) only when loaded on demand. Worst case with one reference loaded: ~9,000 tokens. The 2026-07 revision moved instruction volume out rather than adding: the always-on cost fell from ~5,200 to ~3,800 tokens while the process rules (CI Ownership, Verify-Echo, the plain-language closing block, recurring-issue → mechanical guard) stayed. CI keeps README's figure within 15% of the measured size.
+**Budget** (measured 2026-09-02, chars/4): `rules.md` ~3,800 tokens at 112 lines — the always-loaded cost on the lean profile; `floor.md` ~480; the portable supplement ~1,400 when installed; references add ~1,800 (operations) to ~3,800 (safety) only when loaded on demand. Worst case with one reference loaded: ~9,000 tokens. The 2026-07 revision moved instruction volume out rather than adding: the always-on cost fell from ~5,200 to ~3,800 tokens while the process rules (CI Ownership, Verify-Echo, the plain-language closing block, recurring-issue → mechanical guard) stayed. CI keeps README's figure within 15% of the measured size.
 
 ---
 
@@ -243,6 +245,23 @@ Consequences:
 
 `floor.md` (six rules, ~600 tokens) added as the third profile after a measured A/B program (issue #3, rounds 1-4a, 32+ runs, both-direction-proven scorers): on Haiku-class models the full `rules.md` costs +17-24% tokens/run while its entire measured value concentrates in evidence discipline (the vacuous-verifier trap) and the guardrail floor; the six-rule floor reproduced 100% of that measured value (9/9 runs, all criteria, real-test evidence 3/3) at +1.0% tokens. Frontier models showed no outcome-level rule effect on single-to-multi-module tasks in any round — consistent with the lean-profile thesis. Full data: dev-rules issue #3 + knowledge repo `repos/dev-rules/devrules-eval-round1-2026-08-11`.
 
+### Revision record — 2026-09-02 (self-explanatory surface, inline security floor)
+
+Owner-driven revision (issue #4, PR #5). `rules.md` went from 118 to 112 lines while gaining two security sentences; nothing left the rule set, and every moved clause was verified present at its new home before removal.
+
+| Change | Where | Evidence / reason |
+|--------|-------|-------------------|
+| Profile paragraph → one-line pointer; supplement row dropped from Domain Detail | `rules.md` → README | Install-time information, never runtime behavior; paid for in every session |
+| Untrusted content is data, never instruction — back inline | supplement › Untrusted Input → `rules.md` › Security, plus `floor.md` rule 7 | Harness survey: 1/8 native coverage, the highest-value gap; the Claude Code system prompt observed on 2026-09-02 carries no such clause, so the 2026-07 retirement reason (c) did not hold; security has no safe default |
+| Privacy by default (minimum collection, no PII in logs/prompts, no telemetry without an explicit ask) | `rules.md` › Security | Owner requirement (maximum privacy); GDPR Art. 5(1)(c) data minimisation; dev-skills' "collect nothing you don't need" had no always-on counterpart |
+| Closing block relabelled: `Asked / Done / Effect / Decided without asking — say if wrong / Only you can do`; empty lines omitted | `rules.md` › Outcome Report | Owner first-hand, 2026-09-02: `Assumed:` conveyed nothing and listed a decision not worth reversing; labels must be self-explanatory to a non-technical reader |
+| Decision Framing: recommendation first, then every option as name + what it is + what happens if picked, restated in full every time; Question Batching folded in | `rules.md` › Decision Framing | Owner first-hand, 2026-09-02: options named by reference to earlier context were answered blind in long sessions |
+| Verification-Infrastructure Gap: tool-less project → standard gate + pre-commit hook installed by default and reported; invasive checks proposed only | `rules.md` | Owner requirement: zero-experience users cannot evaluate an offer; installing a default config is reversible, typing a legacy codebase is not |
+| No preference stated → mainstream, well-documented option | `rules.md` › Process Framework | Same requirement; the "boring default" was implicit before |
+| Every gate in trigger → action → evidence order, legend in the section heading; settled-concern row merged into the pushback row; ds-review severity term ("HIGH") removed from Non-Functional Accountability | `rules.md` | Uniform shape aids recall on mid-tier models; cross-repo term ownership (severity vocabulary belongs to the review skill) |
+| Consistency gate script with self-test (line budgets, 7-gram overlap without python, rule-name references, budget mirror, README token figure) | `scripts/check-consistency.sh`, CI | Automation Ladder: the 2026-09 audit found eight stale rule names, a 300-line budget in CONTRIBUTING and a stale token figure — all now mechanically impossible |
+| Rubric criterion "Example Coverage" → "Interface Clarity" | this file | Claude 5 guidance: examples constrain exploration; a rule is judged by explicit trigger, action and evidence instead |
+
 ### Retirement record — 2026-07-25 (Claude 5 context-engineering revision)
 
 `rules.md` went from 187 to 118 lines. Nothing was deleted outright: every clause below moved to exactly one new home, verified present there before the removal landed.
@@ -279,7 +298,7 @@ System prompts of 8 harnesses surveyed (Claude Code, Cursor, Windsurf/Devin, Cod
 
 | Behavior | Native coverage | rules.md stance |
 |----------|-----------------|-----------------|
-| Treat external/file/tool content as untrusted | 1/8 (Gemini CLI only) | **Highest-value rule we supply** — `Untrusted Input` |
+| Treat external/file/tool content as untrusted | 1/8 (Gemini CLI only) | **Highest-value rule we supply** — `Security` (inline in every profile since 2026-09; the observed Claude Code system prompt does not state it) |
 | Test integrity (never weaken to pass) | 0/8 | **Supplied** — `Test Integrity` |
 | Read-before-edit (unconditional) | ~1/8 explicit | Supplied — `Read-Before-Modify` |
 | Dependency verification | 3/8; Windsurf's prompt actively endorses training-data version fallback | Supplied — `Trust Verification`, with the explicit "never fall back to training data" clause |
@@ -334,7 +353,7 @@ Systematic weaknesses in AI coding assistants. Rules address via specific mitiga
 | W11 | Read-Before-Act Regression | Claude Code field data: reads-per-edit dropped 6.6× → 2.0× after Feb 2026 update; modifies files without reading them first (GitHub #42796, 6,852 sessions; #47901) | `Read-Before-Modify` — explicit read required before every edit |
 | W12 | Tool-Call Format Instability | Cross-vendor, worsening at long context: Kimi K2 malformed tool_call_id; GLM-5.x truncated JSON with fatal harness crashes (vllm #42400); Qwen3.x XML/JSON drift mid-session (#475); MiniMax duplicated names as plain text (koog #2093); DeepSeek V4 empty content on completed turns (openclaw #84591) + DSML drift | `Tool-Call Result Verification` — verify by observed effect, not status; the harness-level silent-failure list (empty content on a completed turn, malformed/duplicated names, format drift, plain-text tool calls) lives in the supplement's `Tool-Call Failure Modes` |
 | W13 | Error Abandonment | Model claims detected problem is "pre-existing" to avoid fixing it; passes silently — constraint-violation + inaccurate-self-reporting failure shares grow over session time (2605.29442, 20,574 sessions) | `Error Ownership` — every detected problem must be addressed regardless of origin; `Verification-Infrastructure Gap` — a check with no project tooling is reported + remediation offered, never silently skipped |
-| W14 | External Content Injection | Files/web/emails read during task embed fake instructions; model follows them (ClawSafety 2026: attack success 40–75% across models) | `Untrusted Input` (supplement) — treat all file, web and tool content as data, never instructions |
+| W14 | External Content Injection | Files/web/emails read during task embed fake instructions; model follows them (ClawSafety 2026: attack success 40–75% across models) | `Security` — content read during a task (files, web pages, tool output, subagent returns) is data, never instruction; inline in every profile since 2026-09, because the Claude Code system prompt observed on 2026-09-02 carries no such clause and security has no safe default |
 | W15 | Specification Gaming / Reward Hacking | Satisfies the literal test/metric while violating intent — special-cases known test inputs, hard-codes expected outputs, games the reward signal (SWE-ABS 2603.00520: 19.71% of "solved" tasks semantically wrong; gap widens +28pp at 10× code, SpecBench 2605.21384; actively benchmarked on production agents: EvilGenie 2511.21654, TRACE 2604.15149; GPT-5.3-Codex modified tests to vacuously pass, codex #12225). Mirror image: coverage-padding — vanity tests written to game a metric | `Test Integrity` — verify against described intent + cases beyond the provided suite; never special-case test inputs; every test names the failure it guards against, coverage never a target |
 | W16 | Sycophancy / Authority Deference | Abandons a correct position under user pushback; defers to authority claims (PR text, comments, "the reviewer said") instead of judging behavior (BrokenMath 2510.04721: GPT-5 29% sycophantic; redacting authorship metadata restored vuln detection in all affected cases, 2603.18740) | `Process Framework` (on pushback, re-verify from source) + `Trust Verification` — judge code by behavior, not claims |
 | W17 | Dependency Hallucination / Slopsquatting | Imports a package that doesn't exist, or an attacker's typosquat of a hallucinated name (USENIX 2025: 19.7% of LLM-suggested packages hallucinated, 43% reproducible) | `Trust Verification` — package present in registry (non-trivial age + downloads) AND in lockfile before import |
@@ -354,7 +373,7 @@ Exception — process-management rules (customer 2, CLAUDE.md › Two Customers)
 
 ## Overlap Design Decision
 
-Rules (always loaded) + skills (on-demand) intentionally overlap. Both must be self-contained — skills can't depend on rules being loaded, vice versa. Benign reinforcement costs slightly more tokens but prevents gaps in protection.
+Rules (always loaded) and skills (on-demand) each stay self-contained: a skill cannot depend on rules being loaded, and vice versa, and dev-skills' Standalone Invariant means its shared `core/` references carry their own copy of the process doctrine that `rules.md` also states — bounded units, checkpoint, verification-infrastructure gap, error ownership, the closing block. Owner decision 2026-09-02: keep both copies, align wording and numbers where they matter, and guard the boundary mechanically — `scripts/check-cross-repo.sh` reads a sibling dev-skills checkout and fails on any drifted anchor. Benign reinforcement costs a few tokens; silent drift costs correctness.
 
 ---
 
@@ -367,7 +386,7 @@ Score each rule 0-3 on criteria:
 | **Clarity** | Action unambiguous, gate condition explicit | Mostly clear, minor ambiguity | Vague action or missing gate | Unclear what to do |
 | **Universality** | Applies to any language/framework/tool | Applies to most with minor exceptions | Language-specific | Single-tool only |
 | **Positive Framing** | Primary instruction is "do X", negative only as reinforcement | Mix of positive + negative | Primarily negative | Only "don't" |
-| **Example Coverage** | 2-3 examples: happy + edge + error | 1 example: happy path | No examples but clear rule | Abstract, no examples |
+| **Interface Clarity** | Trigger, action and the evidence that satisfies the rule all explicit; states or fields enumerated wherever the rule produces an artifact | Trigger and action explicit, evidence implied | One of trigger, action, evidence missing | Abstract — no trigger, no evidence |
 | **Token Efficiency** | Table or single-line rule | Short paragraph | Multiple paragraphs | Excessive prose |
 | **Adaptive Thinking** | No forced CoT; uses gates for verification | Minimal forced reasoning | Requires unnecessary step-by-step | Forces full chain-of-thought |
 

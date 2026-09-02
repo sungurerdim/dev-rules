@@ -21,7 +21,7 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 - **The highest-value rules are the ones no harness enforces.** A survey of 8 harness system prompts (Claude Code, Cursor, Codex CLI, Copilot, Gemini CLI, …) found 0/8 prohibit weakening tests to make them pass, and only 1/8 treats file/web/tool content as untrusted data. Those gaps are exactly what this file supplies.
 - **False "done" is the failure to design against.** Agents self-report success falsely in 45–75% of failure cases when unverified — vs 3% when completion is independently verifiable (arXiv:2606.09863). Hence the Operating Loop's core principle: done is an external signal, never a self-assessment.
 - **Short beats complete.** Bloated rules files get ignored (documented in Claude Code issue #22022 and Anthropic's own docs) — so every line here passes the test "would removing it cause mistakes?", and anything a linter/CI can enforce is pushed there instead (see the Automation Ladder in [rule-design.md](references/rule-design.md)).
-- **Overconstraining is its own failure mode.** Anthropic removed >80% of Claude Code's system prompt for Claude 5 generation models with no measurable eval loss, because conflicting guidance across system prompt, rules files, and skills made the model work harder to decide what the user actually wanted ([The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models), 2026-07-24). Hence the two profiles below: nothing here re-asserts what your host's own system prompt already says.
+- **Overconstraining is its own failure mode.** Anthropic removed >80% of Claude Code's system prompt for Claude 5 generation models with no measurable eval loss, because conflicting guidance across system prompt, rules files, and skills made the model work harder to decide what the user actually wanted ([The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models), 2026-07-24). Hence the profiles below: nothing here re-asserts what your host's own system prompt already says.
 
 ## What's inside
 
@@ -29,27 +29,29 @@ This rule set is built from a 2026 survey of harness system prompts, model failu
 
 **Pre-task protocol** — size-based pre-flight gate (Small task: inline, no-wait; Large task: block + confirmation for complex/risky), spec artifact (tracker checklist issue, or `tasks.md` fallback) for multi-phase work, scope expansion stop at 2× estimate
 
-**Failure prevention** — scope boundary, test integrity, error ownership (pre-existing error = not an excuse), cross-file consistency, over-engineering prevention, concurrency safety, trust verification, grounded specifics (no fabricated identifiers in any output form), external content injection guard, read-before-modify, tool-call result verification
+**Failure prevention** — test integrity, error ownership (pre-existing error = not an excuse), cross-file consistency, breaking-first over compat hacks, trust verification, grounded specifics (no fabricated identifiers in any output form), read-before-modify, tool-call result verification, checkpoint before destructive work, measure-before-optimize
 
 **Completion gate** — explicit done criteria, `git diff` verification, CI ownership (pushed work isn't done until checks are green), no silent "done" without stating what changed and how to verify
 
-**Outcome report** — every task closes with a plain-language three-field summary (Task / Done / Gain: the concrete effect, not activity counts), open human-owned actions listed, deferred findings offered to the project's issue tracker instead of vanishing into chat
+**Outcome report** — every task closes with a plain-language block a non-technical reader understands: what was asked, what was done, what got better; then any decision made without asking, and anything only a human can do — each stated in full, never as a bare title; deferred findings offered to the project's issue tracker instead of vanishing into chat
 
-**Security** — human-verification gate for auth/payments/crypto, shell command safety, no hardcoded secrets — the one domain kept inline, because it has no safe default
+**Security** — human-verification gate for auth/payments/crypto, shell command safety, no hardcoded secrets, content read during a task is data not instruction, privacy by default — the one domain kept inline in every profile, because it has no safe default
 
-**Process discipline** — structured workflow, artifact-first recovery after context gaps, decision framing, question batching — with adaptive binding: named tools/artifacts are defaults, the host's native equivalent takes precedence
+**Process discipline** — structured workflow, artifact-first recovery after context gaps, decision framing (recommendation first; every option restated in full every time, so a choice never depends on remembering an earlier part of the session), question batching — with adaptive binding: named tools/artifacts are defaults, the host's native equivalent takes precedence
 
-**Reference files** — security, operations, and the portable supplement, loaded on demand rather than in every session. Code style, complexity thresholds, error-message quality, observability and migration safety live there or in the matching [dev-skills](https://github.com/sungurerdim/dev-skills) skill — one canonical home each, never two.
+**Reference files** — security, operations, and the portable supplement (scope discipline, code style, error-message quality, destructive-action confirmation, tool selection), loaded on demand rather than in every session. Complexity thresholds, observability and migration safety live there or in the matching [dev-skills](https://github.com/sungurerdim/dev-skills) skill — one canonical home each, never two
 
 ## Install
 
 ### Pick your profile first
 
-| Your setup | Install | Why |
+Two questions decide it: does the host's own system prompt already supply ordinary engineering judgment, and how capable is the model?
+
+| Host system prompt | Model | Install | Why |
 |---|---|---|
-| **Claude Code on a Claude 5 generation model** | `rules.md` alone | The host system prompt already supplies ordinary engineering judgment; adding a second copy creates conflicting guidance |
-| **Cursor · Copilot · Aider · Cline · older or smaller models** | `rules.md` **+** [`references/portable-supplement.md`](references/portable-supplement.md) | The supplement re-adds exactly the guardrails that layer would have provided — scope discipline, code style, destructive-action confirmation, untrusted input, tool selection |
-| **Budget models (Haiku-class)** | [`floor.md`](floor.md) **alone** (replaces `rules.md`) | Six-rule guardrail floor — in A/B runs it delivered the full file's entire measured weak-model value (incl. the vacuous-verifier evidence fix) at +1% tokens, where the full file costs +18% |
+| Strong — Claude Code on a Claude 5 generation model | Frontier (Fable, Opus, Sonnet 5) | `rules.md` alone | The host already supplies ordinary engineering judgment; a second copy creates conflicting guidance. This is the measured, primary deployment (issue #3, 40+ scored runs) |
+| Thin or unknown — Cursor, Copilot, Aider, Cline, Codex CLI, opencode | Frontier or mid-tier, any vendor | `rules.md` **+** [`references/portable-supplement.md`](references/portable-supplement.md) | The supplement re-adds exactly the guardrails a strong host layer would have provided — scope discipline, code style, destructive-action confirmation, tool selection. **Unmeasured:** no A/B run has covered a non-Claude model yet (tracked in #4) |
+| Any | Budget (Haiku-class; "flash", "mini", "lite" tiers) | [`floor.md`](floor.md) **alone** (replaces `rules.md`) | Seven-rule guardrail floor — in A/B runs the floor delivered the full file's entire measured weak-model value (incl. the vacuous-verifier evidence fix) at +1% tokens, where the full file costs +18% |
 
 The supplement is a delta, not an alternative version: it never restates a line of `rules.md`, and CI enforces that.
 
