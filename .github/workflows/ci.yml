@@ -19,24 +19,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
-      - name: Line budget — rules.md hard limit 130
-        run: |
-          lines=$(wc -l < rules.md)
-          echo "rules.md: ${lines} lines (target ~110, hard limit 130)"
-          [ "${lines}" -le 130 ]
-      - name: Profile delta — supplement must not restate rules.md
-        run: |
-          python3 - <<'PY'
-          import re, sys
-          def shingles(path, n=7):
-              words = re.sub(r'[^a-z0-9 ]', ' ', open(path).read().lower()).split()
-              return {' '.join(words[i:i+n]) for i in range(len(words) - n + 1)}
-          overlap = shingles('rules.md') & shingles('references/portable-supplement.md')
-          print(f"shared 7-grams: {len(overlap)}")
-          for s in sorted(overlap):
-              print("  ", s)
-          sys.exit(1 if len(overlap) > 2 else 0)
-          PY
+      - name: Consistency gate — self-test first, then line budgets, profile overlap, rule-name references, README figures
+        run: bash scripts/check-consistency.sh --self-test && bash scripts/check-consistency.sh
       - name: markdownlint
         uses: DavidAnson/markdownlint-cli2-action@v24
         with:
